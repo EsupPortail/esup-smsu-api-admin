@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.esupportail.smsuapiadmin.dao.beans">
+	<class name="Account" table="account" lazy="false">
+		<meta attribute="sync-DAO">false</meta>
+		<id name="Id" type="integer" column="ACC_ID">
+			<generator class="native"/>
+		</id>
+		<property name="Label" column="ACC_LABEL" type="string" not-null="true" length="32"/>
+		<property name="Quota" column="ACC_QUOTA" type="java.lang.Long" not-null="false" length="19"/>
+		<property name="ConsumedSms" column="ACC_CONSUMED_SMS" type="java.lang.Long" not-null="true" length="19"/>
+		<set name="Sms" inverse="true">
+			<key column="ACC_ID"/>
+			<one-to-many class="Sms"/>
+		</set>
+		<set name="Applications" inverse="true">
+			<key column="ACC_ID"/>
+			<one-to-many class="Application"/>
+		</set>
+	</class>
+</hibernate-mapping>

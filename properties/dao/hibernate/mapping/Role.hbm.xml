@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.esupportail.smsuapiadmin.dao.beans">
+	<class name="Role" table="role" lazy="false">
+		<meta attribute="sync-DAO">false</meta>
+		<id name="Id" type="integer" column="ROL_ID">
+			<generator class="native"/>
+		</id>
+		<property name="Name" column="ROL_NAME" type="string" not-null="true" length="32"/>
+		<set name="Fonctions" table="role_composition" cascade="all">
+			<key column="ROL_ID"/>
+			<many-to-many column="FCT_ID" class="Fonction"/>
+		</set>
+		<set inverse="true" name="Users">
+			<key column="ROL_ID"/>
+			<one-to-many class="UserBoSmsu"/>
+		</set>
+	</class>
+</hibernate-mapping>

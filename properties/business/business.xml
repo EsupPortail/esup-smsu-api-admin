@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+	<bean id="applicationManager"
+		class="org.esupportail.smsuapiadmin.business.ApplicationManager"
+		parent="abstractApplicationAwareBean">
+		<description>The business layer concerning application.
+		</description>
+		<property name="daoService" ref="daoService" />
+		<property name="dtoConverterService" ref="dtoConverterService" />
+	</bean>
+
+	<bean id="accountManager" class="org.esupportail.smsuapiadmin.business.AccountManager"
+		parent="abstractApplicationAwareBean">
+		<description>The business layer concerning account.</description>
+		<property name="daoService" ref="daoService" />
+		<property name="dtoConverterService" ref="dtoConverterService" />
+	</bean>
+
+	<bean id="institutionManager"
+		class="org.esupportail.smsuapiadmin.business.InstitutionManager"
+		parent="abstractApplicationAwareBean">
+		<description>The business layer concerning institution.
+		</description>
+		<property name="daoService" ref="daoService" />
+		<property name="dtoConverterService" ref="dtoConverterService" />
+	</bean>
+
+	<bean id="statisticManager" class="org.esupportail.smsuapiadmin.business.StatisticManager"
+		parent="abstractApplicationAwareBean">
+		<description>The business layer concerning statistic.
+		</description>
+		<property name="daoService" ref="daoService" />
+		<property name="dtoConverterService" ref="dtoConverterService" />
+	</bean>
+	
+	<bean id="userManager" class="org.esupportail.smsuapiadmin.business.UserManager"
+		parent="abstractApplicationAwareBean">
+		<description>The business layer concerning users.
+		</description>
+		<property name="daoService" ref="daoService" />
+		<property name="dtoConverterService" ref="dtoConverterService" />
+	</bean>
+	
+		<bean id="roleManager" class="org.esupportail.smsuapiadmin.business.RoleManager"
+		parent="abstractApplicationAwareBean">
+		<description>The business layer concerning roles.
+		</description>
+		<property name="daoService" ref="daoService" />
+		<property name="dtoConverterService" ref="dtoConverterService" />
+	</bean>
+
+</beans>

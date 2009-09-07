@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.esupportail.smsuapiadmin.dao.beans">
+	<class name="RoleComposition" table="role_composition" lazy="false">
+		<meta attribute="sync-DAO">false</meta>
+		<composite-id>
+			<key-many-to-one name="Fct" class="Fonction" column="FCT_ID"/>
+			<key-many-to-one name="Rol" class="Role" column="ROL_ID"/>
+		</composite-id>
+	</class>
+</hibernate-mapping>

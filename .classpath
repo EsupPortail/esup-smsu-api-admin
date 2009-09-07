@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/esup-commons"/>
+	<classpathentry kind="lib" path="webapp/WEB-INF/lib/poi-3.2-FINAL-20081019.jar"/>
+	<classpathentry kind="lib" path="webapp/WEB-INF/lib/poi-contrib-3.2-FINAL-20081019.jar"/>
+	<classpathentry kind="lib" path="webapp/WEB-INF/lib/poi-scratchpad-3.2-FINAL-20081019.jar"/>
+	<classpathentry kind="lib" path="webapp/WEB-INF/lib/jasperreports-3.5.2.jar"/>
+	<classpathentry kind="lib" path="webapp/WEB-INF/lib/iText-2.1.7.jar"/>
+	<classpathentry kind="lib" path="webapp/WEB-INF/lib/jcommon-1.0.16.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

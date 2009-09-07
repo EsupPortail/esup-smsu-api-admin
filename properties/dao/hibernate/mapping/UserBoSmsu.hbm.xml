@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.esupportail.smsuapiadmin.dao.beans">
+	<class name="UserBoSmsu" table="user_bo_smsu" lazy="false">
+		<meta attribute="sync-DAO">false</meta>
+		<id name="Id" type="integer" column="USER_ID">
+			<generator class="native"/>
+		</id>
+		<property name="Login" column="USER_LOGIN" type="string" not-null="true" length="32"/>
+		<many-to-one name="Role" column="ROL_ID" class="Role" not-null="true" />
+	</class>
+</hibernate-mapping>

@@ -3,14 +3,18 @@
 	locale="#{sessionController.locale}"
 	authorized="#{applicationsController.pageAuthorized}">
 	<%@include file="../_navigation.jsp"%>
-
+<script type="text/javascript">
+	function selectAccountFromAvailable(value) {
+		document.getElementById("editApplication:account").value = value;
+	}
+</script>
 	<e:section value="#{msgs['APPLICATION.CREATE.TITLE']}"
 		rendered="#{applicationsController.application.addMode}" />
 	<e:section value="#{msgs['APPLICATION.MODIFY.TITLE']}"
 		rendered="#{not applicationsController.application.addMode}" />
 
 	<h:form id="editApplication" enctype="multipart/form-data">
-		<e:panelGrid columns="2">
+		<e:panelGrid columns="4">
 
 			<e:outputLabel value="#{msgs['APPLICATION.LABEL.NAME']}" />
 			<h:panelGroup>
@@ -19,6 +23,12 @@
 					validator="#{applicationsController.validateName}">
 				</e:inputText>
 				<e:message for="name" />
+			</h:panelGroup>
+			<h:panelGroup>
+				<f:verbatim> </f:verbatim>
+			</h:panelGroup>
+			<h:panelGroup>
+				<f:verbatim> </f:verbatim>
 			</h:panelGroup>
 
 			<e:outputLabel value="#{msgs['APPLICATION.LABEL.CERTIFICATE']}" />
@@ -38,6 +48,12 @@
 					</h:panelGroup>
 				</h:panelGrid>
 			</h:panelGroup>
+			<h:panelGroup>
+				<f:verbatim> </f:verbatim>
+			</h:panelGroup>
+			<h:panelGroup>
+				<f:verbatim> </f:verbatim>
+			</h:panelGroup>
 
 			<e:outputLabel value="#{msgs['APPLICATION.LABEL.INSTITUTION']}" />
 			<h:panelGroup>
@@ -47,6 +63,12 @@
 					validator="#{applicationsController.validateInstitution}">
 				</e:inputText>
 				<e:message for="institution" />
+			</h:panelGroup>
+			<h:panelGroup>
+				<f:verbatim> </f:verbatim>
+			</h:panelGroup>
+			<h:panelGroup>
+				<f:verbatim> </f:verbatim>
 			</h:panelGroup>
 
 			<e:outputLabel value="#{msgs['APPLICATION.LABEL.ACCOUNT']}" />
@@ -59,6 +81,16 @@
 				<e:message for="account" />
 			</h:panelGroup>
 
+			<e:outputLabel for="availableAccounts"
+				value="#{msgs['APPLICATION.LABEL.AVAILABLEACCOUNTS']}"
+				rendered="#{not empty applicationsController.availableAccounts}" />
+			<h:selectOneListbox id="availableAccounts"
+				rendered="#{not empty applicationsController.availableAccounts}"
+				onclick="selectAccountFromAvailable(this.options[this.selectedIndex].text)">
+				<f:selectItems value="#{applicationsController.availableAccounts}" />
+			</h:selectOneListbox>
+
+
 			<e:outputLabel value="#{msgs['APPLICATION.LABEL.QUOTA']}" />
 			<h:panelGroup>
 				<e:inputText id="quota"
@@ -66,6 +98,12 @@
 					validator="#{applicationsController.validateQuota}">
 				</e:inputText>
 				<e:message for="quota" />
+			</h:panelGroup>
+			<h:panelGroup>
+				<f:verbatim> </f:verbatim>
+			</h:panelGroup>
+			<h:panelGroup>
+				<f:verbatim> </f:verbatim>
 			</h:panelGroup>
 
 		</e:panelGrid>

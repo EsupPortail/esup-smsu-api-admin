@@ -43,18 +43,7 @@ public class PreferencesController extends AbstractContextAwareController {
 		super();
 	}
 
-	/**
-	 * JSF callback.
-	 * 
-	 * @return A String.
-	 */
-	public String enter() {
-		if (!isPageAuthorized()) {
-			addUnauthorizedActionMessage();
-			return null;
-		}
-		return "navigationPreferences";
-	}
+
 
 	/**
 	 * @see java.lang.Object#toString()

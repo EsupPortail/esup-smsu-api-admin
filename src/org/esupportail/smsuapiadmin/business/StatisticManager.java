@@ -2,6 +2,7 @@ package org.esupportail.smsuapiadmin.business;
 
 import java.awt.Image;
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -23,6 +24,13 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.export.JRXlsAbstractExporterParameter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.esupportail.commons.beans.AbstractApplicationAwareBean;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
@@ -443,18 +451,299 @@ public class StatisticManager
 
 		if (format.equals(FormatReport.XLS)) {
 			// on l'exporte en Excel
-			final ByteArrayOutputStream xlsReport = new ByteArrayOutputStream();
-			final JRXlsExporter exporter = new JRXlsExporter();
-			exporter.setParameter(JRXlsAbstractExporterParameter.JASPER_PRINT,
-					jasperPrint);
-			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, xlsReport);
-			exporter.exportReport();
-
-			result = xlsReport.toByteArray();
+			result = makeConsolidatedReportXlsFile(data);
 
 		} else if (format.equals(FormatReport.PDF)) {
 			// on exporte en pdf
 			result = JasperExportManager.exportReportToPdf(jasperPrint);
+		}
+
+		return result;
+	}
+	
+	/**
+	 * Makes an Excel file that presents consolidated report.
+	 * @param data 
+	 * 
+	 * @return
+	 */
+	private byte[] makeConsolidatedReportXlsFile(final List<UIStatistic> statistics) {
+		byte[] result = null;
+
+
+		// on construit le document
+		HSSFWorkbook workbook = new HSSFWorkbook();
+
+		// le style du header
+		HSSFFont font = workbook.createFont();
+		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		HSSFCellStyle style = workbook.createCellStyle();
+		style.setFont(font);
+
+		// on construit la feuille
+		String nameSheet = getI18nService().getString("ACCOUNT.XLSFILE.SHEET");
+		HSSFSheet sheet = workbook.createSheet(nameSheet);
+
+		// on récupère les titres des colonnes
+		String columnInstitution = getI18nService().getString("INSTITUTION.NAME");
+		String columnApplication = getI18nService().getString("APPLICATION.NAME");
+		String columnAccount = getI18nService().getString("ACCOUNT.NAME");
+		String columnMonth = getI18nService().getString("MONTH.NAME");
+		String columnSendedSms = getI18nService().getString("STATISTIC.SENDEDSMS");
+		String columnReceivedSms = getI18nService().getString("STATISTIC.RECEIVEDSMS");
+		String columnFailRate = getI18nService().getString("STATISTIC.FAILRATE");
+		
+		// on fait le row header
+		HSSFRow headerRow = sheet.createRow(0);
+		HSSFCell cellInstitutionHeader = headerRow.createCell(0);
+		cellInstitutionHeader.setCellStyle(style);
+		cellInstitutionHeader.setCellValue(new HSSFRichTextString(columnInstitution));
+		HSSFCell cellApplicationHeader = headerRow.createCell(1);
+		cellApplicationHeader.setCellStyle(style);
+		cellApplicationHeader.setCellValue(new HSSFRichTextString(columnApplication));
+		HSSFCell cellAccountHeader = headerRow.createCell(2);
+		cellAccountHeader.setCellStyle(style);
+		cellAccountHeader.setCellValue(new HSSFRichTextString(columnAccount));
+		HSSFCell cellMonthHeader = headerRow.createCell(3);
+		cellMonthHeader.setCellStyle(style);
+		cellMonthHeader.setCellValue(new HSSFRichTextString(columnMonth));
+		HSSFCell cellSendedSmsHeader = headerRow.createCell(4);
+		cellSendedSmsHeader.setCellStyle(style);
+		cellSendedSmsHeader.setCellValue(new HSSFRichTextString(columnSendedSms));
+		HSSFCell cellReceivedSmsHeader = headerRow.createCell(5);
+		cellReceivedSmsHeader.setCellStyle(style);
+		cellReceivedSmsHeader.setCellValue(new HSSFRichTextString(columnReceivedSms));
+		HSSFCell cellFailRateHeader = headerRow.createCell(6);
+		cellFailRateHeader.setCellStyle(style);
+		cellFailRateHeader.setCellValue(new HSSFRichTextString(columnFailRate));
+
+		HSSFRow valueRow = null;
+		int i = 1;
+		for (UIStatistic stat : statistics) {
+			// on recupere les valeurs du compte
+			UIApplication uiApplication = stat.getApplication();
+			String institution = uiApplication.getInstitution().getName();
+			String application = uiApplication.getName();
+			String account = stat.getAccount().getName();
+			String month = stat.getFormattedMonth();
+			String nbSendedSMS = stat.getNbSendedSMS();
+			String nbReceivedSMS = stat.getNbReceivedSMS();
+			String failRate = stat.getFailRate();
+
+			// on crée une nouvelle ligne de valeurs
+			valueRow = sheet.createRow(i);
+			int j = 0;
+			HSSFCell cellInstitutionValue = valueRow.createCell(j);
+			cellInstitutionValue.setCellValue(new HSSFRichTextString(institution));
+			j++;
+			HSSFCell cellApplicationValue = valueRow.createCell(j);
+			cellApplicationValue.setCellValue(new HSSFRichTextString(application));
+			j++;
+			HSSFCell cellAccountValue = valueRow.createCell(j);
+			cellAccountValue.setCellValue(new HSSFRichTextString(account));
+			j++;
+			HSSFCell cellMonthValue = valueRow.createCell(j);
+			cellMonthValue.setCellValue(new HSSFRichTextString(month));
+			j++;
+			HSSFCell cellSendedSmsValue = valueRow.createCell(j);
+			cellSendedSmsValue.setCellValue(new HSSFRichTextString(nbSendedSMS));
+			j++;
+			HSSFCell cellReceivedSmsValue = valueRow.createCell(j);
+			cellReceivedSmsValue.setCellValue(new HSSFRichTextString(nbReceivedSMS));
+			j++;
+			HSSFCell cellFailRateValue = valueRow.createCell(j);
+			cellFailRateValue.setCellValue(new HSSFRichTextString(failRate));
+
+			// on passe à la ligne suivante
+			i++;
+		}
+
+		// On ouvre un flux d'écriture sur le fichier résultat
+		try {
+			ByteArrayOutputStream fos = new ByteArrayOutputStream();
+			workbook.write(fos);
+			fos.flush();
+			fos.close();
+			result = fos.toByteArray();
+		} catch (FileNotFoundException e) {
+			logger
+					.error(
+							"Impossible d'ouvrir un flux en écriture sur le fichier excel",
+							e);
+		} catch (IOException e) {
+			logger.error("Impossible d'écrire dans le fichier excel", e);
+		}
+
+		return result;
+	}
+	
+	
+	/**
+	 * Makes an Excel file that presents informations about detailed summaries.
+	 * @param data 
+	 * 
+	 * @return
+	 */
+	private byte[] makeDetailedReportXlsFile(final List<UIDetailedSummary> data) {
+		byte[] result = null;
+
+
+		// on construit le document
+		HSSFWorkbook workbook = new HSSFWorkbook();
+
+		// le style du header
+		HSSFFont font = workbook.createFont();
+		font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		HSSFCellStyle style = workbook.createCellStyle();
+		style.setFont(font);
+
+		// on construit la feuille
+		String nameSheet = getI18nService().getString("ACCOUNT.XLSFILE.SHEET");
+		HSSFSheet sheet = workbook.createSheet(nameSheet);
+
+		// on récupère les titres des colonnes
+		final String columnSending = getI18nService().getString("SUMMARY.SENDING");
+		final String columnInstitution = getI18nService().getString("INSTITUTION.NAME");
+		final String columnApplication = getI18nService().getString("APPLICATION.NAME");
+		final String columnAccount = getI18nService().getString("ACCOUNT.NAME");
+		final String columnSMSCount = getI18nService().getString("SUMMARY.SMSCOUNT");
+		final String columnSmsStatusCreated = getI18nService().getString("SMS.STATUS.CREATED.NAME");
+		final String columnSmsStatusInProgress = getI18nService().getString("SMS.STATUS.IN_PROGRESS.NAME");
+		final String columnSmsStatusDelivered = getI18nService().getString("SMS.STATUS.DELIVERED.NAME");
+		final String columnSmsStatusErrorPreBl = getI18nService().getString("SMS.STATUS.ERROR_PRE_BL.NAME");
+		final String columnSmsStatusErrorPostBl = getI18nService().getString("SMS.STATUS.ERROR_POST_BL.NAME");
+		final String columnSmsStatusErrorQuota = getI18nService().getString("SMS.STATUS.ERROR_QUOTA.NAME");
+		final String columnSmsStatusError = getI18nService().getString("SMS.STATUS.ERROR.NAME");
+		
+		
+		// on fait le row header
+		HSSFRow headerRow = sheet.createRow(0);
+		
+		int columnIndex = 0;
+		HSSFCell cellSendingHeader = headerRow.createCell(columnIndex);
+		cellSendingHeader.setCellStyle(style);
+		cellSendingHeader.setCellValue(new HSSFRichTextString(columnSending));
+		columnIndex++;
+		HSSFCell cellInstitutionHeader = headerRow.createCell(columnIndex);
+		cellInstitutionHeader.setCellStyle(style);
+		cellInstitutionHeader.setCellValue(new HSSFRichTextString(columnInstitution));
+		columnIndex++;
+		HSSFCell cellApplicationHeader = headerRow.createCell(columnIndex);
+		cellApplicationHeader.setCellStyle(style);
+		cellApplicationHeader.setCellValue(new HSSFRichTextString(columnApplication));
+		columnIndex++;
+		HSSFCell cellAccountHeader = headerRow.createCell(columnIndex);
+		cellAccountHeader.setCellStyle(style);
+		cellAccountHeader.setCellValue(new HSSFRichTextString(columnAccount));
+		columnIndex++;
+		HSSFCell cellSmsCountHeader = headerRow.createCell(columnIndex);
+		cellSmsCountHeader.setCellStyle(style);
+		cellSmsCountHeader.setCellValue(new HSSFRichTextString(columnSMSCount));
+		columnIndex++;
+		HSSFCell cellSmsStatusCreatedHeader = headerRow.createCell(columnIndex);
+		cellSmsStatusCreatedHeader.setCellStyle(style);
+		cellSmsStatusCreatedHeader.setCellValue(new HSSFRichTextString(columnSmsStatusCreated));
+		columnIndex++;
+		HSSFCell cellSmsStatusInProgressHeader = headerRow.createCell(columnIndex);
+		cellSmsStatusInProgressHeader.setCellStyle(style);
+		cellSmsStatusInProgressHeader.setCellValue(new HSSFRichTextString(columnSmsStatusInProgress));
+		columnIndex++;
+		HSSFCell cellSmsStatusDeliveredHeader = headerRow.createCell(columnIndex);
+		cellSmsStatusDeliveredHeader.setCellStyle(style);
+		cellSmsStatusDeliveredHeader.setCellValue(new HSSFRichTextString(columnSmsStatusDelivered));
+		columnIndex++;
+		HSSFCell cellSmsStatusErrorPreBlHeader = headerRow.createCell(columnIndex);
+		cellSmsStatusErrorPreBlHeader.setCellStyle(style);
+		cellSmsStatusErrorPreBlHeader.setCellValue(new HSSFRichTextString(columnSmsStatusErrorPreBl));
+		columnIndex++;
+		HSSFCell cellSmsStatusErrorPostBlHeader = headerRow.createCell(columnIndex);
+		cellSmsStatusErrorPostBlHeader.setCellStyle(style);
+		cellSmsStatusErrorPostBlHeader.setCellValue(new HSSFRichTextString(columnSmsStatusErrorPostBl));
+		columnIndex++;
+		HSSFCell cellSmsStatusErrorQuotaHeader = headerRow.createCell(columnIndex);
+		cellSmsStatusErrorQuotaHeader.setCellStyle(style);
+		cellSmsStatusErrorQuotaHeader.setCellValue(new HSSFRichTextString(columnSmsStatusErrorQuota));
+		columnIndex++;
+		HSSFCell cellSmsStatusErrorHeader = headerRow.createCell(columnIndex);
+		cellSmsStatusErrorHeader.setCellStyle(style);
+		cellSmsStatusErrorHeader.setCellValue(new HSSFRichTextString(columnSmsStatusError));
+		
+		HSSFRow valueRow = null;
+		int i = 1;
+		for (UIDetailedSummary summarry : data) {
+			// on recupere les valeurs du compte
+			UIApplication uiApplication = summarry.getApplication();
+			String date = summarry.getFormattedDate();
+			String institution = uiApplication.getInstitution().getName();
+			String application = uiApplication.getName();
+			String account = summarry.getAccount().getName();
+			Integer smsCount = summarry.getSMSCount();
+			Integer nbCreated = summarry.getNbCreated();
+			Integer nbInProgress = summarry.getNbInProgress();
+			Integer nbDelivered = summarry.getNbDelivered();
+			Integer nbErrorPreBl = summarry.getNbErrorPreBl();
+			Integer nbErrorPostBl = summarry.getNbErrorPostBl();
+			Integer nbErrorQuota = summarry.getNbErrorQuota();
+			Integer nbError = summarry.getNbError();
+			
+			// on crée une nouvelle ligne de valeurs
+			valueRow = sheet.createRow(i);
+			int j = 0;
+			HSSFCell cellDateValue = valueRow.createCell(j);
+			cellDateValue.setCellValue(new HSSFRichTextString(date));
+			j++;
+			HSSFCell cellInstitutionValue = valueRow.createCell(j);
+			cellInstitutionValue.setCellValue(new HSSFRichTextString(institution));
+			j++;
+			HSSFCell cellApplicationValue = valueRow.createCell(j);
+			cellApplicationValue.setCellValue(new HSSFRichTextString(application));
+			j++;
+			HSSFCell cellAccountValue = valueRow.createCell(j);
+			cellAccountValue.setCellValue(new HSSFRichTextString(account));
+			j++;
+			HSSFCell cellSmsCountValue = valueRow.createCell(j);
+			cellSmsCountValue.setCellValue(smsCount);
+			j++;
+			HSSFCell cellNbCreatedValue = valueRow.createCell(j);
+			cellNbCreatedValue.setCellValue(nbCreated);
+			j++;
+			HSSFCell cellNbInProgressValue = valueRow.createCell(j);
+			cellNbInProgressValue.setCellValue(nbInProgress);
+			j++;
+			HSSFCell cellNbDeliveredValue = valueRow.createCell(j);
+			cellNbDeliveredValue.setCellValue(nbDelivered);
+			j++;
+			HSSFCell cellNbErrorPreBlValue = valueRow.createCell(j);
+			cellNbErrorPreBlValue.setCellValue(nbErrorPreBl);
+			j++;
+			HSSFCell cellNbErrorPostBlValue = valueRow.createCell(j);
+			cellNbErrorPostBlValue.setCellValue(nbErrorPostBl);
+			j++;
+			HSSFCell cellNbErrorQuotaValue = valueRow.createCell(j);
+			cellNbErrorQuotaValue.setCellValue(nbErrorQuota);
+			j++;
+			HSSFCell cellNbErrorValue = valueRow.createCell(j);
+			cellNbErrorValue.setCellValue(nbError);
+			j++;
+
+			// on passe à la ligne suivante
+			i++;
+		}
+
+		// On ouvre un flux d'écriture sur le fichier résultat
+		try {
+			ByteArrayOutputStream fos = new ByteArrayOutputStream();
+			workbook.write(fos);
+			fos.flush();
+			fos.close();
+			result = fos.toByteArray();
+		} catch (FileNotFoundException e) {
+			logger
+					.error(
+							"Impossible d'ouvrir un flux en écriture sur le fichier excel",
+							e);
+		} catch (IOException e) {
+			logger.error("Impossible d'écrire dans le fichier excel", e);
 		}
 
 		return result;
@@ -484,15 +773,8 @@ public class StatisticManager
 				app, acc, startDate, endDate);
 
 		if (format.equals(FormatReport.XLS)) {
-			// on l'exporte en Excel
-			final ByteArrayOutputStream xlsReport = new ByteArrayOutputStream();
-			final JRXlsExporter exporter = new JRXlsExporter();
-			exporter.setParameter(JRXlsAbstractExporterParameter.JASPER_PRINT,
-					jasperPrint);
-			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, xlsReport);
-			exporter.exportReport();
-
-			result = xlsReport.toByteArray();
+			
+			result = makeDetailedReportXlsFile(data);
 
 		} else if (format.equals(FormatReport.PDF)) {
 			// on exporte en pdf

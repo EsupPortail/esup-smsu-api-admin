@@ -5,15 +5,19 @@
 package org.esupportail.smsuapiadmin.web.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import javax.faces.validator.ValidatorException;
 
 import org.apache.myfaces.custom.fileupload.UploadedFile;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
 import org.esupportail.smsuapiadmin.domain.beans.EnumeratedFunction;
+import org.esupportail.smsuapiadmin.dto.beans.UIAccount;
 import org.esupportail.smsuapiadmin.dto.beans.UIApplication;
 import org.esupportail.smsuapiadmin.dto.beans.UIUser;
 
@@ -41,6 +45,11 @@ public class ApplicationsController extends AbstractContextAwareController {
 	 */
 	private UIApplication application;
 
+	/**
+	 * list of available accounts
+	 */
+	private List<SelectItem> availableAccounts;
+	
 	/**
 	 * The client applications paginator.
 	 */
@@ -113,6 +122,18 @@ public class ApplicationsController extends AbstractContextAwareController {
 	}
 
 	/**
+	 * initialize the available accounts list.
+	 */
+	private void initAvailableAccounts() {
+		availableAccounts = new ArrayList<SelectItem>();
+		List<UIAccount> accounts = getDomainService().getAccounts();
+		for (UIAccount curAccount : accounts) {
+			SelectItem option = new SelectItem(curAccount.getId().toString(), curAccount.getName());
+			availableAccounts.add(option);
+		}
+	}
+	
+	/**
 	 * JSF callback.
 	 * 
 	 * @return A navigation rule.
@@ -120,6 +141,7 @@ public class ApplicationsController extends AbstractContextAwareController {
 	public String create() {
 		// on crée une nouvelle application
 		setApplication(new UIApplication());
+		initAvailableAccounts();
 		return "editApplication";
 	}
 
@@ -131,6 +153,7 @@ public class ApplicationsController extends AbstractContextAwareController {
 	public String modify() {
 		// on met à jour le mode d'édition
 		application.setAddMode(false);
+		initAvailableAccounts();
 		return "editApplication";
 	}
 
@@ -172,6 +195,9 @@ public class ApplicationsController extends AbstractContextAwareController {
 		}
 	}
 
+	/**
+	 * @return a navigation rule.
+	 */
 	public String uploadCertificate() {
 		// le certificat
 		// on regarde d'abord si un fichier a été uploadé
@@ -269,7 +295,7 @@ public class ApplicationsController extends AbstractContextAwareController {
 	/**
 	 * Getter for 'paginator'.
 	 * 
-	 * @return
+	 * @return the paginator.
 	 */
 	public ApplicationsPaginator getPaginator() {
 		return paginator;
@@ -287,7 +313,7 @@ public class ApplicationsController extends AbstractContextAwareController {
 	/**
 	 * Getter for 'application'.
 	 * 
-	 * @return
+	 * @return an application
 	 */
 	public UIApplication getApplication() {
 		return application;
@@ -331,7 +357,7 @@ public class ApplicationsController extends AbstractContextAwareController {
 	/**
 	 * Check the values.
 	 * 
-	 * @return
+	 * @return true if all mandatory parameters are filed 
 	 */
 	private Boolean checkMandatoryUIParameters() {
 		Boolean result = true;
@@ -388,6 +414,20 @@ public class ApplicationsController extends AbstractContextAwareController {
 		}
 
 		return result;
+	}
+
+	/**
+	 * @param availableAccounts
+	 */
+	public void setAvailableAccounts(final List<SelectItem> availableAccounts) {
+		this.availableAccounts = availableAccounts;
+	}
+
+	/**
+	 * @return the available accounts
+	 */
+	public List<SelectItem> getAvailableAccounts() {
+		return availableAccounts;
 	}
 
 }

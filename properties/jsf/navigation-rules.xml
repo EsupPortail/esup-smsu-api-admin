@@ -109,10 +109,6 @@
 			<to-view-id>/stylesheets/administrators.jsp</to-view-id>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>navigationPreferences</from-outcome>
-			<to-view-id>/stylesheets/preferences.jsp</to-view-id>
-		</navigation-case>
-		<navigation-case>
 			<from-outcome>navigationAbout</from-outcome>
 			<to-view-id>/stylesheets/about.jsp</to-view-id>
 		</navigation-case>

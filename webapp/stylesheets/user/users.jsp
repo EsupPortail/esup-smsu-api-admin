@@ -11,7 +11,7 @@
 			rendered="#{not empty usersController.paginator.visibleItems}"
 			id="data" rowIndexVar="variable"
 			value="#{usersController.paginator.visibleItems}"
-			var="user" cellpadding="5" cellspacing="3" width="60%">
+			var="user" cellpadding="5" cellspacing="3" width="100%">
 
 			<f:facet name="header">
 				<h:panelGroup>
@@ -104,7 +104,7 @@
 					action="#{usersController.modify}"
 					image="/media/icons/pencil.png"
 					title="#{msgs['USER.MODIFY']}"
-					rendered="#{user.isUpdateable}" >
+					rendered="#{currentUser.login!=user.login}" >
 					<t:updateActionListener value="#{user}"
 						property="#{usersController.user}" />
 				</e:commandButton>
@@ -118,7 +118,7 @@
 					action="#{usersController.delete}"
 					image="/media/icons/minus-circle-frame.png"
 					title="#{msgs['USER.DELETE']}"
-					rendered="#{user.isDeletable}">
+					rendered="#{currentUser.login!=user.login}">
 					<t:updateActionListener value="#{user}"
 						property="#{usersController.user}" />
 				</e:commandButton>

@@ -4,6 +4,9 @@
  */
 package org.esupportail.smsuapiadmin.web.controllers;
 
+import org.esupportail.smsuapiadmin.domain.beans.EnumeratedRole;
+import org.esupportail.smsuapiadmin.dto.beans.UIUser;
+
 /**
  * A bean to manage files.
  */
@@ -34,6 +37,22 @@ public class AboutController extends AbstractContextAwareController {
 	 */
 	public boolean isPageAuthorized() {
 		return true;
+	}
+	
+	/**
+	 * @return true if the current user is allowed to test the exceptions.
+	 */
+	public boolean isExceptionAuthorized() {
+		boolean result = false;
+
+		UIUser currentUser = getCurrentUser();
+		if (currentUser != null) {
+			
+			EnumeratedRole role = currentUser.getRole().getRole();
+			result = role.equals(EnumeratedRole.ROLE_SUPER_ADMIN);
+		} 
+
+		return result;
 	}
 	
 	/**

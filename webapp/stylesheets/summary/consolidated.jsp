@@ -58,7 +58,7 @@
 						rendered="#{not empty consolidatedSummaryController.paginator.visibleItems}"
 						id="data" rowIndexVar="variable"
 						value="#{consolidatedSummaryController.paginator.visibleItems}"
-						var="statistic" cellpadding="5" cellspacing="3">
+						var="statistic" cellpadding="5" cellspacing="3" width="100%">
 
 						<f:facet name="header">
 							<h:panelGroup>

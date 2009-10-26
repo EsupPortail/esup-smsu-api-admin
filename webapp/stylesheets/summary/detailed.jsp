@@ -74,7 +74,7 @@
 						rendered="#{not empty detailedSummaryController.paginator.visibleItems}"
 						id="data" rowIndexVar="variable"
 						value="#{detailedSummaryController.paginator.visibleItems}"
-						var="summary" cellpadding="5" cellspacing="3">
+						var="summary" cellpadding="5" cellspacing="3" width="100%">
 
 						<f:facet name="header">
 							<h:panelGroup>

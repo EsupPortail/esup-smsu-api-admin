@@ -11,7 +11,7 @@
 			rendered="#{not empty applicationsController.paginator.visibleItems}"
 			id="data" rowIndexVar="variable"
 			value="#{applicationsController.paginator.visibleItems}"
-			var="application" cellpadding="5" cellspacing="3" width="60%">
+			var="application" cellpadding="5" cellspacing="3" width="100%">
 
 			<f:facet name="header">
 				<h:panelGroup>

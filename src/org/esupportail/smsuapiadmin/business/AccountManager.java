@@ -100,7 +100,7 @@ public class AccountManager extends AbstractApplicationAwareBean {
 	 * 
 	 * @return
 	 */
-	public byte[] makeAccountInfosXlsFile2() {
+	public byte[] makeAccountInfosXlsFile() {
 		byte[] result = null;
 
 		List<Account> accounts = getAllAccounts();
@@ -408,7 +408,7 @@ public class AccountManager extends AbstractApplicationAwareBean {
 	 * @throws JRException
 	 * @throws IOException
 	 */
-	public byte[] makeAccountInfosXlsFile() throws IOException, JRException {
+	public byte[] makeAccountInfosXlsFile2() throws IOException, JRException {
 
 		byte[] result = null;
 

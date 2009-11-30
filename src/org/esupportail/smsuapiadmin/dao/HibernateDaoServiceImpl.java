@@ -4,12 +4,17 @@
  */
 package org.esupportail.smsuapiadmin.dao;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Map;
 
 import org.esupportail.commons.dao.AbstractJdbcJndiHibernateDaoService;
 import org.esupportail.commons.services.application.UninitializedDatabaseException;
 import org.esupportail.commons.services.application.VersionningUtils;
+import org.esupportail.commons.services.logging.Logger;
+import org.esupportail.commons.services.logging.LoggerImpl;
 import org.esupportail.smsuapiadmin.dao.beans.Account;
 import org.esupportail.smsuapiadmin.dao.beans.Application;
 import org.esupportail.smsuapiadmin.dao.beans.Institution;
@@ -19,8 +24,11 @@ import org.esupportail.smsuapiadmin.dao.beans.Statistic;
 import org.esupportail.smsuapiadmin.dao.beans.UserBoSmsu;
 import org.esupportail.smsuapiadmin.domain.beans.VersionManager;
 import org.hibernate.classic.Session;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.jdbc.BadSqlGrammarException;
 
@@ -29,8 +37,13 @@ import org.springframework.jdbc.BadSqlGrammarException;
  */
 @SuppressWarnings("unused")
 public class HibernateDaoServiceImpl extends
-		AbstractJdbcJndiHibernateDaoService implements DaoService,
-		InitializingBean {
+AbstractJdbcJndiHibernateDaoService implements DaoService,
+InitializingBean {
+
+	/**
+	 * Log4j logger.
+	 */
+	private final Logger logger = new LoggerImpl(getClass());
 
 	/**
 	 * The serialization id.
@@ -59,11 +72,11 @@ public class HibernateDaoServiceImpl extends
 	// ////////////////////////////////////////////////////////////
 
 
-	
+
 	public UserBoSmsu getUserById(final Integer id) {
 		UserBoSmsu result = null;
 		String queryString = "FROM UserBoSmsu user " + "WHERE user.Id="
-				+ id + "";
+		+ id + "";
 
 		List users = getHibernateTemplate().find(queryString);
 		if (users.size() == 1) {
@@ -74,11 +87,11 @@ public class HibernateDaoServiceImpl extends
 		return result;
 	}
 
-	
+
 	public UserBoSmsu getUserByLogin(final String login) {
 		UserBoSmsu result = null;
 		String queryString = "FROM UserBoSmsu user " + "WHERE user.Login='"
-				+ login + "'";
+		+ login + "'";
 
 		List users = getHibernateTemplate().find(queryString);
 		if (users.size() == 1) {
@@ -122,7 +135,7 @@ public class HibernateDaoServiceImpl extends
 	@SuppressWarnings("unchecked")
 	public VersionManager getVersionManager() {
 		DetachedCriteria criteria = DetachedCriteria
-				.forClass(VersionManager.class);
+		.forClass(VersionManager.class);
 		criteria.addOrder(Order.asc(ID_ATTRIBUTE));
 		List<VersionManager> versionManagers;
 		try {
@@ -155,27 +168,27 @@ public class HibernateDaoServiceImpl extends
 	// Application
 	// ////////////////////////////////////////////////////////////
 
-	
+
 	public void addApplication(final Application app) {
 		addObject(app);
 	}
 
-	
+
 	public void deleteApplication(final Application app) {
 		deleteObject(app);
 	}
 
-	
+
 	public List<Application> getApplications() {
 		return getHibernateTemplate().loadAll(Application.class);
 	}
 
-	
+
 	public void updateApplication(final Application app) {
 		updateObject(app);
 	}
 
-	
+
 	public Application getApplicationById(final int id) {
 		Application result = null;
 		String queryString = "FROM Application app " + "WHERE app.Id=" + id;
@@ -193,11 +206,11 @@ public class HibernateDaoServiceImpl extends
 	// Account
 	// ////////////////////////////////////////////////////////////
 
-	
+
 	public Account getAccountByName(final String name) {
 		Account result = null;
 		String queryString = "FROM Account account 	" + "WHERE account.Label='"
-				+ name + "'";
+		+ name + "'";
 
 		List accounts = getHibernateTemplate().find(queryString);
 		if (accounts.size() == 1) {
@@ -219,7 +232,7 @@ public class HibernateDaoServiceImpl extends
 	public Institution getInstitutionByName(final String name) {
 		Institution result = null;
 		String queryString = "FROM Institution institution 	"
-				+ "WHERE institution.Label='" + name + "'";
+			+ "WHERE institution.Label='" + name + "'";
 
 		List institutions = getHibernateTemplate().find(queryString);
 		if (institutions.size() == 1) {
@@ -230,7 +243,7 @@ public class HibernateDaoServiceImpl extends
 		return result;
 	}
 
-	
+
 	public void addInstitution(final Institution institution) {
 		addObject(institution);
 	}
@@ -244,49 +257,49 @@ public class HibernateDaoServiceImpl extends
 		return getHibernateTemplate().getSessionFactory().getCurrentSession();
 	}
 
-	
+
 	public List<Sms> getSMSByApplication(final Application app) {
 		List<Sms> result = null;
 		String queryString = "FROM Sms sms " + "WHERE sms.App.Id="
-				+ app.getId();
+		+ app.getId();
 
 		result = getHibernateTemplate().find(queryString);
 
 		return result;
 	}
 
-	
+
 	public List<Statistic> getStatisticByApplication(final Application app) {
 		List<Statistic> result = null;
 		String queryString = "FROM Statistic statistic "
-				+ "WHERE statistic.Id.App.Id=" + app.getId();
+			+ "WHERE statistic.Id.App.Id=" + app.getId();
 
 		result = getHibernateTemplate().find(queryString);
 
 		return result;
 	}
 
-	
+
 	public List<Account> getAccounts() {
 		return getHibernateTemplate().loadAll(Account.class);
 	}
 
-	
+
 	public void updateAccount(final Account account) {
 		updateObject(account);
 	}
 
-	
+
 	public List<Institution> getInstitutions() {
 		return getHibernateTemplate().loadAll(Institution.class);
 	}
 
-	
+
 	public List<Statistic> getStatistics() {
 		return getHibernateTemplate().loadAll(Statistic.class);
 	}
 
-	
+
 	public Account getAccountById(final int id) {
 		Account result = null;
 		String queryString = "FROM Account acc " + "WHERE acc.Id=" + id;
@@ -300,7 +313,7 @@ public class HibernateDaoServiceImpl extends
 		return result;
 	}
 
-	
+
 	public Institution getInstitutionById(final int id) {
 		Institution result = null;
 		String queryString = "FROM Institution inst " + "WHERE inst.Id=" + id;
@@ -314,7 +327,7 @@ public class HibernateDaoServiceImpl extends
 		return result;
 	}
 
-	
+
 	public List<Statistic> searchStatistics(final Institution institution,
 			final Account account, final Application application,
 			final Date month) {
@@ -361,7 +374,7 @@ public class HibernateDaoServiceImpl extends
 
 		// ORDER BY
 		String orderBy = " ORDER BY stat.Id.App.Institution.Label,  "
-				+ "stat.Id.App.Name, stat.Id.Acc.Label, " + "stat.Id.Month";
+			+ "stat.Id.App.Name, stat.Id.Acc.Label, " + "stat.Id.Month";
 
 		String queryString = "";
 
@@ -382,91 +395,63 @@ public class HibernateDaoServiceImpl extends
 		return result;
 	}
 
-	
+
 	public List<Sms> getSms() {
 		return getHibernateTemplate().loadAll(Sms.class);
 	}
 
-	
-	public List<Integer> searchGroupSms(final Institution inst,
+
+	public List<Map> searchGroupSms(final Institution inst,
 			final Account acc, final Application app, final Date startDate,
 			final Date endDate) {
 
-		List<Integer> result = null;
+		List<Map> result = null;
 
-		// SELECT
-		StringBuffer select = new StringBuffer();
-		select.append("SELECT DISTINCT sms." + Sms.PROP_INITIAL_ID);
+		DetachedCriteria criteria = DetachedCriteria.forClass(Sms.class);
 
-		// FROM
-		StringBuffer from = new StringBuffer();
-		from.append(" FROM Sms sms");
+		criteria.setProjection(Projections.projectionList()
+				.add( Projections.distinct(Projections.projectionList()
+						.add(Projections.property(Sms.PROP_APP), "application")
+						.add(Projections.property(Sms.PROP_INITIAL_ID), Sms.PROP_INITIAL_ID))));
 
-		// WHERE
-		StringBuffer where = new StringBuffer();
-		where.append(" WHERE ");
-		boolean whereClause = false;
-		String keywordAND = " AND ";
 		if (inst != null) {
-			where.append(" sms." + Sms.PROP_APP + "." + Application.PROP_INS
-					+ "." + Institution.PROP_ID + "=" + inst.getId()
-					+ keywordAND);
-			whereClause = true;
+			criteria.createCriteria(Sms.PROP_APP).add(Restrictions.eq(Application.PROP_INS, inst));
 		}
+
 		if (app != null) {
-			where.append(" sms." + Sms.PROP_APP + "." + Application.PROP_ID
-					+ "=" + app.getId() + keywordAND);
-			whereClause = true;
+			criteria.add(Restrictions.eq(Sms.PROP_APP, app));
 		}
+
 		if (acc != null) {
-			where.append(" sms." + Sms.PROP_ACC + "." + Account.PROP_ID + "="
-					+ acc.getId() + keywordAND);
-			whereClause = true;
+			criteria.add(Restrictions.eq(Sms.PROP_ACC, acc));
 		}
+
 		if (startDate != null) {
 			long startDateLong = startDate.getTime();
 			java.sql.Date startDateSQL = new java.sql.Date(startDateLong);
-			where.append(" sms." + Sms.PROP_DATE + ">'" + startDateSQL
-					+ "' AND ");
-			whereClause = true;
+			criteria.add(Restrictions.ge(Sms.PROP_DATE, startDateSQL));
 		}
+
 		if (endDate != null) {
-			long endDateLong = endDate.getTime();
+			GregorianCalendar gregorianCalendar = new GregorianCalendar();
+			gregorianCalendar.setTime(endDate);
+			gregorianCalendar.add(Calendar.DAY_OF_YEAR,1); 
+			Date newDate = gregorianCalendar.getTime();
+
+			long endDateLong = newDate.getTime();
 			java.sql.Date endDateSQL = new java.sql.Date(endDateLong);
-			where.append(" sms." + Sms.PROP_DATE + "<'" + endDateSQL + "'"
-					+ keywordAND);
-			whereClause = true;
+
+			criteria.add(Restrictions.lt(Sms.PROP_DATE, endDateSQL));
 		}
 
-		String queryString = "";
+		criteria.setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP);
 
-		StringBuffer selectFrom = select.append(from.toString());
-
-		if (whereClause) {
-			final int sizeAND = 5;
-			String whereStr = where.substring(0, where.length() - sizeAND);
-			queryString = selectFrom.append(whereStr).toString();
-		} else {
-			queryString = selectFrom.toString();
-		}
-
-		result = getHibernateTemplate().find(queryString);
+		result = getHibernateTemplate().findByCriteria(criteria);
 
 		return result;
 	}
 
-	
-	public List<Sms> getSmsByInitialId(final Integer initialId) {
-		List<Sms> result = null;
-		String queryString = "FROM Sms sms " + "WHERE sms."
-				+ Sms.PROP_INITIAL_ID + "=" + initialId;
 
-		result = getHibernateTemplate().find(queryString);
-
-		return result;
-	}
-
-	
 	public Role getRoleById(final String id) {
 		Role result = null;
 		String queryString = "FROM Role role " + "WHERE role.Id=" + id;
@@ -480,9 +465,22 @@ public class HibernateDaoServiceImpl extends
 		return result;
 	}
 
-	
+
 	public List<Role> getRoles() {
 		return getHibernateTemplate().loadAll(Role.class);
+	}
+
+	public List<Sms> getSmsByApplicationAndInitialId(final Application application,
+			final Integer smsInitialId) {
+
+		DetachedCriteria criteria = DetachedCriteria.forClass(Sms.class);
+		criteria.add(Restrictions.eq(Sms.PROP_APP, application));
+		if (smsInitialId != null) {
+			criteria.add(Restrictions.eq(Sms.PROP_INITIAL_ID, smsInitialId));
+		} else {
+			criteria.add(Restrictions.isNull(Sms.PROP_INITIAL_ID));
+		}
+		return getHibernateTemplate().findByCriteria(criteria);
 	}
 
 }

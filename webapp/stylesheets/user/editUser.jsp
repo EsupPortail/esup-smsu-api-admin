@@ -12,7 +12,7 @@
 	<h:form id="editUser">
 		<e:panelGrid columns="2">
 
-			<e:outputLabel value="#{msgs['USER.LOGIN.NAME']}" />
+			<e:outputLabel for="login" value="#{msgs['USER.LOGIN.NAME']}" />
 			<h:panelGroup>
 				<e:inputText id="login" value="#{usersController.user.login}"
 					maxlength="30" required="true"
@@ -21,7 +21,7 @@
 				<e:message for="login" />
 			</h:panelGroup>
 
-			<e:outputLabel value="#{msgs['ROLE.NAME']}" />
+			<e:outputLabel for="role" value="#{msgs['ROLE.NAME']}" />
 			<h:panelGroup>
 				<h:selectOneMenu id="role" value="#{usersController.user.role.id}">
 					<f:selectItems value="#{usersController.roles}" />

@@ -63,8 +63,6 @@
 
 		</e:form>
 
-		<e:message for="startDate" />
-
 		<h:panelGroup rendered="#{detailedSummaryController.searchDone}">
 			<e:subSection value="#{msgs['SUMMARY.AVAILABLE']}" />
 

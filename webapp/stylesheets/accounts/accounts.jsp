@@ -131,7 +131,7 @@
 
 	<h:form id="import" enctype="multipart/form-data">
 		<e:panelGrid columns="2">
-			<e:outputLabel value="#{msgs['ACCOUNT.IMPORT.XLSFILE']}" />
+			<e:outputLabel value="#{msgs['ACCOUNT.IMPORT.XLSFILE']}" for="importFile"/>
 			<h:panelGroup>
 				<h:panelGrid columns="1">
 					<h:panelGroup>

@@ -7,6 +7,7 @@ package org.esupportail.smsuapiadmin.dao;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.esupportail.smsuapiadmin.dao.beans.Account;
 import org.esupportail.smsuapiadmin.dao.beans.Application;
@@ -223,15 +224,9 @@ public interface DaoService extends Serializable {
 	 * @param endDate
 	 * @return
 	 */
-	List<Integer> searchGroupSms(Institution inst, Account acc,
+	List<Map> searchGroupSms(Institution inst, Account acc,
 			Application app, Date startDate, Date endDate);
 
-	/**
-	 * Returns all sms' of the group indentified by initialId.
-	 * 
-	 * @param smsInitialId
-	 */
-	List<Sms> getSmsByInitialId(Integer initialId);
 
 	/**
 	 * Returns the role with the specified id.
@@ -255,5 +250,8 @@ public interface DaoService extends Serializable {
 	 * @return
 	 */
 	List<Role> getRoles();
+
+	List<Sms> getSmsByApplicationAndInitialId(Application application,
+			Integer smsInitialId);
 
 }

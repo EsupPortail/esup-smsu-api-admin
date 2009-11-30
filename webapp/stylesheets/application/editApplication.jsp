@@ -16,7 +16,7 @@
 	<h:form id="editApplication" enctype="multipart/form-data">
 		<e:panelGrid columns="4">
 
-			<e:outputLabel value="#{msgs['APPLICATION.LABEL.NAME']}" />
+			<e:outputLabel value="#{msgs['APPLICATION.LABEL.NAME']}" for="name"/>
 			<h:panelGroup>
 				<e:inputText id="name"
 					value="#{applicationsController.application.name}" maxlength="30"
@@ -31,7 +31,7 @@
 				<f:verbatim> </f:verbatim>
 			</h:panelGroup>
 
-			<e:outputLabel value="#{msgs['APPLICATION.LABEL.CERTIFICATE']}" />
+			<e:outputLabel value="#{msgs['APPLICATION.LABEL.CERTIFICATE']}" for="certificate"/>
 			<h:panelGroup>
 				<h:panelGrid columns="1">
 					<h:panelGroup>
@@ -43,8 +43,8 @@
 					</h:panelGroup>
 					<h:panelGroup
 						rendered="#{applicationsController.application.certificateFile!=null or applicationsController.application.certificate!=null}">
-						<t:graphicImage url="/media/icons/certificat[20x15].png" />
-						<e:outputLabel value="#{msgs['APPLICATION.CERTIFICATEDEFINED']}" />
+						<t:graphicImage id="cer" url="/media/icons/certificat[20x15].png" />
+						<e:outputLabel value="#{msgs['APPLICATION.CERTIFICATEDEFINED']}" for="cer"/>
 					</h:panelGroup>
 				</h:panelGrid>
 			</h:panelGroup>
@@ -55,7 +55,7 @@
 				<f:verbatim> </f:verbatim>
 			</h:panelGroup>
 
-			<e:outputLabel value="#{msgs['APPLICATION.LABEL.INSTITUTION']}" />
+			<e:outputLabel value="#{msgs['APPLICATION.LABEL.INSTITUTION']}" for="institution"/>
 			<h:panelGroup>
 				<e:inputText id="institution"
 					value="#{applicationsController.application.institution.name}"
@@ -71,7 +71,7 @@
 				<f:verbatim> </f:verbatim>
 			</h:panelGroup>
 
-			<e:outputLabel value="#{msgs['APPLICATION.LABEL.ACCOUNT']}" />
+			<e:outputLabel for="account" value="#{msgs['APPLICATION.LABEL.ACCOUNT']}" />
 			<h:panelGroup>
 				<e:inputText id="account"
 					value="#{applicationsController.application.account.name}"
@@ -91,7 +91,7 @@
 			</h:selectOneListbox>
 
 
-			<e:outputLabel value="#{msgs['APPLICATION.LABEL.QUOTA']}" />
+			<e:outputLabel for="quota" value="#{msgs['APPLICATION.LABEL.QUOTA']}" />
 			<h:panelGroup>
 				<e:inputText id="quota"
 					value="#{applicationsController.application.quota}" maxlength="30"

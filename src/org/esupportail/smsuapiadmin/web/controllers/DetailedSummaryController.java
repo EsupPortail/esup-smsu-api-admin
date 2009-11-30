@@ -156,10 +156,12 @@ public class DetailedSummaryController extends AbstractContextAwareController {
 	 * @return A list of summary.
 	 */
 	public String search() {
-
+logger.debug("institutionId : " + institutionId + ", accountId" + accountId + ", applicationId : " + 
+						applicationId + ", startDate" + startDate + ", endDate" + endDate );
 		List<UIDetailedSummary> searchDetailedSummaries = getDomainService()
 				.searchDetailedSummaries(institutionId, accountId,
 						applicationId, startDate, endDate);
+		
 		paginator.setData(searchDetailedSummaries);
 		searchDone = true;
 		results = !searchDetailedSummaries.isEmpty();

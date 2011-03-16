@@ -5,7 +5,6 @@ import org.esupportail.commons.services.application.VersionningService;
 import org.esupportail.commons.services.database.DatabaseUtils;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
-import org.esupportail.smsuapiadmin.domain.beans.User;
 import org.esupportail.smsuapiadmin.web.controllers.AbstractDomainAwareBean;
 
 

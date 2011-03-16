@@ -10,7 +10,6 @@ import org.esupportail.smsuapiadmin.dao.DaoService;
 import org.esupportail.smsuapiadmin.dao.beans.Institution;
 import org.esupportail.smsuapiadmin.dao.beans.Role;
 import org.esupportail.smsuapiadmin.dto.DTOConverterService;
-import org.esupportail.smsuapiadmin.dto.beans.UIInstitution;
 import org.esupportail.smsuapiadmin.dto.beans.UIRole;
 
 /**

@@ -5,7 +5,6 @@ import java.io.Serializable;
 import org.esupportail.commons.utils.strings.StringUtils;
 import org.esupportail.smsuapiadmin.domain.beans.EnumeratedFunction;
 import org.esupportail.smsuapiadmin.domain.beans.User;
-import org.hibernate.property.Setter;
 
 /**
  * UIUser is the representation on the web side of the User persistent.

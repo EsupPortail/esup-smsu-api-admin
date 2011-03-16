@@ -13,7 +13,6 @@ import org.esupportail.commons.services.logging.LoggerImpl;
 import org.esupportail.commons.utils.Assert;
 import org.esupportail.commons.utils.ContextUtils;
 import org.esupportail.smsuapiadmin.domain.DomainService;
-import org.esupportail.smsuapiadmin.domain.beans.User;
 import org.esupportail.smsuapiadmin.dto.beans.UIUser;
 import org.springframework.beans.factory.InitializingBean;
 

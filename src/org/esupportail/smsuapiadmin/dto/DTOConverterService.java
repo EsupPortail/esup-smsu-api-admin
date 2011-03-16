@@ -8,7 +8,6 @@ import org.esupportail.smsuapiadmin.dao.beans.Role;
 import org.esupportail.smsuapiadmin.dao.beans.Sms;
 import org.esupportail.smsuapiadmin.dao.beans.Statistic;
 import org.esupportail.smsuapiadmin.dao.beans.UserBoSmsu;
-import org.esupportail.smsuapiadmin.domain.beans.User;
 import org.esupportail.smsuapiadmin.dto.beans.UIAccount;
 import org.esupportail.smsuapiadmin.dto.beans.UIApplication;
 import org.esupportail.smsuapiadmin.dto.beans.UIFonction;

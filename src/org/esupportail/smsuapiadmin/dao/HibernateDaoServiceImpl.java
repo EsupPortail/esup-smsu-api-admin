@@ -399,11 +399,11 @@ InitializingBean {
 	}
 
 
-	public List<Map> searchGroupSms(final Institution inst,
+	public List<Map<String,?>> searchGroupSms(final Institution inst,
 			final Account acc, final Application app, final Date startDate,
 			final Date endDate) {
 
-		List<Map> result = null;
+		List<Map<String, ?>> result = null;
 
 		DetachedCriteria criteria = DetachedCriteria.forClass(Sms.class);
 

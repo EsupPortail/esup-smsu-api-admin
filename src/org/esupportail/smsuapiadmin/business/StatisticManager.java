@@ -803,12 +803,12 @@ public class StatisticManager
 
 		// on commence par récupérer tous les groupes d'envois correspondant
 		// aux critères
-		final List<Map> groupSms = (List<Map>) searchGroupSms(inst, acc, app,
+		final List<Map<String,?>> groupSms = searchGroupSms(inst, acc, app,
 				startDate, endDate);
 		
 		// pour chaque groupe d'envoi, on construit le relevé détaillé
 		//for (final Integer smsInitialId : groupSms) {
-		for (final Map map : groupSms) {
+		for (final Map<String,?> map : groupSms) {
 
 			final Application application = (Application) map.get("application");
 			final Integer smsInitialId = (Integer) map.get(Sms.PROP_INITIAL_ID);
@@ -897,7 +897,7 @@ public class StatisticManager
 	 * @param endDate
 	 * @return
 	 */
-	private List<Map> searchGroupSms(final Institution inst,
+	private List<Map<String,?>> searchGroupSms(final Institution inst,
 			final Account acc, final Application app, final Date startDate,
 			final Date endDate) {
 		return daoService.searchGroupSms(inst, acc, app, startDate, endDate);

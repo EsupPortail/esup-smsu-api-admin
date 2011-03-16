@@ -224,7 +224,7 @@ public interface DaoService extends Serializable {
 	 * @param endDate
 	 * @return
 	 */
-	List<Map> searchGroupSms(Institution inst, Account acc,
+	List<Map<String,?>> searchGroupSms(Institution inst, Account acc,
 			Application app, Date startDate, Date endDate);
 
 

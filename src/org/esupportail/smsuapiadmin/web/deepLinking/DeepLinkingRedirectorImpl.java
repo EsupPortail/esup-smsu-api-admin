@@ -47,7 +47,6 @@ public class DeepLinkingRedirectorImpl extends AbstractDeepLinkingRedirector {
 	 * @see org.esupportail.commons.web.deepLinking.DeepLinkingRedirector#redirect(java.util.Map)
 	 */
 	public String redirect(
-			@SuppressWarnings("unused")
 			final Map<String, String> params) {
 		sessionController.resetSessionLocale();
 		return null;

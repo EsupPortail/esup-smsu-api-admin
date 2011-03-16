@@ -1,7 +1,6 @@
 package org.esupportail.smsuapiadmin.dto.beans;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.esupportail.smsuapiadmin.domain.beans.EnumeratedFunction;
@@ -85,14 +84,10 @@ public class UIRole extends UIObject {
 	 * @return
 	 */
 	public boolean isAuthorizedForFonction(final EnumeratedFunction fct) {
-		boolean result = false;
-
-		Iterator<UIFonction> it = fonctions.iterator();
-		while (!result && it.hasNext()) {
-			UIFonction uiFct = it.next();
-			result = fct == uiFct.getFunction();
+		for (UIFonction uiFct : fonctions) {
+			if (fct == uiFct.getFunction()) return true;
 		}
-		return result;
+		return false;
 	}
 
 	/**

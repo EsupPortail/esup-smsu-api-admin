@@ -35,6 +35,7 @@ public class SummaryCriteriasController extends AbstractContextAwareController {
 	/**
 	 * Log4j logger.
 	 */
+	@SuppressWarnings("unused")
 	private final Logger logger = new LoggerImpl(getClass());
 
 	/**

@@ -43,6 +43,7 @@ import org.esupportail.smsuapiadmin.dto.beans.UIAccount;
  * @author MZRL3760
  * 
  */
+@SuppressWarnings("serial")
 public class AccountManager extends AbstractApplicationAwareBean {
 
 	/**

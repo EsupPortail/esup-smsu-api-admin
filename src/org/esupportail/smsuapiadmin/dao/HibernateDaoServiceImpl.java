@@ -35,7 +35,7 @@ import org.springframework.jdbc.BadSqlGrammarException;
 /**
  * The Hibernate implementation of the DAO service.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "unchecked"})
 public class HibernateDaoServiceImpl extends
 AbstractJdbcJndiHibernateDaoService implements DaoService,
 InitializingBean {
@@ -105,7 +105,6 @@ InitializingBean {
 	/**
 	 * @see org.esupportail.smsuapiadmin.dao.DaoService#getUsers()
 	 */
-	@SuppressWarnings("unchecked")
 	public List<UserBoSmsu> getUsers() {
 		return getHibernateTemplate().loadAll(UserBoSmsu.class);
 	}
@@ -132,7 +131,6 @@ InitializingBean {
 	/**
 	 * @see org.esupportail.smsuapiadmin.dao.DaoService#getVersionManager()
 	 */
-	@SuppressWarnings("unchecked")
 	public VersionManager getVersionManager() {
 		DetachedCriteria criteria = DetachedCriteria
 		.forClass(VersionManager.class);

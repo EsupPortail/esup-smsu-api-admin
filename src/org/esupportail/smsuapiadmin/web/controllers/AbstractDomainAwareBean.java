@@ -19,6 +19,7 @@ import org.esupportail.smsuapiadmin.dto.beans.UIUser;
  * service (domainService). - the application service (applicationService). -
  * the i18n service (i18nService).
  */
+@SuppressWarnings("serial")
 public abstract class AbstractDomainAwareBean extends
 		AbstractApplicationAwareBean implements Resettable {
 

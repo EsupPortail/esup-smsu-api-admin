@@ -19,6 +19,7 @@ import org.esupportail.smsuapiadmin.dto.beans.UISms;
  * @author MZRL3760
  * 
  */
+@SuppressWarnings("serial")
 public class SmsManager extends AbstractApplicationAwareBean {
 
 

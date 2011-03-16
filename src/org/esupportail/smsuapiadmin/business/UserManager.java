@@ -18,6 +18,7 @@ import org.esupportail.smsuapiadmin.dto.beans.UIUser;
  * @author MZRL3760
  * 
  */
+@SuppressWarnings("serial")
 public class UserManager extends AbstractApplicationAwareBean {
 
 	/**

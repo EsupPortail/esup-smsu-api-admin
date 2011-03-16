@@ -18,6 +18,7 @@ import org.esupportail.smsuapiadmin.dto.beans.UIInstitution;
  * @author MZRL3760
  * 
  */
+@SuppressWarnings("serial")
 public class InstitutionManager extends AbstractApplicationAwareBean {
 
 	/**

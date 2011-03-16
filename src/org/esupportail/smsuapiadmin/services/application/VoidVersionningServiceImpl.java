@@ -8,6 +8,7 @@ import org.esupportail.commons.services.logging.LoggerImpl;
 import org.esupportail.smsuapiadmin.web.controllers.AbstractDomainAwareBean;
 
 
+@SuppressWarnings("serial")
 public class VoidVersionningServiceImpl extends AbstractDomainAwareBean implements VersionningService{
 
 	/**

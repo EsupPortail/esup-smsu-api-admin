@@ -53,6 +53,7 @@ import org.esupportail.smsuapiadmin.dto.beans.UIStatistic;
  * @author MZRL3760
  * 
  */
+@SuppressWarnings("serial")
 public class StatisticManager 
 	extends	AbstractApplicationAwareBean {
 

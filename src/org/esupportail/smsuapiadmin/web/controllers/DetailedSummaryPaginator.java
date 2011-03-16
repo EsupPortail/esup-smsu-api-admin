@@ -21,6 +21,7 @@ public class DetailedSummaryPaginator extends ListPaginator<UIDetailedSummary> {
 	/**
 	 * The domain service.
 	 */
+	@SuppressWarnings("unused")
 	private DomainService domainService;
 
 	/**

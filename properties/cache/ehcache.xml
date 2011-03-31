@@ -58,7 +58,7 @@
     	/>
 
     <cache 
-    	name="org.esupportail.commons.services.ldap.CachingLdapServiceImpl"
+    	name="org.esupportail.commons.services.ldap.CachingLdapEntityServiceImpl"
     	maxElementsInMemory="1000" 
     	eternal="false" 
     	timeToIdleSeconds="300"

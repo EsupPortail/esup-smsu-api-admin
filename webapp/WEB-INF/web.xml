@@ -196,13 +196,23 @@
 			</param-value>
 		</init-param>
 		<init-param>
+			<param-name>portlet-name</param-name>
+			<param-value>esup-smsu-api-admin</param-value>
+		</init-param>
+		<init-param>
 			<param-name>portlet-guid</param-name>
 			<param-value>esup-smsu-api-admin.esup-smsu-api-admin</param-value>
 		</init-param>
+		<load-on-startup>1</load-on-startup>
+
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>esup-smsu-api-admin</servlet-name>
 		<url-pattern>/esup-smsu-api-admin/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>esup-smsu-api-admin</servlet-name>
+		<url-pattern>/PlutoInvoker/esup-smsu-api-admin</url-pattern>
 	</servlet-mapping>
 
 <!--END-PORTLET-ONLY-->

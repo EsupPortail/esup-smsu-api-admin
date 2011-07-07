@@ -43,7 +43,6 @@ import org.esupportail.smsuapiadmin.dto.beans.UIAccount;
 import org.esupportail.smsuapiadmin.dto.beans.UIApplication;
 import org.esupportail.smsuapiadmin.dto.beans.UIDetailedSummary;
 import org.esupportail.smsuapiadmin.dto.beans.UIInstitution;
-import org.esupportail.smsuapiadmin.dto.beans.UISms;
 import org.esupportail.smsuapiadmin.dto.beans.UIStatistic;
 
 /**
@@ -841,9 +840,8 @@ public class StatisticManager
 			int cptERROR = 0;
 			// on parcourt les sms
 			for (final Sms sms : smsList) {
-				final UISms uiSms = dtoConverterService.convertToUI(sms);
 				// gestion de la date
-				final Date smsDate = uiSms.getDate();
+				final Date smsDate = sms.getDate();
 				if (minDate == null) {
 					minDate = smsDate;
 				} else {
@@ -852,7 +850,7 @@ public class StatisticManager
 					}
 				}
 				// gestion du statut
-				final SmsStatus status = uiSms.getState();
+				final SmsStatus status = SmsStatus.valueOf(sms.getState());
 				if (status.equals(SmsStatus.CREATED)) {
 					cptCREATED++;
 				} else if (status.equals(SmsStatus.DELIVERED)) {

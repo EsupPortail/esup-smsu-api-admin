@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
@@ -831,13 +832,10 @@ public class StatisticManager
 
 			Date minDate = null;
 
-			int cptCREATED = 0;
-			int cptINPROGRESS = 0;
-			int cptDELIVERED = 0;
-			int cptERRORQUOTA = 0;
-			int cptERRORPREBL = 0;
-			int cptERRORPOSTBL = 0;
-			int cptERROR = 0;
+			// le décompte
+			final Map<SmsStatus, Integer> stats = new EnumMap<SmsStatus, Integer>(SmsStatus.class);
+			for (SmsStatus status : SmsStatus.values()) stats.put(status, new Integer(0));
+
 			// on parcourt les sms
 			for (final Sms sms : smsList) {
 				// gestion de la date
@@ -851,33 +849,10 @@ public class StatisticManager
 				}
 				// gestion du statut
 				final SmsStatus status = SmsStatus.valueOf(sms.getState());
-				if (status.equals(SmsStatus.CREATED)) {
-					cptCREATED++;
-				} else if (status.equals(SmsStatus.DELIVERED)) {
-					cptDELIVERED++;
-				} else if (status.equals(SmsStatus.ERROR)) {
-					cptERROR++;
-				} else if (status.equals(SmsStatus.ERROR_POST_BL)) {
-					cptERRORPOSTBL++;
-				} else if (status.equals(SmsStatus.ERROR_PRE_BL)) {
-					cptERRORPREBL++;
-				} else if (status.equals(SmsStatus.ERROR_QUOTA)) {
-					cptERRORQUOTA++;
-				} else if (status.equals(SmsStatus.IN_PROGRESS)) {
-					cptINPROGRESS++;
-				}
+				stats.put(status, stats.get(status) + 1);
 			}
 			// la date
 			summary.setDate(minDate);
-			// le décompte
-			final Map<SmsStatus, Integer> stats = new HashMap<SmsStatus, Integer>();
-			stats.put(SmsStatus.CREATED, cptCREATED);
-			stats.put(SmsStatus.DELIVERED, cptDELIVERED);
-			stats.put(SmsStatus.ERROR, cptERROR);
-			stats.put(SmsStatus.ERROR_POST_BL, cptERRORPOSTBL);
-			stats.put(SmsStatus.ERROR_PRE_BL, cptERRORPREBL);
-			stats.put(SmsStatus.ERROR_QUOTA, cptERRORQUOTA);
-			stats.put(SmsStatus.IN_PROGRESS, cptINPROGRESS);
 			summary.setStatistics(stats);
 
 			result.add(summary);

@@ -840,12 +840,8 @@ public class StatisticManager
 			for (final Sms sms : smsList) {
 				// gestion de la date
 				final Date smsDate = sms.getDate();
-				if (minDate == null) {
+				if (minDate == null || smsDate.before(minDate)) {
 					minDate = smsDate;
-				} else {
-					if (smsDate.before(minDate)) {
-						minDate = smsDate;
-					}
 				}
 				// gestion du statut
 				final SmsStatus status = SmsStatus.valueOf(sms.getState());

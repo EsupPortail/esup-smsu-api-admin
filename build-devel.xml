@@ -66,6 +66,20 @@
 		<echo>Refactoring done.</echo>
 	</target>
 
+	<taskdef name="hotswap" classname="dak.ant.taskdefs.Hotswap">
+		<classpath>
+			<pathelement location="${commons.basedir}/utils/ant/hotswap.jar"/>
+		</classpath>
+	</taskdef>
+
+	<target name="hotswap" depends="_compile">
+		<hotswap verbose="true" port="${jpdaAddress}">
+		  	<fileset dir="${build.classes}" includes="**/*.class">
+			  <date datetime="${date}" pattern="d-MMMM-yyyy HH:mma" when="after"/>
+			</fileset>
+		</hotswap>
+	</target>
+
 </project>
 
 

@@ -84,9 +84,8 @@ public class AuthenticatorImpl implements Serializable, InitializingBean,
 			}
 			return user;
 		}
-		if (logger.isDebugEnabled()) {
-			logger.debug("no auth info found in session");
-		}
+		logger.debug("no auth info found in session");
+
 		authInfo = authenticationService.getAuthInfo();
 		if (authInfo == null) {
 			return null;

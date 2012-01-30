@@ -130,7 +130,7 @@ public class AccountsController extends AbstractContextAwareController {
 			getDomainService().updateAccountsQuota(inputStream);
 		} catch (IOException e) {
 			error = true;
-			logger.error("Impossible de lire dans le fichier uploadé", e);
+			logger.error("Impossible de lire dans le fichier uploade", e);
 			addErrorMessage("import:importFile",
 					"ACCOUNT.IMPORT.XLSFILE.ERROR.GETIMPORT");
 		} catch (UpdateAccountsQuotaException e) {
@@ -141,7 +141,7 @@ public class AccountsController extends AbstractContextAwareController {
 		}
 
 		if (!error) {
-			logger.info("L'import du ficher Excel a réussi");
+			logger.info("L'import du ficher Excel a reussi");
 			addInfoMessage("import:importFile", "ACCOUNT.IMPORT.XLSFILE.OK");
 		}
 		return "accounts";
@@ -156,17 +156,17 @@ public class AccountsController extends AbstractContextAwareController {
 	 */
 	public String downloadXLSReport() throws IOException, JRException {
 
-		// on récupère le fichier Excel
+		// on recupere le fichier Excel
 		byte[] report = getDomainService().makeXLSReportForAccounts();
 
 		downloadId = DownloadUtils.setDownload(report, "rapport.xls",
 				"application/octet-stream");
 
 		logger
-				.debug("Le fichier 'rapport.xls' est placé en download avec downloadId="
+				.debug("Le fichier 'rapport.xls' est place en download avec downloadId="
 						+ downloadId);
 
-		// on reste sur la même page
+		// on reste sur la meme page
 		return null;
 	}
 
@@ -179,13 +179,13 @@ public class AccountsController extends AbstractContextAwareController {
 	 */
 	public String downloadPDFReport() throws JRException, IOException {
 
-		// on récupère le fichier Pdf
+		// on recupere le fichier Pdf
 		byte[] report = getDomainService().makePDFReportForAccounts();
 
 		if (report == null) {
-			logger.error("La génération du rapport a échouée");
+			logger.error("La generation du rapport a echouee");
 		} else {
-			logger.info("La génération du rapport a réussie");
+			logger.info("La generation du rapport a reussie");
 		}
 
 		try {
@@ -193,13 +193,13 @@ public class AccountsController extends AbstractContextAwareController {
 					"application/octet-stream");
 
 			logger
-					.info("Le fichier 'rapport.pdf' est placé en download avec downloadId="
+					.info("Le fichier 'rapport.pdf' est place en download avec downloadId="
 							+ downloadId);
 		} catch (DownloadException e) {
-			logger.error("Le placement du rapport en download a échouée", e);
+			logger.error("Le placement du rapport en download a echouee", e);
 		}
 
-		// on reste sur la même page
+		// on reste sur la meme page
 		return null;
 	}
 

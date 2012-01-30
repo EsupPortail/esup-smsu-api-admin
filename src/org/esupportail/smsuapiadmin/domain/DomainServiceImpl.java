@@ -318,7 +318,7 @@ public class DomainServiceImpl implements DomainService, InitializingBean {
 			}
 		} catch (NumberFormatException e) {
 			logger.debug("Impossible de parser la date choisie : "
-					+ "on en déduit que l'item 'Tous' a été sélectionné.", e);
+					+ "on en deduit que l'item 'Tous' a ete selectionne.", e);
 		}
 
 		return statisticManager.searchStatistics(inst, acc, app, month);
@@ -329,7 +329,7 @@ public class DomainServiceImpl implements DomainService, InitializingBean {
 			final String applicationId, final String accountId,
 			final String monthStr) throws IOException, JRException {
 
-		// on récupère les objets persistents
+		// on recupere les objets persistents
 		Institution inst = institutionManager.getInstitutionById(institutionId);
 		Account acc = accountManager.getAccountById(accountId);
 		Application app = applicationManager.getApplicationById(applicationId);
@@ -341,7 +341,7 @@ public class DomainServiceImpl implements DomainService, InitializingBean {
 			}
 		} catch (NumberFormatException e) {
 			logger.debug("Impossible de parser la date choisie : "
-					+ "on en déduit que l'item 'Tous' a été sélectionné.", e);
+					+ "on en deduit que l'item 'Tous' a ete selectionne.", e);
 		}
 
 		return statisticManager.makeReportForConsolidatedSummaries(format,
@@ -353,7 +353,7 @@ public class DomainServiceImpl implements DomainService, InitializingBean {
 			final String applicationId, final String accountId,
 			final Date startDate, final Date endDate) throws IOException,
 			JRException {
-		// on récupère les objets persistents
+		// on recupere les objets persistents
 		Institution inst = institutionManager.getInstitutionById(institutionId);
 		Account acc = accountManager.getAccountById(accountId);
 		Application app = applicationManager.getApplicationById(applicationId);
@@ -365,7 +365,7 @@ public class DomainServiceImpl implements DomainService, InitializingBean {
 	public List<UIDetailedSummary> searchDetailedSummaries(
 			final String institutionId, final String accountId,
 			final String applicationId, final Date startDate, final Date endDate) {
-		// on récupère les objets persistents
+		// on recupere les objets persistents
 		Institution inst = institutionManager.getInstitutionById(institutionId);
 		Account acc = accountManager.getAccountById(accountId);
 		Application app = applicationManager.getApplicationById(applicationId);

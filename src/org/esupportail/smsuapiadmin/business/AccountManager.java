@@ -119,7 +119,7 @@ public class AccountManager extends AbstractApplicationAwareBean {
 		String nameSheet = getI18nService().getString("ACCOUNT.XLSFILE.SHEET");
 		HSSFSheet sheet = workbook.createSheet(nameSheet);
 
-		// on récupère les titres des colonnes
+		// on recupere les titres des colonnes
 		String columnLabel = getI18nService().getString("ACCOUNT.NAME");
 		String columnQuota = getI18nService().getString("ACCOUNT.QUOTA");
 		String columnConsSMS = getI18nService().getString("ACCOUNT.CONS_SMS");
@@ -144,7 +144,7 @@ public class AccountManager extends AbstractApplicationAwareBean {
 			Long quota = account.getQuota();
 			Long consumedSms = account.getConsumedSms();
 
-			// on crée une nouvelle ligne de valeurs
+			// on cree une nouvelle ligne de valeurs
 			valueRow = sheet.createRow(i);
 			HSSFCell cellLabelValue = valueRow.createCell(0);
 			cellLabelValue.setCellValue(new HSSFRichTextString(label));
@@ -153,11 +153,11 @@ public class AccountManager extends AbstractApplicationAwareBean {
 			HSSFCell cellConSMSValue = valueRow.createCell(2);
 			cellConSMSValue.setCellValue(consumedSms);
 
-			// on passe à la ligne suivante
+			// on passe a la ligne suivante
 			i++;
 		}
 
-		// On ouvre un flux d'écriture sur le fichier résultat
+		// On ouvre un flux d'ecriture sur le fichier resultat
 		try {
 			ByteArrayOutputStream fos = new ByteArrayOutputStream();
 			workbook.write(fos);
@@ -167,10 +167,10 @@ public class AccountManager extends AbstractApplicationAwareBean {
 		} catch (FileNotFoundException e) {
 			logger
 					.error(
-							"Impossible d'ouvrir un flux en écriture sur le fichier excel",
+							"Impossible d'ouvrir un flux en ecriture sur le fichier excel",
 							e);
 		} catch (IOException e) {
-			logger.error("Impossible d'écrire dans le fichier excel", e);
+			logger.error("Impossible d'ecrire dans le fichier excel", e);
 		}
 
 		return result;
@@ -197,10 +197,10 @@ public class AccountManager extends AbstractApplicationAwareBean {
 	public void updateAccountsQuota(final InputStream importFile)
 			throws UpdateAccountsQuotaException {
 		try {
-			// on construit le workbook à partir du fichier
+			// on construit le workbook a partir du fichier
 			HSSFWorkbook workbook = new HSSFWorkbook(importFile);
 
-			// on récupère la première feuille
+			// on recupere la premiere feuille
 			HSSFSheet sheet = workbook.getSheetAt(0);
 			if (sheet == null) {
 				String message = "Le fichier d'import ne contient pas de feuille.";
@@ -219,7 +219,7 @@ public class AccountManager extends AbstractApplicationAwareBean {
 				HSSFCell cellQuota = row.getCell(1);
 				HSSFCell cellAction = row.getCell(2);
 
-				// une action et un compte sont précisés
+				// une action et un compte sont precises
 				if (cellLabel != null && cellAction != null) {
 					HSSFRichTextString labelValue = cellLabel
 							.getRichStringCellValue();
@@ -230,7 +230,7 @@ public class AccountManager extends AbstractApplicationAwareBean {
 					// le compte
 					String account = labelValue.getString();
 
-					// le compte n'a pas déjà été traité dans la
+					// le compte n'a pas deja ete traite dans la
 					// liste
 					if (!accountsToIncrement.containsKey(account)
 							&& !accountsToDelete.contains(account)) {
@@ -240,7 +240,7 @@ public class AccountManager extends AbstractApplicationAwareBean {
 
 						// action "Ajouter"
 						if (ACTION_AJOUTER.equals(action)) {
-							// le quota est précisé
+							// le quota est precise
 							String errorQuotaFormat = "ACCOUNT.IMPORT.XLSFILE.ERROR.QUOTAFORMAT";
 							if (cellQuota != null) {
 								try {
@@ -263,7 +263,7 @@ public class AccountManager extends AbstractApplicationAwareBean {
 											message, e);
 								}
 							} else {
-								// le quota n'est pas précisé
+								// le quota n'est pas precise
 								String message = getI18nService().getString(
 										errorQuotaFormat, rowIndex + 1);
 								throw new UpdateAccountsQuotaException(message);
@@ -289,8 +289,8 @@ public class AccountManager extends AbstractApplicationAwareBean {
 							throw new UpdateAccountsQuotaException(message);
 						}
 					} else {
-						// ce compte est déjà présent dans les lignes
-						// précédentes
+						// ce compte est deja present dans les lignes
+						// precedentes
 						String message = getI18nService().getString(
 								"ACCOUNT.IMPORT.XLSFILE.ERROR.ACCOUNTEXISTS",
 								rowIndex + 1);
@@ -306,7 +306,7 @@ public class AccountManager extends AbstractApplicationAwareBean {
 				rowIndex++;
 				row = sheet.getRow(rowIndex);
 			}
-			// on finit par mettre à jour les comptes
+			// on finit par mettre a jour les comptes
 			updateAccountQuota(accountsToIncrement, accountsToDelete);
 		} catch (FileNotFoundException e) {
 			// exception technique
@@ -319,7 +319,7 @@ public class AccountManager extends AbstractApplicationAwareBean {
 			logger.error(message, e);
 			throw new UpdateAccountsQuotaException(message, e);
 		} catch (UpdateAccountsQuotaException e) {
-			// exception métier
+			// exception metier
 			// on relance
 			throw e;
 		}
@@ -337,13 +337,13 @@ public class AccountManager extends AbstractApplicationAwareBean {
 			final Map<String, Integer> accountsToIncrement,
 			final List<String> accountsToDelete) {
 
-		// mise à jour des comptes dont le quota ets à incrémenter
+		// mise a jour des comptes dont le quota ets a incrementer
 		for (String account : accountsToIncrement.keySet()) {
 			int increment = accountsToIncrement.get(account);
 			incrementAccountQuota(account, increment);
 		}
 
-		// La suppression d'un compte consiste à mettre son quota à 0
+		// La suppression d'un compte consiste a mettre son quota a 0
 		for (String accountName : accountsToDelete) {
 			Account account = daoService.getAccountByName(accountName);
 			account.setQuota(new Long(0));
@@ -360,24 +360,24 @@ public class AccountManager extends AbstractApplicationAwareBean {
 	 */
 	private void incrementAccountQuota(final String accountName,
 			final int increment) {
-		// on récupère le compte de la base
+		// on recupere le compte de la base
 		Account account = daoService.getAccountByName(accountName);
-		// si aucun compte de ce nom n'existe, on le crée
+		// si aucun compte de ce nom n'existe, on le cree
 		if (account == null) {
 			Account newAccount = new Account();
 			newAccount.setLabel(accountName);
 			daoService.addAccount(newAccount);
 			account = daoService.getAccountByName(accountName);
 		}
-		// on récupère le quota actuel
+		// on recupere le quota actuel
 		Long currentQuota = account.getQuota();
-		// on l'incrémente
+		// on l'incremente
 		Long newQuota = currentQuota + increment;
-		// si le nouveau quota est négatif, on le met à zéro
+		// si le nouveau quota est negatif, on le met a zero
 		if (newQuota < 0) {
 			newQuota = new Long(0);
 			logger.debug("Le nouveau quota du compte " + accountName
-					+ " est négatif -> on le met à zéro.");
+					+ " est negatif -> on le met a zero.");
 		}
 		account.setQuota(newQuota);
 		daoService.updateAccount(account);
@@ -440,15 +440,15 @@ public class AccountManager extends AbstractApplicationAwareBean {
 	private JasperPrint makeJasperPrint() throws IOException, JRException {
 
 		JasperPrint result;
-		// on récupère le fichier .jasper (déjà compilé)
+		// on recupere le fichier .jasper (deja compile)
 		InputStream jasperFile = this.getClass().getResourceAsStream(
 				"/properties/jasper/accounts_report.jasper");
-		// on récupère le logo pour l'ajouter au report
+		// on recupere le logo pour l'ajouter au report
 		InputStream logoStream = this.getClass().getResourceAsStream(
 				"/properties/jasper/Logo_Univ_Paris.gif");
 		Image logoImage = ImageIO.read(logoStream);
 
-		// Les paramètres
+		// Les parametres
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		// on recupere les chaines i18n
 		String softName = getI18nService().getString("SOFTWARE.NAME");
@@ -463,11 +463,11 @@ public class AccountManager extends AbstractApplicationAwareBean {
 		parameters.put("COLUMN_SMS", columnSMS);
 		parameters.put("LOGO_UNIV_PARIS", logoImage);
 
-		// la source de données
+		// la source de donnees
 		AccountDataSource accountDataSource = new AccountDataSource(
 				getAllAccounts());
 
-		// on remplit le report avec les paramètres et la source de données
+		// on remplit le report avec les parametres et la source de donnees
 		result = JasperFillManager.fillReport(jasperFile,
 				parameters, accountDataSource);
 

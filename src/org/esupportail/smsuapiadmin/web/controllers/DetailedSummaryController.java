@@ -178,28 +178,28 @@ logger.debug("institutionId : " + institutionId + ", accountId" + accountId + ",
 	 */
 	public String downloadPDFReport() throws JRException, IOException {
 
-		// on récupère le fichier Pdf
+		// on recupere le fichier Pdf
 		byte[] report = getDomainService().makeReportForDetailedSummaries(
 				FormatReport.PDF, paginator.getData(), institutionId,
 				applicationId, accountId, startDate, endDate);
 
 		if (report == null) {
-			logger.error("La génération du rapport a échouée");
+			logger.error("La generation du rapport a echouee");
 		} else {
-			logger.info("La génération du rapport a réussie");
+			logger.info("La generation du rapport a reussie");
 		}
 
 		try {
 			downloadId = DownloadUtils.setDownload(report, "rapport.pdf",
 					"application/octet-stream");
 			logger
-					.info("Le fichier 'rapport.pdf' est placé en download avec downloadId="
+					.info("Le fichier 'rapport.pdf' est place en download avec downloadId="
 							+ downloadId);
 		} catch (DownloadException e) {
-			logger.error("Le placement du rapport en download a échouée", e);
+			logger.error("Le placement du rapport en download a echouee", e);
 		}
 
-		// on reste sur la même page
+		// on reste sur la meme page
 		return null;
 	}
 
@@ -212,25 +212,25 @@ logger.debug("institutionId : " + institutionId + ", accountId" + accountId + ",
 	 */
 	public String downloadXLSReport() throws JRException, IOException {
 
-		// on récupère le fichier Pdf
+		// on recupere le fichier Pdf
 		byte[] report = getDomainService().makeReportForDetailedSummaries(
 				FormatReport.XLS, paginator.getData(), institutionId,
 				applicationId, accountId, startDate, endDate);
 
 		if (report == null) {
-			logger.error("La génération du rapport a échouée");
+			logger.error("La generation du rapport a echouee");
 		} else {
-			logger.info("La génération du rapport a réussie");
+			logger.info("La generation du rapport a reussie");
 		}
 
 		downloadId = DownloadUtils.setDownload(report, "rapport.xls",
 				"application/octet-stream");
 
 		logger
-				.debug("Le fichier 'rapport.xls' est placé en download avec downloadId="
+				.debug("Le fichier 'rapport.xls' est place en download avec downloadId="
 						+ downloadId);
 
-		// on reste sur la même page
+		// on reste sur la meme page
 		return null;
 	}
 
@@ -258,7 +258,7 @@ logger.debug("institutionId : " + institutionId + ", accountId" + accountId + ",
 	 * @return
 	 */
 	public Long getDownloadId() {
-		logger.debug("Demande de téléchargement d'un relevé (id=" + downloadId
+		logger.debug("Demande de telechargement d'un releve (id=" + downloadId
 				+ ")");
 		Long id = this.downloadId;
 		this.downloadId = null;

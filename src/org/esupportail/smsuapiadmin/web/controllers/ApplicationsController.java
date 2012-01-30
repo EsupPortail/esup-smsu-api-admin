@@ -139,7 +139,7 @@ public class ApplicationsController extends AbstractContextAwareController {
 	 * @return A navigation rule.
 	 */
 	public String create() {
-		// on crée une nouvelle application
+		// on cree une nouvelle application
 		setApplication(new UIApplication());
 		initAvailableAccounts();
 		return "editApplication";
@@ -151,7 +151,7 @@ public class ApplicationsController extends AbstractContextAwareController {
 	 * @return A navigation rule.
 	 */
 	public String modify() {
-		// on met à jour le mode d'édition
+		// on met a jour le mode d'edition
 		application.setAddMode(false);
 		initAvailableAccounts();
 		return "editApplication";
@@ -200,13 +200,13 @@ public class ApplicationsController extends AbstractContextAwareController {
 	 */
 	public String uploadCertificate() {
 		// le certificat
-		// on regarde d'abord si un fichier a été uploadé
+		// on regarde d'abord si un fichier a ete uploade
 		UploadedFile certificateFile = application.getCertificateFile();
 		if (certificateFile != null) {
 			try {
 				application.setCertificate(certificateFile.getBytes());
 			} catch (IOException e) {
-				logger.warn("Impossible de récupérer les bits du certificat.",
+				logger.warn("Impossible de recuperer les bits du certificat.",
 						e);
 			}
 		}
@@ -280,7 +280,7 @@ public class ApplicationsController extends AbstractContextAwareController {
 			try {
 				// on essaye de le parser en int
 				Integer intValue = Integer.parseInt(strValue);
-				// le quota doit être positif ou nul
+				// le quota doit etre positif ou nul
 				if (intValue < 0) {
 					throw new ValidatorException(
 							getFacesErrorMessage(messageInvalidQuota));
@@ -333,9 +333,9 @@ public class ApplicationsController extends AbstractContextAwareController {
 			} else {
 				getDomainService().updateApplication(application);
 			}
-			// on revient à la liste des applications
+			// on revient a la liste des applications
 		} else {
-			// on revient à la page d'édition
+			// on revient a la page d'edition
 			result = "editApplication";
 		}
 
@@ -349,7 +349,7 @@ public class ApplicationsController extends AbstractContextAwareController {
 	 */
 	public String delete() {
 		getDomainService().deleteApplication(application);
-		// on revient à la liste des application
+		// on revient a la liste des application
 		reset();
 		return "applications";
 	}
@@ -396,7 +396,7 @@ public class ApplicationsController extends AbstractContextAwareController {
 			try {
 				// on essaye de le parser en int
 				Integer intValue = Integer.parseInt(quota);
-				// le quota doit être positif ou nul
+				// le quota doit etre positif ou nul
 				if (intValue < 0) {
 					addErrorMessage("editApplication:quota",
 							messageInvalidQuota);

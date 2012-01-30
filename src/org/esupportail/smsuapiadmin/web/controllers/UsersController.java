@@ -129,7 +129,7 @@ public class UsersController extends AbstractContextAwareController {
 	 * @return A navigation rule.
 	 */
 	public String create() {
-		// on crée un nouvel utilisateur
+		// on cree un nouvel utilisateur
 		setUser(new UIUser());
 		return "editUser";
 	}
@@ -140,7 +140,7 @@ public class UsersController extends AbstractContextAwareController {
 	 * @return A navigation rule.
 	 */
 	public String modify() {
-		// on met à jour le mode d'édition
+		// on met a jour le mode d'edition
 		user.setAddMode(false);
 		return "editUser";
 	}
@@ -208,7 +208,7 @@ public class UsersController extends AbstractContextAwareController {
 			getDomainService().updateUser(user);
 		}
 
-		// on revient à la liste des utilisateurs
+		// on revient a la liste des utilisateurs
 		return result;
 	}
 
@@ -219,7 +219,7 @@ public class UsersController extends AbstractContextAwareController {
 	 */
 	public String delete() {
 		getDomainService().deleteUser(user);
-		// on revient à la liste des utilisateurs
+		// on revient a la liste des utilisateurs
 		reset();
 		return "users";
 	}

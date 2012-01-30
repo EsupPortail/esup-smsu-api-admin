@@ -106,11 +106,11 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 
 		List<Sms> listSMS = daoService.getSMSByApplication(app);
 
-		// aucun sms ne référence cette application
+		// aucun sms ne reference cette application
 		if ((listSMS == null) || (listSMS.size() == 0)) {
 			List<Statistic> listStatistic = daoService
 					.getStatisticByApplication(app);
-			// aucun sms ne référence cette application
+			// aucun sms ne reference cette application
 			if ((listStatistic == null) || (listStatistic.size() == 0)) {
 				result = true;
 			}
@@ -225,7 +225,7 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 		}
 		result.setAccount(account);
 
-		// l'établissement
+		// l'etablissement
 		Institution institution = daoService.getInstitutionByName(uiApp
 				.getInstitution().getName());
 		if (institution == null) {
@@ -235,7 +235,7 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 		}
 		result.setInstitution(institution);
 
-		// le nombre de sms consommé est nul;
+		// le nombre de sms consomme est nul;
 		result.setConsumedSms(new Long(0));
 
 		return result;
@@ -285,7 +285,7 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 		// le nom
 		result.setLogin(uiUser.getLogin());
 
-		// le rôle
+		// le role
 		String roleId = uiUser.getRole().getId();
 		Role role = daoService.getRoleById(roleId);
 		if (role == null) {

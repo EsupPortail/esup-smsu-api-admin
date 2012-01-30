@@ -339,7 +339,7 @@ InitializingBean {
 		// FROM
 		StringBuffer from = new StringBuffer();
 		from.append(" FROM Statistic stat ");
-		// on fait une jointure si le critère 'institution' est renseigné
+		// on fait une jointure si le critere 'institution' est renseigne
 		if (institution != null) {
 			from.append(", Application app ");
 		}

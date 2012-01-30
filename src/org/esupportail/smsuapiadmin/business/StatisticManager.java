@@ -194,15 +194,15 @@ public class StatisticManager
 			throws IOException, JRException {
 		JasperPrint result = null;
 
-		// on récupère le fichier .jasper (déjà compilé)
+		// on recupere le fichier .jasper (deja compile)
 		final InputStream jasperFile = this.getClass().getResourceAsStream(
 				"/properties/jasper/consolidated_report.jasper");
-		// on récupère le logo pour l'ajouter au report
+		// on recupere le logo pour l'ajouter au report
 		final InputStream logoStream = this.getClass().getResourceAsStream(
 				"/properties/jasper/Logo_Univ_Paris.gif");
 		final Image logoImage = ImageIO.read(logoStream);
 
-		// Les paramètres
+		// Les parametres
 		final Map<String, Object> parameters = new HashMap<String, Object>();
 		// on recupere les chaines i18n
 		final String softName = getI18nService().getString("SOFTWARE.NAME");
@@ -222,7 +222,7 @@ public class StatisticManager
 				"STATISTIC.FAILRATE");
 		final String criterias = getI18nService()
 				.getString("SUMMARY.CRITERIAS");
-		// Gestion des critères
+		// Gestion des criteres
 		String instCriteria = "";
 		final String i18nSELECTALL = "SELECT.ALL";
 		if (inst != null) {
@@ -267,11 +267,11 @@ public class StatisticManager
 		parameters.put("ACCOUNT_CRITERIA", accCriteria);
 		parameters.put("MONTH_CRITERIA", monthCriteria);
 
-		// la source de données
+		// la source de donnees
 		final ConsolidatedSummaryDataSource dataSource = new ConsolidatedSummaryDataSource(
 				data);
 
-		// on remplit le report avec les paramètres et la source de données
+		// on remplit le report avec les parametres et la source de donnees
 		result = JasperFillManager.fillReport(jasperFile, parameters,
 				dataSource);
 
@@ -296,15 +296,15 @@ public class StatisticManager
 			final Date endDate) throws IOException, JRException {
 		JasperPrint result = null;
 
-		// on récupère le fichier .jasper (déjà compilé)
+		// on recupere le fichier .jasper (deja compile)
 		final InputStream jasperFile = this.getClass().getResourceAsStream(
 				"/properties/jasper/detailed_report.jasper");
-		// on récupère le logo pour l'ajouter au report
+		// on recupere le logo pour l'ajouter au report
 		final InputStream logoStream = this.getClass().getResourceAsStream(
 				"/properties/jasper/Logo_Univ_Paris.gif");
 		final Image logoImage = ImageIO.read(logoStream);
 
-		// Les paramètres
+		// Les parametres
 		final Map<String, Object> parameters = new HashMap<String, Object>();
 		// on recupere les chaines i18n
 		final String softName = getI18nService().getString("SOFTWARE.NAME");
@@ -345,7 +345,7 @@ public class StatisticManager
 		final String criterias = getI18nService()
 				.getString("SUMMARY.CRITERIAS");
 
-		// Gestion des critères
+		// Gestion des criteres
 		String instCriteria = "";
 		if (inst != null) {
 			instCriteria = inst.getLabel();
@@ -414,11 +414,11 @@ public class StatisticManager
 		parameters.put("STARTDATE_CRITERIA", startDateCriteria);
 		parameters.put("ENDDATE_CRITERIA", endDateCriteria);
 
-		// la source de données
+		// la source de donnees
 		final DetailedSummaryDataSource dataSource = new DetailedSummaryDataSource(
 				data);
 
-		// on remplit le report avec les paramètres et la source de données
+		// on remplit le report avec les parametres et la source de donnees
 		result = JasperFillManager.fillReport(jasperFile, parameters,
 				dataSource);
 
@@ -482,7 +482,7 @@ public class StatisticManager
 		String nameSheet = getI18nService().getString("ACCOUNT.XLSFILE.SHEET");
 		HSSFSheet sheet = workbook.createSheet(nameSheet);
 
-		// on récupère les titres des colonnes
+		// on recupere les titres des colonnes
 		String columnInstitution = getI18nService().getString("INSTITUTION.NAME");
 		String columnApplication = getI18nService().getString("APPLICATION.NAME");
 		String columnAccount = getI18nService().getString("ACCOUNT.NAME");
@@ -528,7 +528,7 @@ public class StatisticManager
 			String nbReceivedSMS = stat.getNbReceivedSMS();
 			String failRate = stat.getFailRate();
 
-			// on crée une nouvelle ligne de valeurs
+			// on cree une nouvelle ligne de valeurs
 			valueRow = sheet.createRow(i);
 			int j = 0;
 			HSSFCell cellInstitutionValue = valueRow.createCell(j);
@@ -552,11 +552,11 @@ public class StatisticManager
 			HSSFCell cellFailRateValue = valueRow.createCell(j);
 			cellFailRateValue.setCellValue(new HSSFRichTextString(failRate));
 
-			// on passe à la ligne suivante
+			// on passe a la ligne suivante
 			i++;
 		}
 
-		// On ouvre un flux d'écriture sur le fichier résultat
+		// On ouvre un flux d'ecriture sur le fichier resultat
 		try {
 			ByteArrayOutputStream fos = new ByteArrayOutputStream();
 			workbook.write(fos);
@@ -566,10 +566,10 @@ public class StatisticManager
 		} catch (FileNotFoundException e) {
 			logger
 					.error(
-							"Impossible d'ouvrir un flux en écriture sur le fichier excel",
+							"Impossible d'ouvrir un flux en ecriture sur le fichier excel",
 							e);
 		} catch (IOException e) {
-			logger.error("Impossible d'écrire dans le fichier excel", e);
+			logger.error("Impossible d'ecrire dans le fichier excel", e);
 		}
 
 		return result;
@@ -599,7 +599,7 @@ public class StatisticManager
 		String nameSheet = getI18nService().getString("ACCOUNT.XLSFILE.SHEET");
 		HSSFSheet sheet = workbook.createSheet(nameSheet);
 
-		// on récupère les titres des colonnes
+		// on recupere les titres des colonnes
 		final String columnSending = getI18nService().getString("SUMMARY.SENDING");
 		final String columnInstitution = getI18nService().getString("INSTITUTION.NAME");
 		final String columnApplication = getI18nService().getString("APPLICATION.NAME");
@@ -684,7 +684,7 @@ public class StatisticManager
 			Integer nbErrorQuota = summarry.getNbErrorQuota();
 			Integer nbError = summarry.getNbError();
 			
-			// on crée une nouvelle ligne de valeurs
+			// on cree une nouvelle ligne de valeurs
 			valueRow = sheet.createRow(i);
 			int j = 0;
 			HSSFCell cellDateValue = valueRow.createCell(j);
@@ -724,11 +724,11 @@ public class StatisticManager
 			cellNbErrorValue.setCellValue(nbError);
 			j++;
 
-			// on passe à la ligne suivante
+			// on passe a la ligne suivante
 			i++;
 		}
 
-		// On ouvre un flux d'écriture sur le fichier résultat
+		// On ouvre un flux d'ecriture sur le fichier resultat
 		try {
 			ByteArrayOutputStream fos = new ByteArrayOutputStream();
 			workbook.write(fos);
@@ -738,10 +738,10 @@ public class StatisticManager
 		} catch (FileNotFoundException e) {
 			logger
 					.error(
-							"Impossible d'ouvrir un flux en écriture sur le fichier excel",
+							"Impossible d'ouvrir un flux en ecriture sur le fichier excel",
 							e);
 		} catch (IOException e) {
-			logger.error("Impossible d'écrire dans le fichier excel", e);
+			logger.error("Impossible d'ecrire dans le fichier excel", e);
 		}
 
 		return result;
@@ -798,15 +798,15 @@ public class StatisticManager
 
 		final List<UIDetailedSummary> result = new ArrayList<UIDetailedSummary>();
 
-		// rappel : les relevés détaillés sont groupés par SMS_INITIAL_ID
+		// rappel : les releves detailles sont groupes par SMS_INITIAL_ID
 		// les statistiques concernent ce groupe d'envoi.
 
-		// on commence par récupérer tous les groupes d'envois correspondant
-		// aux critères
+		// on commence par recuperer tous les groupes d'envois correspondant
+		// aux criteres
 		final List<Map<String,?>> groupSms = searchGroupSms(inst, acc, app,
 				startDate, endDate);
 		
-		// pour chaque groupe d'envoi, on construit le relevé détaillé
+		// pour chaque groupe d'envoi, on construit le releve detaille
 		//for (final Integer smsInitialId : groupSms) {
 		for (final Map<String,?> map : groupSms) {
 
@@ -816,8 +816,8 @@ public class StatisticManager
 					.getSmsByApplicationAndInitialId(application, smsInitialId);
 			final UIDetailedSummary summary = new UIDetailedSummary();
 
-			// on récupère les objets institution, application et account
-			// identique pour tous les sms d'un même groupe
+			// on recupere les objets institution, application et account
+			// identique pour tous les sms d'un meme groupe
 			assert !smsList.isEmpty();
 			final Sms firstSms = smsList.get(0);
 			final UIInstitution uiInst = dtoConverterService
@@ -832,7 +832,7 @@ public class StatisticManager
 
 			Date minDate = null;
 
-			// le décompte
+			// le decompte
 			final Map<SmsStatus, Integer> stats = new EnumMap<SmsStatus, Integer>(SmsStatus.class);
 			for (SmsStatus status : SmsStatus.values()) stats.put(status, new Integer(0));
 

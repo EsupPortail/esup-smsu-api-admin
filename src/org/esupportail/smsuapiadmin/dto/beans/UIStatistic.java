@@ -166,7 +166,7 @@ public class UIStatistic extends UIObject {
 				}
 
 			} catch (NumberFormatException e) {
-				logger.warn("Impossible de calculer le taux d'échec", e);
+				logger.warn("Impossible de calculer le taux d'echec", e);
 			}
 		}
 
@@ -189,7 +189,7 @@ public class UIStatistic extends UIObject {
 				int nbReceivedSMS = nbSendedSMSInt - nbSMSInErrorInt;
 				result = nbReceivedSMS + "";
 			} catch (NumberFormatException e) {
-				logger.warn("Impossible de calculer le taux d'échec", e);
+				logger.warn("Impossible de calculer le taux d'echec", e);
 			}
 		}
 

@@ -275,28 +275,28 @@ public class ConsolidatedSummaryController extends
 	 */
 	public String downloadPDFReport() throws JRException, IOException {
 
-		// on récupère le fichier Pdf
+		// on recupere le fichier Pdf
 		byte[] report = getDomainService().makeReportForConsolidatedSummaries(
 				FormatReport.PDF, paginator.getData(), institutionId,
 				applicationId, accountId, month);
 
 		if (report == null) {
-			logger.error("La génération du rapport a échouée");
+			logger.error("La generation du rapport a echouee");
 		} else {
-			logger.info("La génération du rapport a réussie");
+			logger.info("La generation du rapport a reussie");
 		}
 
 		try {
 			downloadId = DownloadUtils.setDownload(report, "rapport.pdf",
 					"application/octet-stream");
 			logger
-					.info("Le fichier 'rapport.pdf' est placé en download avec downloadId="
+					.info("Le fichier 'rapport.pdf' est place en download avec downloadId="
 							+ downloadId);
 		} catch (DownloadException e) {
-			logger.error("Le placement du rapport en download a échouée", e);
+			logger.error("Le placement du rapport en download a echouee", e);
 		}
 
-		// on reste sur la même page
+		// on reste sur la meme page
 		return null;
 	}
 
@@ -308,28 +308,28 @@ public class ConsolidatedSummaryController extends
 	 */
 	public String downloadXLSReport() throws JRException, IOException {
 
-		// on récupère le fichier Pdf
+		// on recupere le fichier Pdf
 		byte[] report = getDomainService().makeReportForConsolidatedSummaries(
 				FormatReport.XLS, paginator.getData(), institutionId,
 				applicationId, accountId, month);
 
 		if (report == null) {
-			logger.error("La génération du rapport a échouée");
+			logger.error("La generation du rapport a echouee");
 		} else {
-			logger.info("La génération du rapport a réussie");
+			logger.info("La generation du rapport a reussie");
 		}
 
 		try {
 			downloadId = DownloadUtils.setDownload(report, "rapport.xls",
 					"application/octet-stream");
 			logger
-					.info("Le fichier 'rapport.pdf' est placé en download avec downloadId="
+					.info("Le fichier 'rapport.pdf' est place en download avec downloadId="
 							+ downloadId);
 		} catch (DownloadException e) {
-			logger.error("Le placement du rapport en download a échouée", e);
+			logger.error("Le placement du rapport en download a echouee", e);
 		}
 
-		// on reste sur la même page
+		// on reste sur la meme page
 		return null;
 	}
 }

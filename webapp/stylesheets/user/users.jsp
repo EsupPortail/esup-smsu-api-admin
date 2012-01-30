@@ -1,5 +1,5 @@
 <%@include file="../_include.jsp"%>
-<e:page stringsVar="msgs" menuItem="UserManagement"
+<e:page stringsVar="msgs" menuItem="user"
 	locale="#{sessionController.locale}"
 	authorized="#{usersController.pageAuthorized}">
 	<%@include file="../_navigation.jsp"%>

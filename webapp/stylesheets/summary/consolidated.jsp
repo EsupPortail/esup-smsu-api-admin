@@ -1,5 +1,5 @@
 <%@include file="../_include.jsp"%>
-<e:page stringsVar="msgs" menuItem="consolidated"
+<e:page stringsVar="msgs" menuItem="consolidatedSummary"
 	locale="#{sessionController.locale}"
 	authorized="#{consolidatedSummaryController.pageAuthorized}"
 	downloadId="#{consolidatedSummaryController.downloadId}">

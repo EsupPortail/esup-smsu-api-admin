@@ -183,14 +183,6 @@
 						</t:column>
 
 						<t:column sortable="true" defaultSorted="true"
-							footertitle="#{msgs['SMS.STATUS.CREATED.DETAIL']}">
-							<f:facet name="header">
-								<e:text value="#{msgs['SMS.STATUS.CREATED.NAME']}" />
-							</f:facet>
-							<e:text value="#{summary.nbCreated}" />
-						</t:column>
-
-						<t:column sortable="true" defaultSorted="true"
 							footertitle="#{msgs['SMS.STATUS.DELIVERED.DETAIL']}">
 							<f:facet name="header">
 								<e:text value="#{msgs['SMS.STATUS.DELIVERED.NAME']}" />
@@ -199,43 +191,19 @@
 						</t:column>
 
 						<t:column sortable="true" defaultSorted="true"
-							footertitle="#{msgs['SMS.STATUS.ERROR.DETAIL']}">
-							<f:facet name="header">
-								<e:text value="#{msgs['SMS.STATUS.ERROR.NAME']}" />
-							</f:facet>
-							<e:text value="#{summary.nbError}" />
-						</t:column>
-
-						<t:column sortable="true" defaultSorted="true"
-							footertitle="#{msgs['SMS.STATUS.ERROR_PRE_BL.DETAIL']}">
-							<f:facet name="header">
-								<e:text value="#{msgs['SMS.STATUS.ERROR_PRE_BL.NAME']}" />
-							</f:facet>
-							<e:text value="#{summary.nbErrorPreBl}" />
-						</t:column>
-
-						<t:column sortable="true" defaultSorted="true"
-							footertitle="#{msgs['SMS.STATUS.ERROR_POST_BL.DETAIL']}">
-							<f:facet name="header">
-								<e:text value="#{msgs['SMS.STATUS.ERROR_POST_BL.NAME']}" />
-							</f:facet>
-							<e:text value="#{summary.nbErrorPostBl}" />
-						</t:column>
-
-						<t:column sortable="true" defaultSorted="true"
-							footertitle="#{msgs['SMS.STATUS.ERROR_QUOTA.DETAIL']}">
-							<f:facet name="header">
-								<e:text value="#{msgs['SMS.STATUS.ERROR_QUOTA.NAME']}" />
-							</f:facet>
-							<e:text value="#{summary.nbErrorQuota}" />
-						</t:column>
-
-						<t:column sortable="true" defaultSorted="true"
 							footertitle="#{msgs['SMS.STATUS.IN_PROGRESS.DETAIL']}">
 							<f:facet name="header">
 								<e:text value="#{msgs['SMS.STATUS.IN_PROGRESS.NAME']}" />
 							</f:facet>
 							<e:text value="#{summary.nbInProgress}" />
+						</t:column>
+
+						<t:column sortable="true" defaultSorted="true"
+							footertitle="#{msgs['SMS.STATUS.ERROR.DETAIL']}">
+							<f:facet name="header">
+								<e:text value="#{msgs['SMS.STATUS.ERROR.NAME']}" />
+							</f:facet>
+							<e:text value="#{summary.errors}" />
 						</t:column>
 
 					</e:dataTable>

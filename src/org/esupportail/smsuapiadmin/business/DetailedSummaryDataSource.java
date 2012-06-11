@@ -48,20 +48,12 @@ public class DetailedSummaryDataSource implements JRDataSource {
 			result = summary.getAccount().getName();
 		} else if (field.getName().equals("DATE")) {
 			result = summary.getFormattedDate();
-		} else if (field.getName().equals("CREATED_COUNT")) {
-			result = summary.getNbCreated();
 		} else if (field.getName().equals("IN_PROGRESS_COUNT")) {
 			result = summary.getNbInProgress();
 		} else if (field.getName().equals("DELIVERED_COUNT")) {
 			result = summary.getNbDelivered();
-		} else if (field.getName().equals("ERROR_PRE_BL_COUNT")) {
-			result = summary.getNbErrorPreBl();
-		} else if (field.getName().equals("ERROR_POST_BL_COUNT")) {
-			result = summary.getNbErrorPostBl();
-		} else if (field.getName().equals("ERROR_QUOTA_COUNT")) {
-			result = summary.getNbErrorQuota();
-		} else if (field.getName().equals("ERROR_COUNT")) {
-			result = summary.getNbError();
+		} else if (field.getName().equals("ERRORS")) {
+			result = summary.getErrors();
 		} else if (field.getName().equals("SMS_COUNT")) {
 			result = summary.getSMSCount();
 		}

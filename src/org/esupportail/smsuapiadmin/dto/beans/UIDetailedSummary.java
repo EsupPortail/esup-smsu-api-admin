@@ -4,9 +4,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
+import org.esupportail.commons.services.i18n.I18nService;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
 import org.esupportail.smsuapiadmin.dao.beans.SmsStatus;
+
 
 /**
  * UIDetailedSummary.
@@ -25,6 +27,8 @@ public class UIDetailedSummary extends UIObject {
 	 * Log4j logger.
 	 */
 	private final Logger logger = new LoggerImpl(getClass());
+
+	private I18nService i18nService;
 
 	/**
 	 * institution.
@@ -54,8 +58,8 @@ public class UIDetailedSummary extends UIObject {
 	/**
 	 * Default constructor.
 	 */
-	public UIDetailedSummary() {
-		// nothing to do
+	public UIDetailedSummary(I18nService i18nService) {
+		this.i18nService = i18nService;
 	}
 
 	/**
@@ -164,28 +168,22 @@ public class UIDetailedSummary extends UIObject {
 		this.statistics = statistics;
 	}
 
-	public Integer getNbCreated() {
-		return statistics.get(SmsStatus.CREATED);
-	}
-
 	public Integer getNbDelivered() {
 		return statistics.get(SmsStatus.DELIVERED);
 	}
 
-	public Integer getNbError() {
-		return statistics.get(SmsStatus.ERROR);
-	}
-
-	public Integer getNbErrorPostBl() {
-		return statistics.get(SmsStatus.ERROR_POST_BL);
-	}
-
-	public Integer getNbErrorPreBl() {
-		return statistics.get(SmsStatus.ERROR_PRE_BL);
-	}
-
-	public Integer getNbErrorQuota() {
-		return statistics.get(SmsStatus.ERROR_QUOTA);
+	public String getErrors() {
+		String detail = "";
+		int total = 0;
+		SmsStatus[] states = { SmsStatus.ERROR, SmsStatus.ERROR_POST_BL, SmsStatus.ERROR_PRE_BL, SmsStatus.ERROR_QUOTA, SmsStatus.CREATED };
+		for (SmsStatus state : states) {
+			int nb = statistics.get(state);
+			total += nb;
+			if (nb > 0 && state != SmsStatus.ERROR) {
+				detail += (detail.equals("") ? "" : ", ") + nb + " " + i18nService.getString("SMS.STATUS." + state + ".NAME");
+			}
+		}
+		return "" + total + (detail.equals("") ? "" : " (dont " + detail + ")");
 	}
 
 	public Integer getNbInProgress() {

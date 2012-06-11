@@ -16,13 +16,9 @@
 	<parameter name="STARTDATE_CRITERIA" class="java.lang.String"/>
 	<parameter name="ENDDATE_CRITERIA" class="java.lang.String"/>
 	<parameter name="DATE_LABEL" class="java.lang.String"/>
-	<parameter name="SMS_STATUS_CREATED" class="java.lang.String"/>
 	<parameter name="SMS_STATUS_IN_PROGRESS" class="java.lang.String"/>
 	<parameter name="SMS_STATUS_DELIVERED" class="java.lang.String"/>
-	<parameter name="SMS_STATUS_ERROR_PRE_BL" class="java.lang.String"/>
-	<parameter name="SMS_STATUS_ERROR_POST_BL" class="java.lang.String"/>
-	<parameter name="SMS_STATUS_ERROR" class="java.lang.String"/>
-	<parameter name="SMS_STATUS_ERROR_QUOTA" class="java.lang.String"/>
+	<parameter name="SMS_STATUS_ERRORS" class="java.lang.String"/>
 	<parameter name="TITLE_SENDING" class="java.lang.String"/>
 	<parameter name="SMS_COUNT_LABEL" class="java.lang.String"/>
 	<parameter name="CARACTERISTICS" class="java.lang.String"/>
@@ -38,12 +34,8 @@
 	</field>
 	<field name="DATE" class="java.lang.String"/>
 	<field name="IN_PROGRESS_COUNT" class="java.lang.Integer"/>
-	<field name="CREATED_COUNT" class="java.lang.Integer"/>
 	<field name="DELIVERED_COUNT" class="java.lang.Integer"/>
-	<field name="ERROR_PRE_BL_COUNT" class="java.lang.Integer"/>
-	<field name="ERROR_POST_BL_COUNT" class="java.lang.Integer"/>
-	<field name="ERROR_QUOTA_COUNT" class="java.lang.Integer"/>
-	<field name="ERROR_COUNT" class="java.lang.Integer"/>
+	<field name="ERRORS" class="java.lang.String"/>
 	<field name="SMS_COUNT" class="java.lang.Integer"/>
 	<background>
 		<band splitType="Stretch"/>
@@ -114,95 +106,67 @@
 	<columnHeader>
 		<band height="30" splitType="Stretch">
 			<textField>
-				<reportElement mode="Opaque" x="1" y="0" width="67" height="30" forecolor="#FFFFFF" backcolor="#999999"/>
+				<reportElement mode="Opaque" x="1" y="0" width="98" height="30" forecolor="#FFFFFF" backcolor="#999999"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{TITLE_SENDING}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement mode="Opaque" x="68" y="0" width="67" height="30" forecolor="#FFFFFF" backcolor="#999999"/>
+				<reportElement mode="Opaque" x="99" y="0" width="122" height="30" forecolor="#FFFFFF" backcolor="#999999"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{INSTITUTION_LABEL}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement mode="Opaque" x="135" y="0" width="67" height="30" forecolor="#FFFFFF" backcolor="#999999"/>
+				<reportElement mode="Opaque" x="221" y="0" width="117" height="30" forecolor="#FFFFFF" backcolor="#999999"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{APPLICATION_LABEL}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement mode="Opaque" x="202" y="0" width="67" height="30" forecolor="#FFFFFF" backcolor="#999999"/>
+				<reportElement mode="Opaque" x="338" y="0" width="115" height="30" forecolor="#FFFFFF" backcolor="#999999"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{ACCOUNT_LABEL}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement mode="Opaque" x="269" y="0" width="67" height="30" forecolor="#FFFFFF" backcolor="#999999"/>
+				<reportElement mode="Opaque" x="453" y="0" width="67" height="30" forecolor="#FFFFFF" backcolor="#999999"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{SMS_COUNT_LABEL}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement mode="Opaque" x="336" y="0" width="67" height="30" forecolor="#FFFFFF" backcolor="#999999"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{SMS_STATUS_CREATED}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement mode="Opaque" x="403" y="0" width="67" height="30" forecolor="#FFFFFF" backcolor="#999999"/>
+				<reportElement mode="Opaque" x="520" y="0" width="67" height="30" forecolor="#FFFFFF" backcolor="#999999"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{SMS_STATUS_IN_PROGRESS}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement mode="Opaque" x="470" y="0" width="67" height="30" forecolor="#FFFFFF" backcolor="#999999"/>
+				<reportElement mode="Opaque" x="587" y="0" width="67" height="30" forecolor="#FFFFFF" backcolor="#999999"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{SMS_STATUS_DELIVERED}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement mode="Opaque" x="537" y="0" width="67" height="30" forecolor="#FFFFFF" backcolor="#999999"/>
+				<reportElement mode="Opaque" x="655" y="0" width="149" height="30" forecolor="#FFFFFF" backcolor="#999999"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{SMS_STATUS_ERROR_PRE_BL}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement mode="Opaque" x="604" y="0" width="67" height="30" forecolor="#FFFFFF" backcolor="#999999"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{SMS_STATUS_ERROR_POST_BL}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement mode="Opaque" x="671" y="0" width="67" height="30" forecolor="#FFFFFF" backcolor="#999999"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{SMS_STATUS_ERROR_QUOTA}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement mode="Opaque" x="738" y="0" width="67" height="30" forecolor="#FFFFFF" backcolor="#999999"/>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{SMS_STATUS_ERROR}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{SMS_STATUS_ERRORS}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="22" splitType="Prevent">
 			<textField>
-				<reportElement x="1" y="1" width="67" height="20"/>
+				<reportElement x="1" y="1" width="98" height="20"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.0"/>
@@ -216,7 +180,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{DATE}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="68" y="1" width="67" height="20"/>
+				<reportElement x="99" y="1" width="122" height="20"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.0"/>
@@ -230,7 +194,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{INSTITUTION}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="135" y="1" width="67" height="20"/>
+				<reportElement x="221" y="1" width="117" height="20"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.0"/>
@@ -244,7 +208,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{APPLICATION}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="202" y="1" width="67" height="20"/>
+				<reportElement x="338" y="1" width="115" height="20"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.0"/>
@@ -258,7 +222,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{ACCOUNT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="269" y="1" width="67" height="20"/>
+				<reportElement x="453" y="1" width="67" height="20"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.0"/>
@@ -272,21 +236,7 @@
 				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{SMS_COUNT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="336" y="1" width="67" height="20"/>
-				<box>
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.0"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.0"/>
-				</box>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{CREATED_COUNT}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="403" y="1" width="67" height="20"/>
+				<reportElement x="520" y="1" width="67" height="20"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.0"/>
@@ -300,7 +250,7 @@
 				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{IN_PROGRESS_COUNT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="470" y="1" width="67" height="20"/>
+				<reportElement x="587" y="1" width="67" height="20"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.0"/>
@@ -314,7 +264,7 @@
 				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{DELIVERED_COUNT}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="537" y="1" width="67" height="20"/>
+				<reportElement x="654" y="1" width="149" height="20"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.0"/>
@@ -325,49 +275,7 @@
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{ERROR_PRE_BL_COUNT}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="604" y="1" width="67" height="20"/>
-				<box>
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.0"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.0"/>
-				</box>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{ERROR_POST_BL_COUNT}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="671" y="1" width="67" height="20"/>
-				<box>
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.0"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.0"/>
-				</box>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{ERROR_QUOTA_COUNT}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="738" y="1" width="67" height="20"/>
-				<box>
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.0"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.0"/>
-				</box>
-				<textElement>
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{ERROR_COUNT}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ERRORS}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

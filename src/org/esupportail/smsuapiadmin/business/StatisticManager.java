@@ -327,19 +327,11 @@ public class StatisticManager
 				"SUMMARY.COUNT.NAME");
 		final String labelSMSCount = getI18nService().getString(
 				"SUMMARY.SMSCOUNT");
-		final String smsStatusCreated = getI18nService().getString(
-				"SMS.STATUS.CREATED.NAME");
 		final String smsStatusInProgress = getI18nService().getString(
 				"SMS.STATUS.IN_PROGRESS.NAME");
 		final String smsStatusDelivered = getI18nService().getString(
 				"SMS.STATUS.DELIVERED.NAME");
-		final String smsStatusErrorQuota = getI18nService().getString(
-				"SMS.STATUS.ERROR_QUOTA.NAME");
-		final String smsStatusErrorPreBl = getI18nService().getString(
-				"SMS.STATUS.ERROR_PRE_BL.NAME");
-		final String smsStatusErrorPostBl = getI18nService().getString(
-				"SMS.STATUS.ERROR_POST_BL.NAME");
-		final String smsStatusError = getI18nService().getString(
+		final String smsStatusErrors = getI18nService().getString(
 				"SMS.STATUS.ERROR.NAME");
 
 		final String criterias = getI18nService()
@@ -399,13 +391,9 @@ public class StatisticManager
 		parameters.put("COUNT", labelCount);
 		parameters.put("SMS_COUNT_LABEL", labelSMSCount);
 
-		parameters.put("SMS_STATUS_CREATED", smsStatusCreated);
 		parameters.put("SMS_STATUS_IN_PROGRESS", smsStatusInProgress);
 		parameters.put("SMS_STATUS_DELIVERED", smsStatusDelivered);
-		parameters.put("SMS_STATUS_ERROR_PRE_BL", smsStatusErrorPreBl);
-		parameters.put("SMS_STATUS_ERROR_POST_BL", smsStatusErrorPostBl);
-		parameters.put("SMS_STATUS_ERROR_QUOTA", smsStatusErrorQuota);
-		parameters.put("SMS_STATUS_ERROR", smsStatusError);
+		parameters.put("SMS_STATUS_ERRORS", smsStatusErrors);
 
 		parameters.put("CRITERIAS", criterias);
 		parameters.put("INSTITUTION_CRITERIA", instCriteria);
@@ -605,12 +593,8 @@ public class StatisticManager
 		final String columnApplication = getI18nService().getString("APPLICATION.NAME");
 		final String columnAccount = getI18nService().getString("ACCOUNT.NAME");
 		final String columnSMSCount = getI18nService().getString("SUMMARY.SMSCOUNT");
-		final String columnSmsStatusCreated = getI18nService().getString("SMS.STATUS.CREATED.NAME");
 		final String columnSmsStatusInProgress = getI18nService().getString("SMS.STATUS.IN_PROGRESS.NAME");
 		final String columnSmsStatusDelivered = getI18nService().getString("SMS.STATUS.DELIVERED.NAME");
-		final String columnSmsStatusErrorPreBl = getI18nService().getString("SMS.STATUS.ERROR_PRE_BL.NAME");
-		final String columnSmsStatusErrorPostBl = getI18nService().getString("SMS.STATUS.ERROR_POST_BL.NAME");
-		final String columnSmsStatusErrorQuota = getI18nService().getString("SMS.STATUS.ERROR_QUOTA.NAME");
 		final String columnSmsStatusError = getI18nService().getString("SMS.STATUS.ERROR.NAME");
 		
 		
@@ -638,10 +622,6 @@ public class StatisticManager
 		cellSmsCountHeader.setCellStyle(style);
 		cellSmsCountHeader.setCellValue(new HSSFRichTextString(columnSMSCount));
 		columnIndex++;
-		HSSFCell cellSmsStatusCreatedHeader = headerRow.createCell(columnIndex);
-		cellSmsStatusCreatedHeader.setCellStyle(style);
-		cellSmsStatusCreatedHeader.setCellValue(new HSSFRichTextString(columnSmsStatusCreated));
-		columnIndex++;
 		HSSFCell cellSmsStatusInProgressHeader = headerRow.createCell(columnIndex);
 		cellSmsStatusInProgressHeader.setCellStyle(style);
 		cellSmsStatusInProgressHeader.setCellValue(new HSSFRichTextString(columnSmsStatusInProgress));
@@ -649,18 +629,6 @@ public class StatisticManager
 		HSSFCell cellSmsStatusDeliveredHeader = headerRow.createCell(columnIndex);
 		cellSmsStatusDeliveredHeader.setCellStyle(style);
 		cellSmsStatusDeliveredHeader.setCellValue(new HSSFRichTextString(columnSmsStatusDelivered));
-		columnIndex++;
-		HSSFCell cellSmsStatusErrorPreBlHeader = headerRow.createCell(columnIndex);
-		cellSmsStatusErrorPreBlHeader.setCellStyle(style);
-		cellSmsStatusErrorPreBlHeader.setCellValue(new HSSFRichTextString(columnSmsStatusErrorPreBl));
-		columnIndex++;
-		HSSFCell cellSmsStatusErrorPostBlHeader = headerRow.createCell(columnIndex);
-		cellSmsStatusErrorPostBlHeader.setCellStyle(style);
-		cellSmsStatusErrorPostBlHeader.setCellValue(new HSSFRichTextString(columnSmsStatusErrorPostBl));
-		columnIndex++;
-		HSSFCell cellSmsStatusErrorQuotaHeader = headerRow.createCell(columnIndex);
-		cellSmsStatusErrorQuotaHeader.setCellStyle(style);
-		cellSmsStatusErrorQuotaHeader.setCellValue(new HSSFRichTextString(columnSmsStatusErrorQuota));
 		columnIndex++;
 		HSSFCell cellSmsStatusErrorHeader = headerRow.createCell(columnIndex);
 		cellSmsStatusErrorHeader.setCellStyle(style);
@@ -676,13 +644,9 @@ public class StatisticManager
 			String application = uiApplication.getName();
 			String account = summarry.getAccount().getName();
 			Integer smsCount = summarry.getSMSCount();
-			Integer nbCreated = summarry.getNbCreated();
 			Integer nbInProgress = summarry.getNbInProgress();
 			Integer nbDelivered = summarry.getNbDelivered();
-			Integer nbErrorPreBl = summarry.getNbErrorPreBl();
-			Integer nbErrorPostBl = summarry.getNbErrorPostBl();
-			Integer nbErrorQuota = summarry.getNbErrorQuota();
-			Integer nbError = summarry.getNbError();
+			String errors = summarry.getErrors();
 			
 			// on cree une nouvelle ligne de valeurs
 			valueRow = sheet.createRow(i);
@@ -702,26 +666,14 @@ public class StatisticManager
 			HSSFCell cellSmsCountValue = valueRow.createCell(j);
 			cellSmsCountValue.setCellValue(smsCount);
 			j++;
-			HSSFCell cellNbCreatedValue = valueRow.createCell(j);
-			cellNbCreatedValue.setCellValue(nbCreated);
-			j++;
 			HSSFCell cellNbInProgressValue = valueRow.createCell(j);
 			cellNbInProgressValue.setCellValue(nbInProgress);
 			j++;
 			HSSFCell cellNbDeliveredValue = valueRow.createCell(j);
 			cellNbDeliveredValue.setCellValue(nbDelivered);
 			j++;
-			HSSFCell cellNbErrorPreBlValue = valueRow.createCell(j);
-			cellNbErrorPreBlValue.setCellValue(nbErrorPreBl);
-			j++;
-			HSSFCell cellNbErrorPostBlValue = valueRow.createCell(j);
-			cellNbErrorPostBlValue.setCellValue(nbErrorPostBl);
-			j++;
-			HSSFCell cellNbErrorQuotaValue = valueRow.createCell(j);
-			cellNbErrorQuotaValue.setCellValue(nbErrorQuota);
-			j++;
 			HSSFCell cellNbErrorValue = valueRow.createCell(j);
-			cellNbErrorValue.setCellValue(nbError);
+			cellNbErrorValue.setCellValue(new HSSFRichTextString(errors));
 			j++;
 
 			// on passe a la ligne suivante
@@ -813,7 +765,7 @@ public class StatisticManager
 			final Integer smsInitialId = (Integer) map.get(Sms.PROP_INITIAL_ID);
 			final List<Sms> smsList = daoService
 					.getSmsByApplicationAndInitialId(application, smsInitialId);
-			final UIDetailedSummary summary = new UIDetailedSummary();
+			final UIDetailedSummary summary = new UIDetailedSummary(getI18nService());
 
 			// on recupere les objets institution, application et account
 			// identique pour tous les sms d'un meme groupe

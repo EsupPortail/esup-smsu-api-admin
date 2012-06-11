@@ -910,6 +910,9 @@
 				<fail message="Please set property deploy.home in build.properties" />	
 			</then>
 		</if>
+		<!-- cleanup old lib otherwise it will fail -->
+		<delete file="${deploy.home}/WEB-INF/lib/jasperreports-3.5.2.jar" />
+
 		<mkdir dir="${deploy.home}" />
 		<copy todir="${deploy.home}" >
 			<fileset dir="${build.dir}" excludes="WEB-INF/classes/org/esupportail/commons/portal/ws/**/*" />

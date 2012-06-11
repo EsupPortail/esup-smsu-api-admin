@@ -364,14 +364,14 @@ public class DomainServiceImpl implements DomainService, InitializingBean {
 
 	public List<UIDetailedSummary> searchDetailedSummaries(
 			final String institutionId, final String accountId,
-			final String applicationId, final Date startDate, final Date endDate) {
+			final String applicationId, final Date startDate, final Date endDate, int maxResults) {
 		// on recupere les objets persistents
 		Institution inst = institutionManager.getInstitutionById(institutionId);
 		Account acc = accountManager.getAccountById(accountId);
 		Application app = applicationManager.getApplicationById(applicationId);
 
 		return statisticManager.searchDetailedSummaries(inst, acc, app,
-				startDate, endDate);
+				startDate, endDate, maxResults);
 	}
 
 	public List<UIRole> getAllRoles() {

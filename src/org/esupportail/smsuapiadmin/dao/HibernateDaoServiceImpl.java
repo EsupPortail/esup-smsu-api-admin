@@ -24,6 +24,7 @@ import org.esupportail.smsuapiadmin.dao.beans.Statistic;
 import org.esupportail.smsuapiadmin.dao.beans.UserBoSmsu;
 import org.esupportail.smsuapiadmin.domain.beans.VersionManager;
 import org.hibernate.classic.Session;
+import org.hibernate.Criteria;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
@@ -401,11 +402,11 @@ InitializingBean {
 
 	public List<Map<String,?>> searchGroupSms(final Institution inst,
 			final Account acc, final Application app, final Date startDate,
-			final Date endDate) {
+			final Date endDate, int maxResults) {
 
 		List<Map<String, ?>> result = null;
 
-		DetachedCriteria criteria = DetachedCriteria.forClass(Sms.class);
+		Criteria criteria = getCurrentSession().createCriteria(Sms.class);
 
 		criteria.setProjection(Projections.projectionList()
 				.add( Projections.distinct(Projections.projectionList()
@@ -442,13 +443,13 @@ InitializingBean {
 			criteria.add(Restrictions.lt(Sms.PROP_DATE, endDateSQL));
 		}
 
+		criteria.addOrder(Order.desc(Sms.PROP_DATE));
+		if (maxResults > 0) criteria.setMaxResults(maxResults);
+
 		criteria.setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP);
 
-		result = getHibernateTemplate().findByCriteria(criteria);
-
-		return result;
+		return criteria.list();
 	}
-
 
 	public Role getRoleById(final String id) {
 		Role result = null;

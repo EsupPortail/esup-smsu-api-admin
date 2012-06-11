@@ -67,6 +67,9 @@
 			<e:subSection value="#{msgs['SUMMARY.AVAILABLE']}" />
 
 			<h:panelGroup rendered="#{detailedSummaryController.results}">
+
+				<e:messages globalOnly="true"/>
+
 				<e:form id="summaryForm">
 					<e:dataTable
 						rendered="#{not empty detailedSummaryController.paginator.visibleItems}"

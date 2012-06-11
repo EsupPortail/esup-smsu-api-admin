@@ -794,7 +794,7 @@ public class StatisticManager
 	 */
 	public List<UIDetailedSummary> searchDetailedSummaries(
 			final Institution inst, final Account acc, final Application app,
-			final Date startDate, final Date endDate) {
+			final Date startDate, final Date endDate, int maxResults) {
 
 		final List<UIDetailedSummary> result = new ArrayList<UIDetailedSummary>();
 
@@ -803,8 +803,7 @@ public class StatisticManager
 
 		// on commence par recuperer tous les groupes d'envois correspondant
 		// aux criteres
-		final List<Map<String,?>> groupSms = searchGroupSms(inst, acc, app,
-				startDate, endDate);
+		final List<Map<String,?>> groupSms = daoService.searchGroupSms(inst, acc, app, startDate, endDate, maxResults);
 		
 		// pour chaque groupe d'envoi, on construit le releve detaille
 		//for (final Integer smsInitialId : groupSms) {
@@ -856,20 +855,5 @@ public class StatisticManager
 		return result;
 	}
 
-	/**
-	 * Returns identifiers of all sms' group matching criterias.
-	 * 
-	 * @param inst
-	 * @param acc
-	 * @param app
-	 * @param startDate
-	 * @param endDate
-	 * @return
-	 */
-	private List<Map<String,?>> searchGroupSms(final Institution inst,
-			final Account acc, final Application app, final Date startDate,
-			final Date endDate) {
-		return daoService.searchGroupSms(inst, acc, app, startDate, endDate);
-	}
 
 }

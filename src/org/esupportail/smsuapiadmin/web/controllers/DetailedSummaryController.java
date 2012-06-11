@@ -78,10 +78,9 @@ public class DetailedSummaryController extends AbstractContextAwareController {
 	 */
 	private boolean searchDone;
 
-	/**
-	 * Boolean showing the existence of results.
-	 */
-	private boolean results;
+	private int nbResults;
+
+	private int maxResults = 100;
 
 	/**
 	 * Bean constructor.
@@ -132,7 +131,7 @@ public class DetailedSummaryController extends AbstractContextAwareController {
 	 */
 	private void init() {
 		searchDone = false;
-		results = false;
+		nbResults = 0;
 		paginator = new DetailedSummaryPaginator(getDomainService());
 	}
 
@@ -160,11 +159,14 @@ logger.debug("institutionId : " + institutionId + ", accountId" + accountId + ",
 						applicationId + ", startDate" + startDate + ", endDate" + endDate );
 		List<UIDetailedSummary> searchDetailedSummaries = getDomainService()
 				.searchDetailedSummaries(institutionId, accountId,
-						applicationId, startDate, endDate);
+						applicationId, startDate, endDate, maxResults);
 		
 		paginator.setData(searchDetailedSummaries);
 		searchDone = true;
-		results = !searchDetailedSummaries.isEmpty();
+		nbResults = searchDetailedSummaries.size();
+
+		if (nbResults == maxResults)
+			addWarnMessage(null, "SUMMARY.DETAILED.MAXRESULTSREACHED", nbResults);
 
 		return "detailedSummary";
 	}
@@ -351,7 +353,7 @@ logger.debug("institutionId : " + institutionId + ", accountId" + accountId + ",
 	 * @return
 	 */
 	public boolean isResults() {
-		return results;
+		return nbResults > 0;
 	}
 
 	/**

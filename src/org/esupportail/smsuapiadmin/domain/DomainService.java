@@ -227,7 +227,7 @@ public interface DomainService extends Serializable {
 	 * @return
 	 */
 	List<UIDetailedSummary> searchDetailedSummaries(String institutionId,
-			String accountId, String applicationId, Date startDate, Date endDate);
+							String accountId, String applicationId, Date startDate, Date endDate, int maxResults);
 
 	/**
 	 * Returns a report for detailed summaries.

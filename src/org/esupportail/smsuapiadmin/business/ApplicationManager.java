@@ -2,6 +2,7 @@ package org.esupportail.smsuapiadmin.business;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.esupportail.commons.beans.AbstractApplicationAwareBean;
 import org.esupportail.commons.services.logging.Logger;
@@ -85,11 +86,14 @@ public class ApplicationManager extends AbstractApplicationAwareBean {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Retrieves the applications from the database");
 		}
-		List<UIApplication> allUiApps = new ArrayList<UIApplication>();
 		List<Application> allApps = daoService.getApplications();
+		Map<Integer,Integer> idToCount = daoService.getNbSmsByApplication();
 
+		List<UIApplication> allUiApps = new ArrayList<UIApplication>();
 		for (Application app : allApps) {
 			UIApplication ui = dtoConverterService.convertToUI(app);
+			Integer count = idToCount.get(app.getId());
+			ui.setName(ui.getName() + (count == null ? "" : " (" + count + " sms)"));
 			allUiApps.add(ui);
 		}
 		return allUiApps;

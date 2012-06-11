@@ -227,6 +227,8 @@ public interface DaoService extends Serializable {
 	List<Map<String,?>> searchGroupSms(Institution inst, Account acc,
 			Application app, Date startDate, Date endDate, int maxResults);
 
+	Map<Integer,Integer> getNbSmsByAccount();
+	Map<Integer,Integer> getNbSmsByApplication();
 
 	/**
 	 * Returns the role with the specified id.

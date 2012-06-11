@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.esupportail.commons.dao.AbstractJdbcJndiHibernateDaoService;
@@ -449,6 +450,36 @@ InitializingBean {
 		criteria.setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP);
 
 		return criteria.list();
+	}
+
+	public List<Map<String,?>> getNbSmsByAccountAndApplication() {
+		final Criteria criteria = getCurrentSession().createCriteria(Sms.class);
+
+		criteria.setProjection(Projections.projectionList()
+				       .add(Projections.groupProperty(Sms.PROP_APP), Sms.PROP_APP)
+				       .add(Projections.groupProperty(Sms.PROP_ACC), Sms.PROP_ACC)
+				       .add(Projections.count(Sms.PROP_ID), "Count")
+				       );
+
+		criteria.setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP);
+
+		return criteria.list();
+	}
+	public Map<Integer,Integer> getNbSmsByAccount() {
+		Map<Integer,Integer> r = new HashMap<Integer,Integer>();
+		for (Map<String, ?> m : getNbSmsByAccountAndApplication()) {
+			Account a = (Account) m.get(Sms.PROP_ACC);
+			r.put(a.getId(), (Integer) m.get("Count"));
+		}
+		return r;
+	}
+	public Map<Integer,Integer> getNbSmsByApplication() {
+		Map<Integer,Integer> r = new HashMap<Integer,Integer>();
+		for (Map<String, ?> m : getNbSmsByAccountAndApplication()) {
+			Application a = (Application) m.get(Sms.PROP_APP);
+			r.put(a.getId(), (Integer) m.get("Count"));
+		}
+		return r;
 	}
 
 	public Role getRoleById(final String id) {

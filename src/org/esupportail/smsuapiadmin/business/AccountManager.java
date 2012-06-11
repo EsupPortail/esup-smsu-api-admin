@@ -483,11 +483,14 @@ public class AccountManager extends AbstractApplicationAwareBean {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Retrieves the accounts from the database");
 		}
-		List<UIAccount> allUiAccounts = new ArrayList<UIAccount>();
 		List<Account> allAccounts = daoService.getAccounts();
+		Map<Integer,Integer> idToCount = daoService.getNbSmsByAccount();
 
+		List<UIAccount> allUiAccounts = new ArrayList<UIAccount>();
 		for (Account acc : allAccounts) {
 			UIAccount ui = dtoConverterService.convertToUI(acc);
+			Integer count = idToCount.get(acc.getId());
+			ui.setName(ui.getName() + (count == null ? "" : " (" + count + " sms)"));
 			allUiAccounts.add(ui);
 		}
 		return allUiAccounts;

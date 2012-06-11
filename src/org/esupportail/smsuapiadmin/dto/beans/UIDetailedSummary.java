@@ -127,7 +127,7 @@ public class UIDetailedSummary extends UIObject {
 	 * @return
 	 */
 	public String getFormattedDate() {
-		String pattern = "dd MMM yyyy";
+		String pattern = "dd MMM yyyy HH:mm";
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat(pattern);
 			return sdf.format(date);

@@ -128,15 +128,13 @@ public class UIDetailedSummary extends UIObject {
 	 */
 	public String getFormattedDate() {
 		String pattern = "dd MMM yyyy";
-		String result = "N/A";
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-			result = sdf.format(date);
+			return sdf.format(date);
 		} catch (IllegalArgumentException e) {
 			logger.warn("Impossible de formater la date", e);
+			return "N/A";
 		}
-
-		return result;
 	}
 
 	/**

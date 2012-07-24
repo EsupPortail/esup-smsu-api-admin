@@ -15,6 +15,9 @@ public class UIApplication extends UIObject {
 	 * The UID.
 	 */
 	private static final long serialVersionUID = -5312393467136910173L;
+
+	private String PASSWORD_PREFIX_IN_CERTIFCATE = "PASSWORD:";
+
 	/**
 	 * identifier (database) of the application.
 	 */
@@ -23,6 +26,10 @@ public class UIApplication extends UIObject {
 	 * name - linked with the field of the JSF page.
 	 */
 	private String name;
+	/**
+	 * password - linked with the field of the JSF page.
+	 */
+	private String password;
 	/**
 	 * certificate - not linked.
 	 */
@@ -61,6 +68,21 @@ public class UIApplication extends UIObject {
 	private void init() {
 		institution = new UIInstitution();
 		account = new UIAccount();
+	}
+
+	public byte[] getCertificateOrPassword() {
+		if (password != null)
+			return (PASSWORD_PREFIX_IN_CERTIFCATE + password).getBytes();
+		else
+			return certificate;
+	}
+
+	public void setCertificateOrPassword(byte[] certificate) {
+		String password = null;
+		if (certificate != null) 
+			password = removePrefixOrNull(new String(certificate), PASSWORD_PREFIX_IN_CERTIFCATE);
+		setCertificate(password == null ? certificate : null);
+		setPassword(password);
 	}
 
 	/**
@@ -190,6 +212,24 @@ public class UIApplication extends UIObject {
 	}
 
 	/**
+	 * Setter for 'password'.
+	 * 
+	 * @param password
+	 */
+	public void setPassword(final String password) {
+		this.password = password;
+	}
+
+	/**
+	 * Getter for 'password'.
+	 * 
+	 * @return
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
 	 * Setter for 'deletable'.
 	 * 
 	 * @param deletable
@@ -205,6 +245,10 @@ public class UIApplication extends UIObject {
 	 */
 	public boolean isDeletable() {
 		return deletable;
+	}
+
+	private String removePrefixOrNull(String s, String prefix) {
+		return s.startsWith(prefix) ? s.substring(prefix.length()) : null;
 	}
 
 }

@@ -13,6 +13,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.faces.validator.ValidatorException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.myfaces.custom.fileupload.UploadedFile;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
@@ -44,6 +45,10 @@ public class ApplicationsController extends AbstractContextAwareController {
 	 * The application.
 	 */
 	private UIApplication application;
+
+	private boolean isCertificate;
+
+	private List<SelectItem> certificateOrPasswordOptions;
 
 	/**
 	 * list of available accounts
@@ -119,6 +124,15 @@ public class ApplicationsController extends AbstractContextAwareController {
 	private void init() {
 		// initialize the paginator
 		paginator = new ApplicationsPaginator(getDomainService());
+		isCertificate = true;
+		initCertificateOrPasswordOptions();
+	}
+
+	
+	private void initCertificateOrPasswordOptions() {
+		certificateOrPasswordOptions = new ArrayList<SelectItem>();
+		certificateOrPasswordOptions.add(new SelectItem(Boolean.TRUE, this.getI18nService().getString("APPLICATION.LABEL.CERTIFICATE")));
+		certificateOrPasswordOptions.add(new SelectItem(Boolean.FALSE, this.getI18nService().getString("APPLICATION.LABEL.PASSWORD")));
 	}
 
 	/**
@@ -308,6 +322,7 @@ public class ApplicationsController extends AbstractContextAwareController {
 	 */
 	public void setApplication(final UIApplication application) {
 		this.application = application;
+		isCertificate = application.getPassword() == null;
 	}
 
 	/**
@@ -368,8 +383,6 @@ public class ApplicationsController extends AbstractContextAwareController {
 		String account = application.getAccount().getName();
 		String institution = application.getInstitution().getName();
 		String quota = application.getQuota();
-		byte[] certificate = application.getCertificate();
-		UploadedFile certificateFile = application.getCertificateFile();
 
 		String messageInvalidQuota = "APPLICATION.ERROR.INVALIDQUOTA";
 
@@ -407,10 +420,26 @@ public class ApplicationsController extends AbstractContextAwareController {
 				result = false;
 			}
 		}
+
+		if (isCertificate) {
+			byte[] certificate = application.getCertificate();
+			UploadedFile certificateFile = application.getCertificateFile();
+			
 		if (certificate == null && certificateFile == null) {
 			addErrorMessage("editApplication:certificate",
 					"APPLICATION.ERROR.INVALIDCERTIFICATE");
 			result = false;
+			} else {
+				application.setPassword(null); 
+			}
+		} else {
+			if (StringUtils.isBlank(application.getPassword())) {
+				addErrorMessage("editApplication:password",
+						"APPLICATION.ERROR.EMPTYPASSWORD");
+				result = false;
+			} else {
+				application.setCertificate(null);
+			}
 		}
 
 		return result;
@@ -428,6 +457,28 @@ public class ApplicationsController extends AbstractContextAwareController {
 	 */
 	public List<SelectItem> getAvailableAccounts() {
 		return availableAccounts;
+	}
+
+	
+	//////////////////////////////////////////////////////////////
+	// Getter and Setter of isCertificate
+	//////////////////////////////////////////////////////////////
+	/**
+	 * @return isCertificate
+	 */
+	public Boolean getIsCertificate() {
+		return isCertificate;
+	}
+
+	/**
+	 * @param isCertificate
+	 */
+	public void setIsCertificate(final Boolean isCertificate) {
+		this.isCertificate = isCertificate;
+	}
+
+	public List<SelectItem> getCertificateOrPasswordOptions() {
+		return certificateOrPasswordOptions;
 	}
 
 }

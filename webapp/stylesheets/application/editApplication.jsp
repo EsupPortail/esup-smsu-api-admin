@@ -31,9 +31,14 @@
 				<f:verbatim> </f:verbatim>
 			</h:panelGroup>
 
-			<e:outputLabel value="#{msgs['APPLICATION.LABEL.CERTIFICATE']}" for="certificate"/>
+
+			<e:selectOneMenu id="selectTypeRecipient" onchange="submit();"
+		           value="#{applicationsController.isCertificate}">
+			       <f:selectItems value="#{applicationsController.certificateOrPasswordOptions}" />
+		        </e:selectOneMenu>
+
 			<h:panelGroup>
-				<h:panelGrid columns="1">
+				<h:panelGrid columns="1" rendered="#{applicationsController.isCertificate}">
 					<h:panelGroup>
 						<t:inputFileUpload id="certificate"
 							value="#{applicationsController.application.certificateFile}"
@@ -47,6 +52,14 @@
 						<e:outputLabel value="#{msgs['APPLICATION.CERTIFICATEDEFINED']}" for="cer"/>
 					</h:panelGroup>
 				</h:panelGrid>
+
+			        <e:inputText id="password"
+			        		 rendered="#{!applicationsController.isCertificate}"
+			        		 value="#{applicationsController.application.password}" maxlength="30">
+			        </e:inputText>
+			        <f:verbatim>&nbsp;&nbsp;&nbsp;&nbsp;</f:verbatim>
+			        <e:message for="password" />
+
 			</h:panelGroup>
 			<h:panelGroup>
 				<f:verbatim> </f:verbatim>

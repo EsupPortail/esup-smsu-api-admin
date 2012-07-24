@@ -70,7 +70,7 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 
 		result.setId(String.valueOf(app.getId()));
 		result.setName(app.getName());
-		result.setCertificate(app.getCertificate());
+		result.setCertificateOrPassword(app.getCertificate());
 
 		UIAccount uiAcc = convertToUI(app.getAccount());
 		result.setAccount(uiAcc);
@@ -207,7 +207,7 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 		result.setName(uiApp.getName());
 
 		// le certificat
-		result.setCertificate(uiApp.getCertificate());
+		result.setCertificate(uiApp.getCertificateOrPassword());
 
 		// le quota
 		String quotaStr = uiApp.getQuota();

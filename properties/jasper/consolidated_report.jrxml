@@ -43,7 +43,7 @@
 			<textField>
 				<reportElement x="0" y="84" width="554" height="35" forecolor="#3333FF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="20" isBold="false" isItalic="true" isPdfEmbedded="true"/>
+					<font size="20" isBold="false" isItalic="true" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{REPORT_TITLE}]]></textFieldExpression>
 			</textField>

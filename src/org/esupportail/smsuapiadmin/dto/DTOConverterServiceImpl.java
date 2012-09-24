@@ -134,8 +134,8 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 		UIApplication uiApp = convertToUI(app);
 		result.setApplication(uiApp);
 
-		result.setNbSendedSMS(stat.getNbSms() + "");
-		result.setNbSMSInError(stat.getNbSmsInError() + "");
+		result.setNbSendedSMS(stat.getNbSms());
+		result.setNbSMSInError(stat.getNbSmsInError());
 
 		return result;
 	}

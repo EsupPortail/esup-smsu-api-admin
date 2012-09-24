@@ -32,12 +32,12 @@ public class UIStatistic extends UIObject {
 	/**
 	 * nbSMS.
 	 */
-	private String nbSendedSMS;
+	private long nbSendedSMS;
 
 	/**
 	 * nbSMSInError.
 	 */
-	private String nbSMSInError;
+	private long nbSMSInError;
 
 	/**
 	 * account.
@@ -61,7 +61,7 @@ public class UIStatistic extends UIObject {
 	 * 
 	 * @param nbSMS
 	 */
-	public void setNbSendedSMS(final String nbSendedSMS) {
+	public void setNbSendedSMS(final long nbSendedSMS) {
 		this.nbSendedSMS = nbSendedSMS;
 	}
 
@@ -71,7 +71,7 @@ public class UIStatistic extends UIObject {
 	 * @return
 	 */
 	public String getNbSendedSMS() {
-		return nbSendedSMS;
+		return nbSendedSMS + "";
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class UIStatistic extends UIObject {
 	 * 
 	 * @param nbSMSInError
 	 */
-	public void setNbSMSInError(final String nbSMSInError) {
+	public void setNbSMSInError(final long nbSMSInError) {
 		this.nbSMSInError = nbSMSInError;
 	}
 
@@ -89,7 +89,7 @@ public class UIStatistic extends UIObject {
 	 * @return
 	 */
 	public String getNbSMSInError() {
-		return nbSMSInError;
+		return nbSMSInError + "";
 	}
 
 	/**
@@ -154,21 +154,11 @@ public class UIStatistic extends UIObject {
 	public String getFailRate() {
 		String result = "N/A";
 
-		if (nbSendedSMS != null && nbSMSInError != null) {
-			try {
-				double nbSendedSMSInt = Double.parseDouble(nbSendedSMS);
-				double nbSMSInErrorInt = Double.parseDouble(nbSMSInError);
-
-				if (nbSendedSMSInt != 0) {
+				if (nbSendedSMS != 0) {
 					final double cent = 100;
-					double rate = (nbSMSInErrorInt / nbSendedSMSInt) * cent;
+					double rate = ((double) nbSMSInError / nbSendedSMS) * cent;
 					result = (int) rate + "%";
 				}
-
-			} catch (NumberFormatException e) {
-				logger.warn("Impossible de calculer le taux d'echec", e);
-			}
-		}
 
 		return result;
 	}
@@ -179,21 +169,8 @@ public class UIStatistic extends UIObject {
 	 * @return
 	 */
 	public String getNbReceivedSMS() {
-		String result = "N/A";
-
-		if (nbSendedSMS != null && nbSMSInError != null) {
-			try {
-				int nbSendedSMSInt = Integer.parseInt(nbSendedSMS);
-				int nbSMSInErrorInt = Integer.parseInt(nbSMSInError);
-
-				int nbReceivedSMS = nbSendedSMSInt - nbSMSInErrorInt;
-				result = nbReceivedSMS + "";
-			} catch (NumberFormatException e) {
-				logger.warn("Impossible de calculer le taux d'echec", e);
-			}
-		}
-
-		return result;
+		long nbReceivedSMS = nbSendedSMS - nbSMSInError;
+		return nbReceivedSMS + "";
 	}
 
 	/**

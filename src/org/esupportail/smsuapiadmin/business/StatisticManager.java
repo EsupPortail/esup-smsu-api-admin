@@ -512,8 +512,8 @@ public class StatisticManager
 			String application = uiApplication.getName();
 			String account = stat.getAccount().getName();
 			String month = stat.getFormattedMonth();
-			String nbSendedSMS = stat.getNbSendedSMS();
-			String nbReceivedSMS = stat.getNbReceivedSMS();
+			long nbSendedSMS = stat.getNbSendedSMS();
+			long nbReceivedSMS = stat.getNbReceivedSMS();
 			String failRate = stat.getFailRate();
 
 			// on cree une nouvelle ligne de valeurs
@@ -532,10 +532,10 @@ public class StatisticManager
 			cellMonthValue.setCellValue(new HSSFRichTextString(month));
 			j++;
 			HSSFCell cellSendedSmsValue = valueRow.createCell(j);
-			cellSendedSmsValue.setCellValue(new HSSFRichTextString(nbSendedSMS));
+			cellSendedSmsValue.setCellValue(nbSendedSMS);
 			j++;
 			HSSFCell cellReceivedSmsValue = valueRow.createCell(j);
-			cellReceivedSmsValue.setCellValue(new HSSFRichTextString(nbReceivedSMS));
+			cellReceivedSmsValue.setCellValue(nbReceivedSMS);
 			j++;
 			HSSFCell cellFailRateValue = valueRow.createCell(j);
 			cellFailRateValue.setCellValue(new HSSFRichTextString(failRate));

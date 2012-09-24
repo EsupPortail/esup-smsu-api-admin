@@ -70,8 +70,8 @@ public class UIStatistic extends UIObject {
 	 * 
 	 * @return
 	 */
-	public String getNbSendedSMS() {
-		return nbSendedSMS + "";
+	public long getNbSendedSMS() {
+		return nbSendedSMS;
 	}
 
 	/**
@@ -88,8 +88,8 @@ public class UIStatistic extends UIObject {
 	 * 
 	 * @return
 	 */
-	public String getNbSMSInError() {
-		return nbSMSInError + "";
+	public long getNbSMSInError() {
+		return nbSMSInError;
 	}
 
 	/**
@@ -168,9 +168,8 @@ public class UIStatistic extends UIObject {
 	 * 
 	 * @return
 	 */
-	public String getNbReceivedSMS() {
-		long nbReceivedSMS = nbSendedSMS - nbSMSInError;
-		return nbReceivedSMS + "";
+	public long getNbReceivedSMS() {
+		return nbSendedSMS - nbSMSInError;
 	}
 
 	/**

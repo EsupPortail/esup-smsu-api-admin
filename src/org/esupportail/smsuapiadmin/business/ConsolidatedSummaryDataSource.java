@@ -49,9 +49,9 @@ public class ConsolidatedSummaryDataSource implements JRDataSource {
 		} else if (field.getName().equals("MONTH")) {
 			result = stat.getFormattedMonth();
 		} else if (field.getName().equals("SENDEDSMS")) {
-			result = stat.getNbSendedSMS();
+			result = stat.getNbSendedSMS() + "";
 		} else if (field.getName().equals("RECEIVEDSMS")) {
-			result = stat.getNbReceivedSMS();
+			result = stat.getNbReceivedSMS() + "";
 		} else if (field.getName().equals("FAILRATE")) {
 			result = stat.getFailRate();
 		}

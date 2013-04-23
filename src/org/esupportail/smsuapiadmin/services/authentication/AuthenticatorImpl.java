@@ -89,13 +89,11 @@ public class AuthenticatorImpl implements Serializable, InitializingBean,
 		authInfo = authenticationService.getAuthInfo();
 		if (authInfo == null) {
 			return null;
-		}
-		if (AuthUtils.CAS.equals(authInfo.getType())) {
+		} else {
 			UIUser user = getDomainService().getUserByLogin(authInfo.getId());
 			storeToSession(authInfo, user);
 			return user;
 		} 
-		return null;
 	}
 	
 	

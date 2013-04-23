@@ -256,14 +256,10 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 		result.setApplication(uiApp);
 		// date
 		result.setDate(sms.getDate());
-		// grpSenderId
-		result.setGrpSenderId(sms.getGrpSenderId() + "");
 		// initialId
 		result.setInitialId(sms.getInitialId() + "");
 		// senderId
 		result.setSenderId(sms.getSenderId() + "");
-		// svcId
-		result.setSvcId(sms.getSvcId() + "");
 		// state
 		SmsStatus smsStatus = SmsStatus.valueOf(sms.getState());
 		result.setState(smsStatus);

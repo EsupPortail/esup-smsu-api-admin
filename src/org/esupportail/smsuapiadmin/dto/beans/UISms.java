@@ -37,14 +37,6 @@ public class UISms extends UIObject {
 	 */
 	private String senderId;
 	/**
-	 * grpSenderId.
-	 */
-	private String grpSenderId;
-	/**
-	 * svcId.
-	 */
-	private String svcId;
-	/**
 	 * state.
 	 */
 	private SmsStatus state;
@@ -152,42 +144,6 @@ public class UISms extends UIObject {
 	 */
 	public void setSenderId(final String senderId) {
 		this.senderId = senderId;
-	}
-
-	/**
-	 * Getter for 'grpSenderId'.
-	 * 
-	 * @return
-	 */
-	public String getGrpSenderId() {
-		return grpSenderId;
-	}
-
-	/**
-	 * Setter for 'grpSenderId'.
-	 * 
-	 * @return
-	 */
-	public void setGrpSenderId(final String grpSenderId) {
-		this.grpSenderId = grpSenderId;
-	}
-
-	/**
-	 * Getter for 'svcId'.
-	 * 
-	 * @return
-	 */
-	public String getSvcId() {
-		return svcId;
-	}
-
-	/**
-	 * Setter for 'svcId'.
-	 * 
-	 * @return
-	 */
-	public void setSvcId(final String svcId) {
-		this.svcId = svcId;
 	}
 
 	/**

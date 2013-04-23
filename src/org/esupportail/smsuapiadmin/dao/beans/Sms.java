@@ -18,16 +18,6 @@ public class Sms  implements Serializable {
 	 */
 
 	/**
-	 * Hibernate property for the service identifier.
-	 */
-	public static final String PROP_SVC_ID = "SvcId";
-
-	/**
-	 * Hibernate property for the group sender identifier.
-	 */
-	public static final String PROP_GRP_SENDER_ID = "GrpSenderId";
-
-	/**
 	 * Hibernate property for the sender identifier.
 	 */
 	public static final String PROP_SENDER_ID = "SenderId";
@@ -86,16 +76,6 @@ public class Sms  implements Serializable {
 	 * Sender identifier of the sms (in the application source).
 	 */
 	private java.lang.Integer senderId;
-
-	/**
-	 * Group sender identifier of the sms (in the application source).
-	 */
-	private java.lang.Integer grpSenderId;
-
-	/**
-	 * Service id associated to the sms (in the application source).
-	 */
-	private java.lang.Integer svcId;
 
 	/**
 	 * Sms state.
@@ -198,40 +178,6 @@ public class Sms  implements Serializable {
 	public void setSenderId(final java.lang.Integer senderId) {
 		this.senderId = senderId;
 	}
-
-
-
-	/**
-	 * Return the value associated with the column: SMS_GRP_SENDER_ID.
-	 */
-	public java.lang.Integer getGrpSenderId() {
-		return grpSenderId;
-	}
-
-	/**
-	 * Set the value related to the column: SMS_GRP_SENDER_ID.
-	 * @param grpSenderId the SMS_GRP_SENDER_ID value
-	 */
-	public void setGrpSenderId(final java.lang.Integer grpSenderId) {
-		this.grpSenderId = grpSenderId;
-	}
-
-	/**
-	 * Return the value associated with the column: SMS_SVC_ID.
-	 */
-	public java.lang.Integer getSvcId() {
-		return svcId;
-	}
-
-	/**
-	 * Set the value related to the column: SMS_SVC_ID.
-	 * @param svcId the SMS_SVC_ID value
-	 */
-	public void setSvcId(final java.lang.Integer svcId) {
-		this.svcId = svcId;
-	}
-
-
 
 	/**
 	 * Return the value associated with the column: SMS_STATE.
@@ -353,8 +299,7 @@ public class Sms  implements Serializable {
 	@Override
 	public String toString() {
 		return "Sms#" + hashCode() + "[id=[" + id + "], initial id=[" + initialId 
-		+ "], sender id=[" + senderId + "], group sender id=[" + grpSenderId
-		+ "], service id=[" + svcId + "], phone=[" + phone 
+		+ "], sender id=[" + senderId + "], phone=[" + phone 
 		+ "], state=[" + state + "], date=[" + date + "]]";
 	}
 

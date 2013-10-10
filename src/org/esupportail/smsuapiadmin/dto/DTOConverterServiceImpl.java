@@ -1,7 +1,7 @@
 package org.esupportail.smsuapiadmin.dto;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
@@ -20,8 +20,6 @@ import org.esupportail.smsuapiadmin.domain.beans.EnumeratedFunction;
 import org.esupportail.smsuapiadmin.domain.beans.EnumeratedRole;
 import org.esupportail.smsuapiadmin.dto.beans.UIAccount;
 import org.esupportail.smsuapiadmin.dto.beans.UIApplication;
-import org.esupportail.smsuapiadmin.dto.beans.UIFonction;
-import org.esupportail.smsuapiadmin.dto.beans.UIInstitution;
 import org.esupportail.smsuapiadmin.dto.beans.UIRole;
 import org.esupportail.smsuapiadmin.dto.beans.UISms;
 import org.esupportail.smsuapiadmin.dto.beans.UIStatistic;
@@ -56,10 +54,23 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 	public UIAccount convertToUI(final Account acc) {
 		UIAccount result = new UIAccount();
 
-		result.setId(String.valueOf(acc.getId()));
+		result.setId(acc.getId());
 		result.setName(acc.getLabel());
-		result.setQuota(acc.getQuota() + "");
-		result.setConsumedSms(acc.getConsumedSms() + "");
+		result.setQuota(acc.getQuota());
+		result.setConsumedSms(acc.getConsumedSms());
+
+		return result;
+	}
+
+	
+    public Account convertFromUI(final UIAccount acc, boolean isAddMode) {
+		Account result = new Account();
+
+		if (!isAddMode) {
+			result.setId(Integer.valueOf(acc.getId()));
+		}
+		result.setLabel(acc.getName());
+		result.setQuota(acc.getQuota());
 
 		return result;
 	}
@@ -68,16 +79,15 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 	public UIApplication convertToUI(final Application app) {
 		UIApplication result = new UIApplication();
 
-		result.setId(String.valueOf(app.getId()));
+		result.setId(app.getId());
 		result.setName(app.getName());
 		result.setCertificateOrPassword(app.getCertificate());
 
-		UIAccount uiAcc = convertToUI(app.getAccount());
-		result.setAccount(uiAcc);
-		UIInstitution uiInst = convertToUI(app.getInstitution());
-		result.setAccount(uiAcc);
+		result.setAccountName(app.getAccount().getLabel());
+		String uiInst = convertToUI(app.getInstitution());
 		result.setInstitution(uiInst);
-		result.setQuota(app.getQuota() + "");
+		result.setQuota(app.getQuota());
+		result.setConsumedSms(app.getConsumedSms());
 		boolean deletable = isDeletable(app);
 		result.setDeletable(deletable);
 
@@ -85,13 +95,8 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 	}
 
 	
-	public UIInstitution convertToUI(final Institution inst) {
-		UIInstitution result = new UIInstitution();
-
-		result.setId(String.valueOf(inst.getId()));
-		result.setName(inst.getLabel());
-
-		return result;
+	public String convertToUI(final Institution inst) {
+		return inst.getLabel();
 	}
 
 	/**
@@ -126,13 +131,9 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 		StatisticPK id = stat.getId();
 		result.setMonth(id.getMonth());
 
-		Account acc = id.getAcc();
-		UIAccount uiAcc = convertToUI(acc);
-		result.setAccount(uiAcc);
-
-		Application app = id.getApp();
-		UIApplication uiApp = convertToUI(app);
-		result.setApplication(uiApp);
+		result.setAccountName(id.getAcc().getLabel());
+		result.setAppName(id.getApp().getName());
+		result.setInstitution(id.getApp().getInstitution().getLabel());
 
 		result.setNbSendedSMS(stat.getNbSms());
 		result.setNbSMSInError(stat.getNbSmsInError());
@@ -146,10 +147,7 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 
 		result.setId(user.getId() + "");
 		result.setLogin(user.getLogin());
-
-		Role role = user.getRole();
-		UIRole uiRole = convertToUI(role);
-		result.setRole(uiRole);
+		result.setRole(convertToEnum(user.getRole()));
 
 		return result;
 	}
@@ -158,31 +156,28 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 	public UIRole convertToUI(final Role role) {
 		UIRole result = new UIRole();
 
-		result.setId(role.getId() + "");
-		
-		EnumeratedRole enumRole = EnumeratedRole.valueOf(role.getName());
-		result.setRole(enumRole);
-
-		List<UIFonction> uiFcts = new ArrayList<UIFonction>();
-
-		for (Fonction fct : role.getFonctions()) {
-			UIFonction uiFct = convertToUI(fct);
-			uiFcts.add(uiFct);
-		}
-		result.setFonctions(uiFcts);
+		result.setId(role.getId() + "");	
+		result.setRole(EnumeratedRole.valueOf(role.getName()));
+		result.setFonctions(convertToEnum(role.getFonctions()));
 
 		return result;
 	}
+	
+	public EnumeratedRole convertToEnum(final Role role) {
+		return EnumeratedRole.valueOf(role.getName());
+	}
 
 	
-	public UIFonction convertToUI(final Fonction fct) {
-		UIFonction result = new UIFonction();
-
-		result.setId(fct.getId() + "");
-		EnumeratedFunction function = EnumeratedFunction.valueOf(fct.getName());
-		result.setFunction(function);
-
-		return result;
+	public EnumeratedFunction convertToEnum(final Fonction fct) {
+		return EnumeratedFunction.valueOf(fct.getName());
+	}
+	
+	public Set<EnumeratedFunction> convertToEnum(final Set<Fonction> fcts) {
+		Set<EnumeratedFunction> r = new java.util.TreeSet<EnumeratedFunction>();
+		for (Fonction fct : fcts) {
+			r.add(convertToEnum(fct));
+		}
+		return r;
 	}
 
 	/**
@@ -195,10 +190,10 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 	}
 
 	
-	public Application convertFromUI(final UIApplication uiApp) {
+    public Application convertFromUI(final UIApplication uiApp, boolean isAddMode) {
 		final Application result = new Application();
 
-		if (!uiApp.isAddMode()) {
+		if (!isAddMode) {
 			// l'id
 			result.setId(Integer.valueOf(uiApp.getId()));
 		}
@@ -207,30 +202,26 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 		result.setName(uiApp.getName());
 
 		// le certificat
-		result.setCertificate(uiApp.getCertificateOrPassword());
+		result.setCertificate(uiApp.computeCertificateOrPassword());
 
-		// le quota
-		String quotaStr = uiApp.getQuota();
-		Long quota = Long.valueOf(quotaStr);
-		result.setQuota(quota);
+		result.setQuota(uiApp.getQuota());
 
 		// le compte d'imputation
-		Account account = daoService.getAccountByName(uiApp.getAccount()
-				.getName());
+		Account account = daoService.getAccountByName(uiApp.getAccountName());
 		if (account == null) {
 			account = new Account();
-			account.setLabel(uiApp.getAccount().getName());
-			account.setQuota(quota);
+			account.setLabel(uiApp.getAccountName());
+			account.setQuota(uiApp.getQuota());
 			daoService.addAccount(account);
 		}
 		result.setAccount(account);
 
 		// l'etablissement
 		Institution institution = daoService.getInstitutionByName(uiApp
-				.getInstitution().getName());
+				.getInstitution());
 		if (institution == null) {
 			institution = new Institution();
-			institution.setLabel(uiApp.getInstitution().getName());
+			institution.setLabel(uiApp.getInstitution());
 			daoService.addInstitution(institution);
 		}
 		result.setInstitution(institution);
@@ -270,10 +261,10 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 	}
 
 	
-	public UserBoSmsu convertFromUI(final UIUser uiUser) {
+	public UserBoSmsu convertFromUI(final UIUser uiUser, boolean isAddMode) {
 		final UserBoSmsu result = new UserBoSmsu();
 
-		if (!uiUser.isAddMode()) {
+		if (!isAddMode) {
 			// l'id
 			result.setId(Integer.valueOf(uiUser.getId()));
 		}
@@ -282,11 +273,10 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 		result.setLogin(uiUser.getLogin());
 
 		// le role
-		String roleId = uiUser.getRole().getId();
-		Role role = daoService.getRoleById(roleId);
+		EnumeratedRole roleName = uiUser.getRole();
+		Role role = daoService.getRoleByName(roleName.toString());
 		if (role == null) {
-			logger.error("Aucun role d'identifiant " + roleId
-					+ " n'existe en base.");
+			logger.error("Aucun role d'identifiant " + roleName + " n'existe en base.");
 		}
 		result.setRole(role);
 

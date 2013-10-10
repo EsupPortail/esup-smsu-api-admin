@@ -13,10 +13,6 @@ import org.esupportail.smsuapiadmin.dao.beans.SmsStatus;
 public class UISms extends UIObject {
 
 	/**
-	 * The UID.
-	 */
-	private static final long serialVersionUID = -5312393467136910173L;
-	/**
 	 * identifier (database) of the account.
 	 */
 	private String id;

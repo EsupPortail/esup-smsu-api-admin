@@ -1,7 +1,6 @@
 package org.esupportail.smsuapiadmin.dto.beans;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import org.esupportail.smsuapiadmin.domain.beans.EnumeratedFunction;
 import org.esupportail.smsuapiadmin.domain.beans.EnumeratedRole;
@@ -12,7 +11,7 @@ import org.esupportail.smsuapiadmin.domain.beans.EnumeratedRole;
  * @author MZRL3760
  * 
  */
-public class UIRole extends UIObject {
+public class UIRole {
 
 	/**
 	 * identifier (database) of the account.
@@ -25,20 +24,12 @@ public class UIRole extends UIObject {
 	/**
 	 * fonctions.
 	 */
-	private List<UIFonction> fonctions;
+	private Set<EnumeratedFunction> fonctions;
 
 	/**
 	 * Default constructor.
 	 */
 	public UIRole() {
-		init();
-	}
-
-	/**
-	 * Initializes the bean.
-	 */
-	private void init() {
-		fonctions = new ArrayList<UIFonction>();
 	}
 
 	/**
@@ -64,7 +55,7 @@ public class UIRole extends UIObject {
 	 * 
 	 * @param fonctions
 	 */
-	public void setFonctions(final List<UIFonction> fonctions) {
+	public void setFonctions(final Set<EnumeratedFunction> fonctions) {
 		this.fonctions = fonctions;
 	}
 
@@ -73,7 +64,7 @@ public class UIRole extends UIObject {
 	 * 
 	 * @return
 	 */
-	public List<UIFonction> getFonctions() {
+	public Set<EnumeratedFunction> getFonctions() {
 		return fonctions;
 	}
 
@@ -84,8 +75,8 @@ public class UIRole extends UIObject {
 	 * @return
 	 */
 	public boolean isAuthorizedForFonction(final EnumeratedFunction fct) {
-		for (UIFonction uiFct : fonctions) {
-			if (fct == uiFct.getFunction()) return true;
+		for (EnumeratedFunction uiFct : fonctions) {
+			if (fct == uiFct) return true;
 		}
 		return false;
 	}

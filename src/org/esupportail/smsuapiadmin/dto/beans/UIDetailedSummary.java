@@ -16,12 +16,7 @@ import org.esupportail.smsuapiadmin.dao.beans.SmsStatus;
  * @author MZRL3760
  * 
  */
-public class UIDetailedSummary extends UIObject {
-
-	/**
-	 * The UID.
-	 */
-	private static final long serialVersionUID = -5312393467136910173L;
+public class UIDetailedSummary {
 
 	/**
 	 * Log4j logger.
@@ -33,17 +28,17 @@ public class UIDetailedSummary extends UIObject {
 	/**
 	 * institution.
 	 */
-	private UIInstitution institution;
+	private String institution;
 
 	/**
 	 * application.
 	 */
-	private UIApplication application;
+	private String appName;
 
 	/**
 	 * account.
 	 */
-	private UIAccount account;
+	private String accountName;
 
 	/**
 	 * date.
@@ -67,7 +62,7 @@ public class UIDetailedSummary extends UIObject {
 	 * 
 	 * @return
 	 */
-	public UIInstitution getInstitution() {
+	public String getInstitution() {
 		return institution;
 	}
 
@@ -76,44 +71,44 @@ public class UIDetailedSummary extends UIObject {
 	 * 
 	 * @param institution
 	 */
-	public void setInstitution(final UIInstitution institution) {
+	public void setInstitution(final String institution) {
 		this.institution = institution;
 	}
 
 	/**
-	 * Getter for 'application'.
+	 * Getter for 'appName'.
 	 * 
 	 * @return
 	 */
-	public UIApplication getApplication() {
-		return application;
+	public String getAppName() {
+		return appName;
 	}
 
 	/**
-	 * Setter for 'application'.
+	 * Setter for 'appName'.
 	 * 
-	 * @param application
+	 * @param appName
 	 */
-	public void setApplication(final UIApplication application) {
-		this.application = application;
+	public void setAppName(final String appName) {
+		this.appName = appName;
 	}
 
 	/**
-	 * Getter for 'account'.
+	 * Getter for 'accountName'.
 	 * 
 	 * @return
 	 */
-	public UIAccount getAccount() {
-		return account;
+	public String getAccountName() {
+		return accountName;
 	}
 
 	/**
-	 * Setter for 'account'.
+	 * Setter for 'accountName'.
 	 * 
-	 * @param account
+	 * @param accountName
 	 */
-	public void setAccount(final UIAccount account) {
-		this.account = account;
+	public void setAccountName(final String accountName) {
+		this.accountName = accountName;
 	}
 
 	/**
@@ -130,7 +125,7 @@ public class UIDetailedSummary extends UIObject {
 	 * 
 	 * @return
 	 */
-	public String getFormattedDate() {
+	public String formattedDate() {
 		String pattern = "dd MMM yyyy HH:mm";
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat(pattern);
@@ -148,15 +143,6 @@ public class UIDetailedSummary extends UIObject {
 	 */
 	public void setDate(final Date date) {
 		this.date = date;
-	}
-
-	/**
-	 * Getter for 'statistics'.
-	 * 
-	 * @return
-	 */
-	public Map<SmsStatus, Integer> getStatistics() {
-		return statistics;
 	}
 
 	/**
@@ -190,7 +176,7 @@ public class UIDetailedSummary extends UIObject {
 		return statistics.get(SmsStatus.IN_PROGRESS);
 	}
 
-	public Integer getSMSCount() {
+	public Integer getNbSms() {
 		int result = 0;
 		for (Integer cpt : statistics.values()) {
 			result += cpt;

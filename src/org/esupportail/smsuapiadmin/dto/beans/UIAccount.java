@@ -1,22 +1,19 @@
 package org.esupportail.smsuapiadmin.dto.beans;
 
 
+
 /**
  * UIAccount is the representation on the web side of the Account persistent.
  * 
  * @author MZRL3760
  * 
  */
-public class UIAccount extends UIObject {
+public class UIAccount {
 
-	/**
-	 * The UID.
-	 */
-	private static final long serialVersionUID = -5312393467136910173L;
 	/**
 	 * identifier (database) of the account.
 	 */
-	private String id;
+	private Integer id;
 	/**
 	 * name.
 	 */
@@ -24,11 +21,11 @@ public class UIAccount extends UIObject {
 	/**
 	 * quota.
 	 */
-	private String quota;
+	private Long quota;
 	/**
 	 * consumed_sms.
 	 */
-	private String consumedSms;
+	private Long consumedSms;
 
 	/**
 	 * Default constructor.
@@ -60,7 +57,7 @@ public class UIAccount extends UIObject {
 	 * 
 	 * @return
 	 */
-	public String getQuota() {
+	public Long getQuota() {
 		return quota;
 	}
 
@@ -69,8 +66,8 @@ public class UIAccount extends UIObject {
 	 * 
 	 * @param quota
 	 */
-	public void setQuota(final String quota) {
-		this.quota = quota.trim();
+	public void setQuota(final Long quota) {
+		this.quota = quota;
 	}
 
 	/**
@@ -78,7 +75,7 @@ public class UIAccount extends UIObject {
 	 * 
 	 * @param id
 	 */
-	public void setId(final String id) {
+	public void setId(final Integer id) {
 		this.id = id;
 	}
 
@@ -87,7 +84,7 @@ public class UIAccount extends UIObject {
 	 * 
 	 * @return
 	 */
-	public String getId() {
+	public Integer getId() {
 		return id;
 	}
 
@@ -96,7 +93,7 @@ public class UIAccount extends UIObject {
 	 * 
 	 * @param consumedSms
 	 */
-	public void setConsumedSms(final String consumedSms) {
+	public void setConsumedSms(final Long consumedSms) {
 		this.consumedSms = consumedSms;
 	}
 
@@ -105,7 +102,7 @@ public class UIAccount extends UIObject {
 	 * 
 	 * @return
 	 */
-	public String getConsumedSms() {
+	public Long getConsumedSms() {
 		return consumedSms;
 	}
 

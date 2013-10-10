@@ -1,7 +1,5 @@
 package org.esupportail.smsuapiadmin.dto.beans;
 
-import org.apache.myfaces.custom.fileupload.UploadedFile;
-
 /**
  * UIApplication is the representation on the web side of the Application
  * persistent.
@@ -9,68 +7,29 @@ import org.apache.myfaces.custom.fileupload.UploadedFile;
  * @author MZRL3760
  * 
  */
-public class UIApplication extends UIObject {
-
-	/**
-	 * The UID.
-	 */
-	private static final long serialVersionUID = -5312393467136910173L;
+public class UIApplication {
 
 	private String PASSWORD_PREFIX_IN_CERTIFCATE = "PASSWORD:";
 
-	/**
-	 * identifier (database) of the application.
-	 */
-	private String id;
-	/**
-	 * name - linked with the field of the JSF page.
-	 */
+	/** identifier (database) of the application. */
+	private Integer id;
+
 	private String name;
-	/**
-	 * password - linked with the field of the JSF page.
-	 */
 	private String password;
-	/**
-	 * certificate - not linked.
-	 */
+	private String institution;
+	private String accountName;
+	private Long quota;
+	private java.lang.Long consumedSms;
 	private byte[] certificate;
-	/**
-	 * institution - linked with the field of the JSF page.
-	 */
-	private UIInstitution institution;
-	/**
-	 * account - linked with the field of the JSF page.
-	 */
-	private UIAccount account;
-	/**
-	 * quota - linked with the field of the JSF page.
-	 */
-	private String quota;
-	/**
-	 * uploaded file - linked with the field of the JSF page.
-	 */
-	private UploadedFile certificateFile;
-	/**
-	 * deletable.
-	 */
 	private boolean deletable = true;
 
 	/**
 	 * Constructor.
 	 */
 	public UIApplication() {
-		init();
 	}
 
-	/**
-	 * Initialization.
-	 */
-	private void init() {
-		institution = new UIInstitution();
-		account = new UIAccount();
-	}
-
-	public byte[] getCertificateOrPassword() {
+	public byte[] computeCertificateOrPassword() {
 		if (password != null)
 			return (PASSWORD_PREFIX_IN_CERTIFCATE + password).getBytes();
 		else
@@ -108,7 +67,7 @@ public class UIApplication extends UIObject {
 	 * 
 	 * @return
 	 */
-	public UIInstitution getInstitution() {
+	public String getInstitution() {
 		return institution;
 	}
 
@@ -117,26 +76,16 @@ public class UIApplication extends UIObject {
 	 * 
 	 * @param institution
 	 */
-	public void setInstitution(final UIInstitution institution) {
+	public void setInstitution(final String institution) {
 		this.institution = institution;
 	}
 
-	/**
-	 * Getter for 'account'.
-	 * 
-	 * @return
-	 */
-	public UIAccount getAccount() {
-		return account;
+	public String getAccountName() {
+		return accountName;
 	}
 
-	/**
-	 * Setter for 'account'.
-	 * 
-	 * @param account
-	 */
-	public void setAccount(final UIAccount account) {
-		this.account = account;
+	public void setAccountName(final String accountName) {
+		this.accountName = accountName;
 	}
 
 	/**
@@ -144,7 +93,7 @@ public class UIApplication extends UIObject {
 	 * 
 	 * @return
 	 */
-	public String getQuota() {
+	public Long getQuota() {
 		return quota;
 	}
 
@@ -153,26 +102,16 @@ public class UIApplication extends UIObject {
 	 * 
 	 * @param quota
 	 */
-	public void setQuota(final String quota) {
-		this.quota = quota.trim();
+	public void setQuota(final Long quota) {
+		this.quota = quota;
 	}
 
-	/**
-	 * Setter for 'certificateFile'.
-	 * 
-	 * @param certificateFile
-	 */
-	public void setCertificateFile(final UploadedFile certificateFile) {
-		this.certificateFile = certificateFile;
+	public java.lang.Long getConsumedSms() {
+		return consumedSms;
 	}
 
-	/**
-	 * Setter for 'certificateFile'.
-	 * 
-	 * @return
-	 */
-	public UploadedFile getCertificateFile() {
-		return certificateFile;
+	public void setConsumedSms(final java.lang.Long consumedSms) {
+		this.consumedSms = consumedSms;
 	}
 
 	/**
@@ -180,7 +119,7 @@ public class UIApplication extends UIObject {
 	 * 
 	 * @param id
 	 */
-	public void setId(final String id) {
+	public void setId(final Integer id) {
 		this.id = id;
 	}
 
@@ -189,7 +128,7 @@ public class UIApplication extends UIObject {
 	 * 
 	 * @return
 	 */
-	public String getId() {
+	public Integer getId() {
 		return id;
 	}
 

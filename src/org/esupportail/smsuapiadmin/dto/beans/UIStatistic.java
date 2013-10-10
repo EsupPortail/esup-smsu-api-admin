@@ -12,12 +12,7 @@ import org.esupportail.commons.services.logging.LoggerImpl;
  * @author MZRL3760
  * 
  */
-public class UIStatistic extends UIObject {
-
-	/**
-	 * The UID.
-	 */
-	private static final long serialVersionUID = -5312393467136910173L;
+public class UIStatistic {
 
 	/**
 	 * Log4j logger.
@@ -40,21 +35,19 @@ public class UIStatistic extends UIObject {
 	private long nbSMSInError;
 
 	/**
-	 * account.
+	 * accountName.
 	 */
-	private UIAccount account;
+	private String accountName;
 
 	/**
-	 * application.
+	 * appName.
 	 */
-	private UIApplication application;
+	private String appName;
 
 	/**
-	 * Default constructor.
+	 * institution.
 	 */
-	public UIStatistic() {
-		// nothing to do
-	}
+	private String institution;
 
 	/**
 	 * Setter for 'nbSMS'.
@@ -93,39 +86,57 @@ public class UIStatistic extends UIObject {
 	}
 
 	/**
-	 * Setter for 'account'.
+	 * Setter for 'accountName'.
 	 * 
 	 * @return
 	 */
-	public void setAccount(final UIAccount account) {
-		this.account = account;
+	public void setAccountName(final String accountName) {
+		this.accountName = accountName;
 	}
 
 	/**
-	 * Getter for 'account'.
+	 * Getter for 'accountName'.
 	 * 
 	 * @return
 	 */
-	public UIAccount getAccount() {
-		return account;
+	public String getAccountName() {
+		return accountName;
 	}
 
 	/**
-	 * Setter for 'application'.
+	 * Setter for 'appName'.
 	 * 
 	 * @return
 	 */
-	public void setApplication(final UIApplication application) {
-		this.application = application;
+	public void setAppName(final String appName) {
+		this.appName = appName;
 	}
 
 	/**
-	 * Getter for 'application'.
+	 * Getter for 'appName'.
 	 * 
 	 * @return
 	 */
-	public UIApplication getApplication() {
-		return application;
+	public String getAppName() {
+		return appName;
+	}
+
+	/**
+	 * Setter for 'institution'.
+	 * 
+	 * @return
+	 */
+	public void setInstitution(final String institution) {
+		this.institution = institution;
+	}
+
+	/**
+	 * Getter for 'institution'.
+	 * 
+	 * @return
+	 */
+	public String getInstitution() {
+		return institution;
 	}
 
 	/**
@@ -142,51 +153,14 @@ public class UIStatistic extends UIObject {
 	 * 
 	 * @return
 	 */
-	public Date getMonth() {
-		return month;
-	}
-
-	/**
-	 * Compute the fail rate.
-	 * 
-	 * @return
-	 */
-	public String getFailRate() {
-		String result = "N/A";
-
-				if (nbSendedSMS != 0) {
-					final double cent = 100;
-					double rate = ((double) nbSMSInError / nbSendedSMS) * cent;
-					result = (int) rate + "%";
-				}
-
-		return result;
-	}
-
-	/**
-	 * Compute number of received SMS.
-	 * 
-	 * @return
-	 */
-	public long getNbReceivedSMS() {
-		return nbSendedSMS - nbSMSInError;
-	}
-
-	/**
-	 * Returns the month corresponding to format pattern.
-	 * 
-	 * @return
-	 */
-	public String getFormattedMonth() {
-		String pattern = "MMM yyyy";
-		String result = "N/A";
+	public String getMonth() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
 		try {
-			SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-			result = sdf.format(month);
+			return sdf.format(month);
 		} catch (IllegalArgumentException e) {
 			logger.warn("Impossible de formater la date", e);
+			return "N/A";
 		}
-
-		return result;
 	}
+
 }

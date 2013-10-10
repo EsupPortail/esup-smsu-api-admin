@@ -1,5 +1,7 @@
 package org.esupportail.smsuapiadmin.dto;
 
+import java.util.Set;
+
 import org.esupportail.smsuapiadmin.dao.beans.Account;
 import org.esupportail.smsuapiadmin.dao.beans.Application;
 import org.esupportail.smsuapiadmin.dao.beans.Fonction;
@@ -8,10 +10,10 @@ import org.esupportail.smsuapiadmin.dao.beans.Role;
 import org.esupportail.smsuapiadmin.dao.beans.Sms;
 import org.esupportail.smsuapiadmin.dao.beans.Statistic;
 import org.esupportail.smsuapiadmin.dao.beans.UserBoSmsu;
+import org.esupportail.smsuapiadmin.domain.beans.EnumeratedFunction;
+import org.esupportail.smsuapiadmin.domain.beans.EnumeratedRole;
 import org.esupportail.smsuapiadmin.dto.beans.UIAccount;
 import org.esupportail.smsuapiadmin.dto.beans.UIApplication;
-import org.esupportail.smsuapiadmin.dto.beans.UIFonction;
-import org.esupportail.smsuapiadmin.dto.beans.UIInstitution;
 import org.esupportail.smsuapiadmin.dto.beans.UIRole;
 import org.esupportail.smsuapiadmin.dto.beans.UISms;
 import org.esupportail.smsuapiadmin.dto.beans.UIStatistic;
@@ -56,15 +58,17 @@ public interface DTOConverterService {
 	 * @param uiApp
 	 * @return
 	 */
-	Application convertFromUI(UIApplication uiApp);
+	Application convertFromUI(UIApplication uiApp, boolean isAddMode);
+
+	Account convertFromUI(UIAccount acc, boolean isAddMode);
 
 	/**
-	 * Makes an UIInstitution from an Institution.
+	 * Makes a string from an Institution.
 	 * 
 	 * @param inst
 	 * @return
 	 */
-	UIInstitution convertToUI(Institution inst);
+	String convertToUI(Institution inst);
 
 	/**
 	 * Makes an UIUser from a UserBoSmsu.
@@ -80,15 +84,25 @@ public interface DTOConverterService {
 	 * @param user
 	 * @return
 	 */
-	UIFonction convertToUI(Fonction fct);
+	EnumeratedFunction convertToEnum(Fonction fct);
+
+	Set<EnumeratedFunction> convertToEnum(Set<Fonction> fcts);
 
 	/**
 	 * Makes an UIRole from a Role.
 	 * 
-	 * @param user
+	 * @param role
 	 * @return
 	 */
 	UIRole convertToUI(Role role);
+
+	/**
+	 * Makes an EnumeratedRole from a Role.
+	 * 
+	 * @param role
+	 * @return
+	 */
+	EnumeratedRole convertToEnum(Role role);
 
 	/**
 	 * Makes an UISms from a Sms.
@@ -104,6 +118,6 @@ public interface DTOConverterService {
 	 * @param uiUser
 	 * @return
 	 */
-	UserBoSmsu convertFromUI(UIUser uiUser);
+	UserBoSmsu convertFromUI(UIUser uiUser, boolean isAddMode);
 
 }

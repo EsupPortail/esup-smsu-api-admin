@@ -2,8 +2,7 @@ package org.esupportail.smsuapiadmin.dto.beans;
 
 import java.io.Serializable;
 
-import org.esupportail.commons.utils.strings.StringUtils;
-import org.esupportail.smsuapiadmin.domain.beans.EnumeratedFunction;
+import org.esupportail.smsuapiadmin.domain.beans.EnumeratedRole;
 import org.esupportail.smsuapiadmin.domain.beans.User;
 
 /**
@@ -12,7 +11,7 @@ import org.esupportail.smsuapiadmin.domain.beans.User;
  * @author MZRL3760
  * 
  */
-public class UIUser extends UIObject implements Serializable {
+public class UIUser implements Serializable {
 
 	/**
 	 * The UID.
@@ -29,7 +28,7 @@ public class UIUser extends UIObject implements Serializable {
 	/**
 	 * role.
 	 */
-	private UIRole role;
+	private EnumeratedRole role;
 	
 	/**
 	 * Boolean isDeletable.
@@ -42,22 +41,9 @@ public class UIUser extends UIObject implements Serializable {
 	private Boolean isUpdateable;
 	
 	/**
-	 * language.
-	 */
-	private String language;
-
-	/**
 	 * Default constructor.
 	 */
 	public UIUser() {
-		init();
-	}
-
-	/**
-	 * Initializes the bean.
-	 */
-	private void init() {
-		role = new UIRole();
 	}
 
 	/**
@@ -101,7 +87,7 @@ public class UIUser extends UIObject implements Serializable {
 	 * 
 	 * @param role
 	 */
-	public void setRole(final UIRole role) {
+	public void setRole(final EnumeratedRole role) {
 		this.role = role;
 	}
 
@@ -110,18 +96,8 @@ public class UIUser extends UIObject implements Serializable {
 	 * 
 	 * @return
 	 */
-	public UIRole getRole() {
+	public EnumeratedRole getRole() {
 		return role;
-	}
-
-	/**
-	 * Check if the user is allowed to the fonction.
-	 * 
-	 * @param EnumeratedFunction
-	 * @return
-	 */
-	public boolean isAuthorizedForFonction(final EnumeratedFunction fct) {
-		return role.isAuthorizedForFonction(fct);
 	}
 
 	/**
@@ -144,20 +120,6 @@ public class UIUser extends UIObject implements Serializable {
 	@Override
 	public int hashCode() {
 		return super.hashCode();
-	}
-	
-	/**
-	 * @return the language
-	 */
-	public String getLanguage() {
-		return language;
-	}
-
-	/**
-	 * @param language the language to set
-	 */
-	public void setLanguage(final String language) {
-		this.language = StringUtils.nullIfEmpty(language);
 	}
 	
 	public Boolean getIsDeletable() {

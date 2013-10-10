@@ -4,481 +4,108 @@
  */
 package org.esupportail.smsuapiadmin.web.controllers;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
-import javax.faces.validator.ValidatorException;
+import javax.annotation.security.RolesAllowed;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.Produces;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.myfaces.custom.fileupload.UploadedFile;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
-import org.esupportail.smsuapiadmin.domain.beans.EnumeratedFunction;
-import org.esupportail.smsuapiadmin.dto.beans.UIAccount;
+import org.esupportail.smsuapiadmin.business.NotFoundException;
+import org.esupportail.smsuapiadmin.domain.DomainService;
 import org.esupportail.smsuapiadmin.dto.beans.UIApplication;
-import org.esupportail.smsuapiadmin.dto.beans.UIUser;
 
-/**
- * ApplicationController is the controller for all actions on pages about
- * application.
- * 
- * @author MZRL3760
- * 
- */
-public class ApplicationsController extends AbstractContextAwareController {
 
-	/**
-	 * The serialization id.
-	 */
-	private static final long serialVersionUID = -239570715531002003L;
+@Path("/applications")
+@RolesAllowed("FCTN_API_CONFIG_APPLIS")
+public class ApplicationsController {
+	
+	@Autowired
+	private DomainService domainService;
 
-	/**
-	 * Log4j logger.
-	 */
+        @SuppressWarnings("unused")
 	private final Logger logger = new LoggerImpl(getClass());
 
-	/**
-	 * The application.
-	 */
-	private UIApplication application;
-
-	private boolean isCertificate;
-
-	private List<SelectItem> certificateOrPasswordOptions;
-
-	/**
-	 * list of available accounts
-	 */
-	private List<SelectItem> availableAccounts;
-	
-	/**
-	 * The client applications paginator.
-	 */
-	private ApplicationsPaginator paginator;
-
-	/**
-	 * Bean constructor.
-	 */
-	public ApplicationsController() {
-		super();
+	@GET
+	@Produces("application/json")
+	public List<UIApplication> getApplications() {
+		return domainService.getApplications();
 	}
 
-	/**
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + "#" + hashCode();
+	@GET
+	@Path("/{id:\\d+}")
+	@Produces("application/json")
+	public UIApplication getApplication(@PathParam("id") int id) {
+		UIApplication app = domainService.getApplication(id);
+		if (app == null) throw new NotFoundException("invalid application " + id); 
+		return app;
 	}
 
-	/**
-	 * @see org.esupportail.smsuapiadmin.web.controllers.AbstractDomainAwareBean#reset()
-	 */
-	@Override
-	public void reset() {
-		super.reset();
-		paginator = new ApplicationsPaginator(getDomainService());
+	@POST
+	public void create(UIApplication application) {
+		checkMandatoryUIParameters(application);
+		domainService.addApplication(application);
 	}
 
-	/**
-	 * @return true if the current user is allowed to view the page.
-	 */
-	public boolean isPageAuthorized() {
-		boolean result = false;
-
-		UIUser currentUser = getCurrentUser();
-		if (currentUser != null) {
-			String roleName = currentUser.getRole().getRole().name();
-			logger.info("L'utilisateur courant est : "
-					+ currentUser.getLogin() + ", il a le role : " + roleName);
-			result = currentUser
-					.isAuthorizedForFonction(EnumeratedFunction.FCTN_API_CONFIG_APPLIS);
-		} else {
-			logger.error("L'utilisateur n'est pas connu en base");
-		}
-
-		return result;
+	@PUT
+	@Path("/{id:\\d+}")
+	public void modify(@PathParam("id") int id, UIApplication application) {
+		application.setId(id);
+		checkMandatoryUIParameters(application);
+		domainService.updateApplication(application);
 	}
 
-	/**
-	 * JSF callback.
-	 * 
-	 * @return A navigation rule.
-	 */
-	public String enter() {
-		if (!isPageAuthorized()) {
-			addUnauthorizedActionMessage();
-			return null;
-		}
-		init();
-		return "applications";
-	}
-
-	/**
-	 * initialize the page.
-	 */
-	private void init() {
-		// initialize the paginator
-		paginator = new ApplicationsPaginator(getDomainService());
-		isCertificate = true;
-		initCertificateOrPasswordOptions();
-	}
-
-	
-	private void initCertificateOrPasswordOptions() {
-		certificateOrPasswordOptions = new ArrayList<SelectItem>();
-		certificateOrPasswordOptions.add(new SelectItem(Boolean.TRUE, this.getI18nService().getString("APPLICATION.LABEL.CERTIFICATE")));
-		certificateOrPasswordOptions.add(new SelectItem(Boolean.FALSE, this.getI18nService().getString("APPLICATION.LABEL.PASSWORD")));
-	}
-
-	/**
-	 * initialize the available accounts list.
-	 */
-	private void initAvailableAccounts() {
-		availableAccounts = new ArrayList<SelectItem>();
-		List<UIAccount> accounts = getDomainService().getAccounts();
-		for (UIAccount curAccount : accounts) {
-			SelectItem option = new SelectItem(curAccount.getId().toString(), curAccount.getName());
-			availableAccounts.add(option);
-		}
-	}
-	
-	/**
-	 * JSF callback.
-	 * 
-	 * @return A navigation rule.
-	 */
-	public String create() {
-		// on cree une nouvelle application
-		setApplication(new UIApplication());
-		initAvailableAccounts();
-		return "editApplication";
-	}
-
-	/**
-	 * JSF callback.
-	 * 
-	 * @return A navigation rule.
-	 */
-	public String modify() {
-		// on met a jour le mode d'edition
-		application.setAddMode(false);
-		initAvailableAccounts();
-		return "editApplication";
-	}
-
-	/**
-	 * Validates the name field.
-	 * 
-	 * @param context
-	 * @param componentToValidate
-	 * @param value
-	 * @throws ValidatorException
-	 */
-	public void validateName(final FacesContext context,
-			final UIComponent componentToValidate, final Object value)
-			throws ValidatorException {
-		String strValue = (String) value;
-		// on enleve les espaces
-		strValue = strValue.trim();
-
-		if (strValue.equals("")) {
-			throw new ValidatorException(
-					getFacesErrorMessage("APPLICATION.ERROR.INVALIDNAME"));
-		}
-	}
-
-	/**
-	 * Validates the certificate field.
-	 * 
-	 * @param context
-	 * @param componentToValidate
-	 * @param value
-	 * @throws ValidatorException
-	 */
-	public void validateCertificate(final FacesContext context,
-			final UIComponent componentToValidate, final Object value)
-			throws ValidatorException {
-		if (value == null) {
-			throw new ValidatorException(
-					getFacesErrorMessage("APPLICATION.ERROR.INVALIDCERTIFICATE"));
-		}
-	}
-
-	/**
-	 * @return a navigation rule.
-	 */
-	public String uploadCertificate() {
-		// le certificat
-		// on regarde d'abord si un fichier a ete uploade
-		UploadedFile certificateFile = application.getCertificateFile();
-		if (certificateFile != null) {
-			try {
-				application.setCertificate(certificateFile.getBytes());
-			} catch (IOException e) {
-				logger.warn("Impossible de recuperer les bits du certificat.",
-						e);
-			}
-		}
-		return "editApplication";
-	}
-
-	/**
-	 * Validates the institution field.
-	 * 
-	 * @param context
-	 * @param componentToValidate
-	 * @param value
-	 * @throws ValidatorException
-	 */
-	public void validateInstitution(final FacesContext context,
-			final UIComponent componentToValidate, final Object value)
-			throws ValidatorException {
-		String strValue = (String) value;
-		// on enleve les espaces
-		strValue = strValue.trim();
-
-		if (strValue.equals("")) {
-			throw new ValidatorException(
-					getFacesErrorMessage("APPLICATION.ERROR.INVALIDINSTITUTION"));
-		}
-	}
-
-	/**
-	 * Validates the account field.
-	 * 
-	 * @param context
-	 * @param componentToValidate
-	 * @param value
-	 * @throws ValidatorException
-	 */
-	public void validateAccount(final FacesContext context,
-			final UIComponent componentToValidate, final Object value)
-			throws ValidatorException {
-		String strValue = (String) value;
-		// on enleve les espaces
-		strValue = strValue.trim();
-
-		if (strValue.equals("")) {
-			throw new ValidatorException(
-					getFacesErrorMessage("APPLICATION.ERROR.INVALIDACCOUNT"));
-		}
-	}
-
-	/**
-	 * Validates the quota field. Quota has to be a positive or null integer.
-	 * 
-	 * @param context
-	 * @param componentToValidate
-	 * @param value
-	 * @throws ValidatorException
-	 */
-	public void validateQuota(final FacesContext context,
-			final UIComponent componentToValidate, final Object value)
-			throws ValidatorException {
-		String strValue = (String) value;
-		// on enleve les espaces
-		strValue = strValue.trim();
-
-		String messageInvalidQuota = "APPLICATION.ERROR.INVALIDQUOTA";
-		if (strValue.equals("")) {
-			// le champ est vide
-			throw new ValidatorException(
-					getFacesErrorMessage(messageInvalidQuota));
-		} else {
-			// le champ n'est pas vide
-			try {
-				// on essaye de le parser en int
-				Integer intValue = Integer.parseInt(strValue);
-				// le quota doit etre positif ou nul
-				if (intValue < 0) {
-					throw new ValidatorException(
-							getFacesErrorMessage(messageInvalidQuota));
-				}
-			} catch (NumberFormatException e) {
-				throw new ValidatorException(
-						getFacesErrorMessage(messageInvalidQuota));
-			}
-		}
-	}
-
-	/**
-	 * Getter for 'paginator'.
-	 * 
-	 * @return the paginator.
-	 */
-	public ApplicationsPaginator getPaginator() {
-		return paginator;
-	}
-
-	/**
-	 * Setter for 'application'.
-	 * 
-	 * @param application
-	 */
-	public void setApplication(final UIApplication application) {
-		this.application = application;
-		isCertificate = application.getPassword() == null;
-	}
-
-	/**
-	 * Getter for 'application'.
-	 * 
-	 * @return an application
-	 */
-	public UIApplication getApplication() {
-		return application;
-	}
-
-	/**
-	 * JSF callback. Saves an application in database (add or update).
-	 * 
-	 * @return A navigation rule.
-	 */
-	public String save() {
-		String result = "applications";
-
-		if (checkMandatoryUIParameters()) {
-			if (application.isAddMode()) {
-				getDomainService().addApplication(application);
-			} else {
-				getDomainService().updateApplication(application);
-			}
-			// on revient a la liste des applications
-		} else {
-			// on revient a la page d'edition
-			result = "editApplication";
-		}
-
-		return result;
-	}
-
-	/**
-	 * JSF callback. Deletes an application in database (add or update).
-	 * 
-	 * @return A navigation rule.
-	 */
-	public String delete() {
-		getDomainService().deleteApplication(application);
-		// on revient a la liste des application
-		reset();
-		return "applications";
+	@DELETE
+	@Path("/{id:\\d+}")
+	public void delete(@PathParam("id") int id) {
+		domainService.deleteApplication(id);
 	}
 
 	/**
 	 * Check the values.
 	 * 
-	 * @return true if all mandatory parameters are filed 
+	 * @return true if all mandatory parameters are filled 
 	 */
-	private Boolean checkMandatoryUIParameters() {
-		Boolean result = true;
-
-		uploadCertificate();
-
+	private void checkMandatoryUIParameters(UIApplication application) {
 		String name = application.getName();
-		String account = application.getAccount().getName();
-		String institution = application.getInstitution().getName();
-		String quota = application.getQuota();
+		String institution = application.getInstitution();
+		Long quota = application.getQuota();
 
-		String messageInvalidQuota = "APPLICATION.ERROR.INVALIDQUOTA";
+		if (StringUtils.isBlank(name))
+			throw new InvalidParameterException("APPLICATION.ERROR.INVALIDNAME");
+		if (StringUtils.isBlank(institution))
+			throw new InvalidParameterException("APPLICATION.ERROR.INVALIDINSTITUTION");
+		if (quota == null || quota < 0)
+			throw new InvalidParameterException("APPLICATION.ERROR.INVALIDQUOTA");
 
-		if ((name == null) || name.equals("")) {
-			addErrorMessage("editApplication:name",
-					"APPLICATION.ERROR.INVALIDNAME");
-			result = false;
-		}
-		if ((account == null) || account.equals("")) {
-			addErrorMessage("editApplication:account",
-					"APPLICATION.ERROR.INVALIDACCOUNT");
-			result = false;
-		}
-		if ((institution == null) || institution.equals("")) {
-			addErrorMessage("editApplication:institution",
-					"APPLICATION.ERROR.INVALIDINSTITUTION");
-			result = false;
-		}
+		if (application.getPassword() == null) {		
+			if (application.getCertificate() == null)
+				throw new InvalidParameterException("APPLICATION.ERROR.INVALIDCERTIFICATE");
 
-		if (quota == null || quota.equals("")) {
-			addErrorMessage("editApplication:quota", messageInvalidQuota);
-			result = false;
-		} else {
-			try {
-				// on essaye de le parser en int
-				Integer intValue = Integer.parseInt(quota);
-				// le quota doit etre positif ou nul
-				if (intValue < 0) {
-					addErrorMessage("editApplication:quota",
-							messageInvalidQuota);
-					result = false;
-				}
-			} catch (NumberFormatException e) {
-				addErrorMessage("editApplication:quota", messageInvalidQuota);
-				result = false;
-			}
-		}
-
-		if (isCertificate) {
-			byte[] certificate = application.getCertificate();
-			UploadedFile certificateFile = application.getCertificateFile();
-			
-		if (certificate == null && certificateFile == null) {
-			addErrorMessage("editApplication:certificate",
-					"APPLICATION.ERROR.INVALIDCERTIFICATE");
-			result = false;
-			} else {
-				application.setPassword(null); 
-			}
+			application.setPassword(null); 
 		} else {
 			if (StringUtils.isBlank(application.getPassword())) {
-				addErrorMessage("editApplication:password",
-						"APPLICATION.ERROR.EMPTYPASSWORD");
-				result = false;
-			} else {
-				application.setCertificate(null);
+				throw new InvalidParameterException("APPLICATION.ERROR.EMPTYPASSWORD");
 			}
+			application.setCertificate(null);
 		}
-
-		return result;
 	}
 
-	/**
-	 * @param availableAccounts
-	 */
-	public void setAvailableAccounts(final List<SelectItem> availableAccounts) {
-		this.availableAccounts = availableAccounts;
+	static boolean isPositiveInteger(String strValue) {
+		try {
+			// le quota doit etre positif ou nul
+			return Integer.parseInt(strValue) >= 0;
+		} catch (NumberFormatException e) {
+			return false;
+		}
 	}
-
-	/**
-	 * @return the available accounts
-	 */
-	public List<SelectItem> getAvailableAccounts() {
-		return availableAccounts;
-	}
-
 	
-	//////////////////////////////////////////////////////////////
-	// Getter and Setter of isCertificate
-	//////////////////////////////////////////////////////////////
-	/**
-	 * @return isCertificate
-	 */
-	public Boolean getIsCertificate() {
-		return isCertificate;
-	}
-
-	/**
-	 * @param isCertificate
-	 */
-	public void setIsCertificate(final Boolean isCertificate) {
-		this.isCertificate = isCertificate;
-	}
-
-	public List<SelectItem> getCertificateOrPasswordOptions() {
-		return certificateOrPasswordOptions;
-	}
-
 }

@@ -36,16 +36,4 @@
 		<property name="applicationService" ref="applicationService" />
     </bean>
 
-    <bean 
-    	id="abstractDomainAwareBean"
-    	abstract="true"
-    	parent="abstractApplicationAwareBean"
-    	>
-    	<description>
-			An abstract bean to factorize the declaration of beans of which 
-			class inherits from AbstractDomainAwareBean.
-    	</description>
-		<property name="domainService" ref="domainService" />
-    </bean>
-
 </beans>

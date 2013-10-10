@@ -4,365 +4,54 @@
  */
 package org.esupportail.smsuapiadmin.web.controllers;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
-import net.sf.jasperreports.engine.JRException;
+import javax.annotation.security.RolesAllowed;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Response;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import org.esupportail.commons.exceptions.DownloadException;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
-import org.esupportail.commons.utils.DownloadUtils;
-import org.esupportail.smsuapiadmin.business.FormatReport;
-import org.esupportail.smsuapiadmin.domain.beans.EnumeratedFunction;
+import org.esupportail.smsuapiadmin.domain.DomainService;
 import org.esupportail.smsuapiadmin.dto.beans.UIDetailedSummary;
-import org.esupportail.smsuapiadmin.dto.beans.UIUser;
 
-/**
- * DetailedSummaryController is the controller for all actions on pages about
- * detailed summary.
- * 
- * @author MZRL3760
- * 
- */
-public class DetailedSummaryController extends AbstractContextAwareController {
 
-	/**
-	 * The serialization id.
-	 */
-	private static final long serialVersionUID = -239570715531002003L;
+@Path("/summary/detailed")
+@RolesAllowed("FCTN_API_EDITION_RAPPORT")
+public class DetailedSummaryController {
+	
+	@Autowired
+	private DomainService domainService;
 
-	/**
-	 * Log4j logger.
-	 */
 	private final Logger logger = new LoggerImpl(getClass());
 
-	/**
-	 * identifier of institution.
-	 */
-	private String institutionId = "-1";
+	@GET
+	//@Produces({"application/json","application/pdf","application/vnd.ms-excel"})
+	public Response search(
+		@QueryParam("institution") String institution,
+		@QueryParam("account") Long accountId,
+		@QueryParam("application") Long applicationId,
+		@QueryParam("startDate") Long startDate,
+		@QueryParam("endDate") Long endDate,
+		@QueryParam("maxResults") @DefaultValue("0" /* no limit */) int maxResults
+		) throws Exception {
 
-	/**
-	 * identifier of account.
-	 */
-	private String accountId = "-1";
+		Date startDate_ = startDate == null ? null : new Date(startDate);
+		Date endDate_ = endDate == null ? null : new Date(endDate);
 
-	/**
-	 * identifier of application.
-	 */
-	private String applicationId = "-1";
+		logger.debug("institution=" + institution + ", accountId=" + accountId + ", applicationId=" + 
+			    applicationId + ", startDate=" + startDate + ", endDate=" + endDate);
+		List<UIDetailedSummary> list = 
+			domainService.searchDetailedSummaries(institution, accountId, applicationId, startDate_, endDate_, maxResults);
 
-	/**
-	 * identifier of startDate.
-	 */
-	private Date startDate;
-
-	/**
-	 * identifier of endDate.
-	 */
-	private Date endDate;
-
-	/**
-	 * Id for summary to download.
-	 */
-	private Long downloadId;
-
-	/**
-	 * The detailed summary paginator.
-	 */
-	private DetailedSummaryPaginator paginator;
-
-	/**
-	 * Boolean showing that a search has been done.
-	 */
-	private boolean searchDone;
-
-	private int nbResults;
-
-	private int maxResults = 100;
-
-	/**
-	 * Bean constructor.
-	 */
-	public DetailedSummaryController() {
-		super();
-	}
-
-	/**
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + "#" + hashCode();
-	}
-
-	/**
-	 * @see org.esupportail.smsuapiadmin.web.controllers.AbstractDomainAwareBean#reset()
-	 */
-	@Override
-	public void reset() {
-		super.reset();
-		enter();
-	}
-
-	/**
-	 * @return true if the current user is allowed to view the page.
-	 */
-	public boolean isPageAuthorized() {
-		boolean result = false;
-
-		UIUser currentUser = getCurrentUser();
-		if (currentUser != null) {
-			String roleName = currentUser.getRole().getRole().name();
-			logger.info("L'utilisateur courant est : "
-					+ currentUser.getLogin() + ", il a le role : " + roleName);
-			result = currentUser
-					.isAuthorizedForFonction(EnumeratedFunction.FCTN_API_EDITION_RAPPORT);
-		} else {
-			logger.error("L'utilisateur n'est pas connu en base");
-		}
-
-		return result;
-	}
-
-	/**
-	 * initialize the page.
-	 */
-	private void init() {
-		searchDone = false;
-		nbResults = 0;
-		paginator = new DetailedSummaryPaginator(getDomainService());
-	}
-
-	/**
-	 * JSF callback.
-	 * 
-	 * @return A navigation rule.
-	 */
-	public String enter() {
-		if (!isPageAuthorized()) {
-			addUnauthorizedActionMessage();
-			return null;
-		}
-		init();
-		return "detailedSummary";
-	}
-
-	/**
-	 * JSF callback.
-	 * 
-	 * @return A list of summary.
-	 */
-	public String search() {
-logger.debug("institutionId : " + institutionId + ", accountId" + accountId + ", applicationId : " + 
-						applicationId + ", startDate" + startDate + ", endDate" + endDate );
-		List<UIDetailedSummary> searchDetailedSummaries = getDomainService()
-				.searchDetailedSummaries(institutionId, accountId,
-						applicationId, startDate, endDate, maxResults);
-		
-		paginator.setData(searchDetailedSummaries);
-		searchDone = true;
-		nbResults = searchDetailedSummaries.size();
-
-		if (nbResults == maxResults)
-			addWarnMessage(null, "SUMMARY.DETAILED.MAXRESULTSREACHED", nbResults);
-
-		return "detailedSummary";
-	}
-
-	/**
-	 * JSF callback used to download the report in PDF format.
-	 * 
-	 * @return
-	 * @throws JRException
-	 * @throws IOException
-	 */
-	public String downloadPDFReport() throws JRException, IOException {
-
-		// on recupere le fichier Pdf
-		byte[] report = getDomainService().makeReportForDetailedSummaries(
-				FormatReport.PDF, paginator.getData(), institutionId,
-				applicationId, accountId, startDate, endDate);
-
-		if (report == null) {
-			logger.error("La generation du rapport a echouee");
-		} else {
-			logger.info("La generation du rapport a reussie");
-		}
-
-		try {
-			downloadId = DownloadUtils.setDownload(report, "rapport.pdf",
-					"application/octet-stream");
-			logger
-					.info("Le fichier 'rapport.pdf' est place en download avec downloadId="
-							+ downloadId);
-		} catch (DownloadException e) {
-			logger.error("Le placement du rapport en download a echouee", e);
-		}
-
-		// on reste sur la meme page
-		return null;
-	}
-
-	/**
-	 * JSF callback used to download the report in Excel format.
-	 * 
-	 * @return
-	 * @throws JRException
-	 * @throws IOException
-	 */
-	public String downloadXLSReport() throws JRException, IOException {
-
-		// on recupere le fichier Pdf
-		byte[] report = getDomainService().makeReportForDetailedSummaries(
-				FormatReport.XLS, paginator.getData(), institutionId,
-				applicationId, accountId, startDate, endDate);
-
-		if (report == null) {
-			logger.error("La generation du rapport a echouee");
-		} else {
-			logger.info("La generation du rapport a reussie");
-		}
-
-		downloadId = DownloadUtils.setDownload(report, "rapport.xls",
-				"application/octet-stream");
-
-		logger
-				.debug("Le fichier 'rapport.xls' est place en download avec downloadId="
-						+ downloadId);
-
-		// on reste sur la meme page
-		return null;
-	}
-
-	/**
-	 * Setter for 'institution'.
-	 * 
-	 * @param institutionId
-	 */
-	public void setInstitutionId(final String institutionId) {
-		this.institutionId = institutionId;
-	}
-
-	/**
-	 * Getter for 'institution'.
-	 * 
-	 * @return
-	 */
-	public String getInstitutionId() {
-		return institutionId;
-	}
-
-	/**
-	 * Getter for 'downloadId'.
-	 * 
-	 * @return
-	 */
-	public Long getDownloadId() {
-		logger.debug("Demande de telechargement d'un releve (id=" + downloadId
-				+ ")");
-		Long id = this.downloadId;
-		this.downloadId = null;
-		return id;
-	}
-
-	/**
-	 * Setter for 'accountId'.
-	 * 
-	 * @param accountId
-	 */
-	public void setAccountId(final String accountId) {
-		this.accountId = accountId;
-	}
-
-	/**
-	 * Getter for 'accountId'.
-	 * 
-	 * @return
-	 */
-	public String getAccountId() {
-		return accountId;
-	}
-
-	/**
-	 * Setter for 'applicationId'.
-	 * 
-	 * @param applicationId
-	 */
-	public void setApplicationId(final String applicationId) {
-		this.applicationId = applicationId;
-	}
-
-	/**
-	 * Getter for 'applicationId'.
-	 * 
-	 * @return
-	 */
-	public String getApplicationId() {
-		return applicationId;
-	}
-
-	/**
-	 * Getter for 'paginator'.
-	 * 
-	 * @return
-	 */
-	public DetailedSummaryPaginator getPaginator() {
-		return paginator;
-	}
-
-	/**
-	 * Getter for 'startDate'.
-	 * 
-	 * @return
-	 */
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	/**
-	 * Setter for 'startDate'.
-	 * 
-	 * @param startDate
-	 */
-	public void setStartDate(final Date startDate) {
-		this.startDate = startDate;
-	}
-
-	/**
-	 * Getter for 'endDate'.
-	 * 
-	 * @return
-	 */
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	/**
-	 * 
-	 * @param endDate
-	 */
-	public void setEndDate(final Date endDate) {
-		this.endDate = endDate;
-	}
-
-	/**
-	 * Getter for 'results'.
-	 * 
-	 * @return
-	 */
-	public boolean isResults() {
-		return nbResults > 0;
-	}
-
-	/**
-	 * Getter for 'searchDone'.
-	 * 
-	 * @return
-	 */
-	public boolean isSearchDone() {
-		return searchDone;
+		String contentType = "application/json";
+		Object result = list;
+		return Response.status(200).entity(result).type(contentType).build();	
 	}
 
 }

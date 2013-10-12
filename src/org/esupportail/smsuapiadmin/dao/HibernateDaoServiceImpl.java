@@ -75,32 +75,26 @@ InitializingBean {
 
 
 	public UserBoSmsu getUserById(final Integer id) {
-		UserBoSmsu result = null;
 		String queryString = "FROM UserBoSmsu user " + "WHERE user.Id="
 		+ id + "";
 
-		List users = getHibernateTemplate().find(queryString);
+		List<UserBoSmsu> users = getHibernateTemplate().find(queryString);
 		if (users.size() == 1) {
-			result = (UserBoSmsu) users.get(0);
-		} else {
-			// TODO
+			return users.get(0);
 		}
-		return result;
+		return null;
 	}
 
 
 	public UserBoSmsu getUserByLogin(final String login) {
-		UserBoSmsu result = null;
 		String queryString = "FROM UserBoSmsu user " + "WHERE user.Login='"
 		+ login + "'";
 
-		List users = getHibernateTemplate().find(queryString);
+		List<UserBoSmsu> users = getHibernateTemplate().find(queryString);
 		if (users.size() == 1) {
-			result = (UserBoSmsu) users.get(0);
-		} else {
-			// TODO
+			return (UserBoSmsu) users.get(0);
 		}
-		return result;
+		return null;
 	}
 
 	/**
@@ -189,16 +183,13 @@ InitializingBean {
 
 
 	public Application getApplicationById(final int id) {
-		Application result = null;
 		String queryString = "FROM Application app " + "WHERE app.Id=" + id;
 
-		List apps = getHibernateTemplate().find(queryString);
+		List<Application> apps = getHibernateTemplate().find(queryString);
 		if (apps.size() == 1) {
-			result = (Application) apps.get(0);
-		} else {
-			// TODO
+			return apps.get(0);
 		}
-		return result;
+		return null;
 	}
 
 	// ////////////////////////////////////////////////////////////
@@ -207,17 +198,14 @@ InitializingBean {
 
 
 	public Account getAccountByName(final String name) {
-		Account result = null;
 		String queryString = "FROM Account account 	" + "WHERE account.Label='"
 		+ name + "'";
 
-		List accounts = getHibernateTemplate().find(queryString);
+		List<Account> accounts = getHibernateTemplate().find(queryString);
 		if (accounts.size() == 1) {
-			result = (Account) accounts.get(0);
-		} else {
-			// TODO
+			return accounts.get(0);
 		}
-		return result;
+		return null;
 	}
 
 	public void addAccount(final Account account) {
@@ -229,17 +217,14 @@ InitializingBean {
 	// ////////////////////////////////////////////////////////////
 
 	public Institution getInstitutionByName(final String name) {
-		Institution result = null;
 		String queryString = "FROM Institution institution 	"
 			+ "WHERE institution.Label='" + name + "'";
 
-		List institutions = getHibernateTemplate().find(queryString);
+		List<Institution> institutions = getHibernateTemplate().find(queryString);
 		if (institutions.size() == 1) {
-			result = (Institution) institutions.get(0);
-		} else {
-			// TODO
+			return institutions.get(0);
 		}
-		return result;
+		return null;
 	}
 
 
@@ -300,30 +285,24 @@ InitializingBean {
 
 
 	public Account getAccountById(final int id) {
-		Account result = null;
 		String queryString = "FROM Account acc " + "WHERE acc.Id=" + id;
 
-		List accs = getHibernateTemplate().find(queryString);
+		List<Account> accs = getHibernateTemplate().find(queryString);
 		if (accs.size() == 1) {
-			result = (Account) accs.get(0);
-		} else {
-			// TODO
+			return accs.get(0);
 		}
-		return result;
+		return null;
 	}
 
 
 	public Institution getInstitutionById(final int id) {
-		Institution result = null;
 		String queryString = "FROM Institution inst " + "WHERE inst.Id=" + id;
 
-		List institutions = getHibernateTemplate().find(queryString);
+		List<Institution> institutions = getHibernateTemplate().find(queryString);
 		if (institutions.size() == 1) {
-			result = (Institution) institutions.get(0);
-		} else {
-			// TODO
+			return institutions.get(0);
 		}
-		return result;
+		return null;
 	}
 
 

@@ -8,35 +8,12 @@
 
 	<portlet>
 		<portlet-name>esup-smsu-api-admin</portlet-name>
-		<portlet-class>org.apache.portals.bridges.portletfilter.FilterPortlet</portlet-class>
-        <init-param>
-            <name>portlet-class</name>
-            <value>org.esupportail.commons.web.portlet.FacesPortlet</value>
-        </init-param>
-        <init-param>
-            <name>portlet-filters</name>
-            <value>jp.sf.pal.facesresponse.FacesResponseFilter,jp.sf.pal.tomahawk.filter.ExtensionsPortletFilter</value>
-        </init-param>
-		<init-param>
-			<name>default-view</name>
-			<value>/stylesheets/welcome.jsp</value>
-		</init-param>
-		<init-param>
-			<name>default-view-selector</name>
-			<value>org.esupportail.commons.web.deepLinking.UportalDefaultViewSelector</value>
-		</init-param>
-		<expiration-cache>-1</expiration-cache>
+		<portlet-class>org.esupportail.smsuapiadmin.web.StartPagePortlet</portlet-class>
 		<supports>
 			<mime-type>text/html</mime-type>
 		</supports>
 		<portlet-info>
 			<title>esup-smsu-api-admin</title>
-			<short-title>esup-smsu-api-admin portlet</short-title>
-			<keywords>esup-smsu-api-admin</keywords>
 		</portlet-info>
 	</portlet>
-	<user-attribute>
-		<description>the uid of the portal user</description>
-		<name>uid</name>
-	</user-attribute>
 </portlet-app>

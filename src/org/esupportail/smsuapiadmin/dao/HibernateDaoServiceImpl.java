@@ -37,7 +37,7 @@ import org.springframework.jdbc.BadSqlGrammarException;
  */
 @SuppressWarnings({"unchecked"})
 public class HibernateDaoServiceImpl extends
-AbstractJdbcJndiHibernateDaoService implements DaoService,
+HibernateDaoSupport implements DaoService,
 InitializingBean {
 
 	/**
@@ -419,6 +419,60 @@ InitializingBean {
 			criteria.add(Restrictions.isNull(Sms.PROP_INITIAL_ID));
 		}
 		return getHibernateTemplate().findByCriteria(criteria);
+	}
+
+
+
+	protected void addObject(final Object object) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("adding " + object + "...");
+		}
+		getCurrentSession().beginTransaction();
+		getHibernateTemplate().save(object);
+		getCurrentSession().getTransaction().commit();
+		if (logger.isDebugEnabled()) {
+			logger.debug("done.");
+		}
+	}
+
+	/**
+	 * Update an object in the database.
+	 * @param object
+	 */
+	protected void updateObject(final Object object) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("merging " + object + "...");
+		}
+		getCurrentSession().beginTransaction();
+		Object merged = getHibernateTemplate().merge(object);
+		if (logger.isDebugEnabled()) {
+			logger.debug("done, updating " + merged + "...");
+		}
+		getHibernateTemplate().update(merged);
+		getCurrentSession().getTransaction().commit();
+		if (logger.isDebugEnabled()) {
+			logger.debug("done.");
+		}
+	}
+
+	/**
+	 * Delete an object from the database.
+	 * @param object
+	 */
+	protected void deleteObject(final Object object) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("merging " + object + "...");
+		}
+		getCurrentSession().beginTransaction();
+		Object merged = getHibernateTemplate().merge(object);
+		if (logger.isDebugEnabled()) {
+			logger.debug("done, deleting " + merged + "...");
+		}
+		getHibernateTemplate().delete(merged);
+                getCurrentSession().getTransaction().commit();
+		if (logger.isDebugEnabled()) {
+			logger.debug("done.");
+		}
 	}
 
 }

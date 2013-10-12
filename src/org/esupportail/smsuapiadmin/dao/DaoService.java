@@ -16,7 +16,6 @@ import org.esupportail.smsuapiadmin.dao.beans.Role;
 import org.esupportail.smsuapiadmin.dao.beans.Sms;
 import org.esupportail.smsuapiadmin.dao.beans.Statistic;
 import org.esupportail.smsuapiadmin.dao.beans.UserBoSmsu;
-import org.esupportail.smsuapiadmin.domain.beans.VersionManager;
 
 
 /**
@@ -59,22 +58,6 @@ public interface DaoService extends Serializable {
 	 * @param user
 	 */
 	void updateUser(UserBoSmsu user);
-
-	// ////////////////////////////////////////////////////////////
-	// VersionManager
-	// ////////////////////////////////////////////////////////////
-
-	/**
-	 * @return the VersionManager of the database.
-	 */
-	VersionManager getVersionManager();
-
-	/**
-	 * Updates a VersionManager.
-	 * 
-	 * @param versionManager
-	 */
-	void updateVersionManager(VersionManager versionManager);
 
 	/**
 	 * Returns all the applications.

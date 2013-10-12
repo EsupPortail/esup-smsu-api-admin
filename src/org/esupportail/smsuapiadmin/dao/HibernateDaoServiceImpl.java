@@ -22,7 +22,6 @@ import org.esupportail.smsuapiadmin.dao.beans.Role;
 import org.esupportail.smsuapiadmin.dao.beans.Sms;
 import org.esupportail.smsuapiadmin.dao.beans.Statistic;
 import org.esupportail.smsuapiadmin.dao.beans.UserBoSmsu;
-import org.esupportail.smsuapiadmin.domain.beans.VersionManager;
 import org.hibernate.classic.Session;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.CriteriaSpecification;
@@ -118,44 +117,6 @@ InitializingBean {
 
 	public void updateUser(final UserBoSmsu user) {
 		updateObject(user);
-	}
-
-	// ////////////////////////////////////////////////////////////
-	// VersionManager
-	// ////////////////////////////////////////////////////////////
-
-	/**
-	 * @see org.esupportail.smsuapiadmin.dao.DaoService#getVersionManager()
-	 */
-	public VersionManager getVersionManager() {
-		DetachedCriteria criteria = DetachedCriteria
-		.forClass(VersionManager.class);
-		criteria.addOrder(Order.asc(ID_ATTRIBUTE));
-		List<VersionManager> versionManagers;
-		try {
-			versionManagers = getHibernateTemplate().findByCriteria(criteria);
-		} catch (BadSqlGrammarException e) {
-			throw new UninitializedDatabaseException(
-					"your database is not initialized, please run 'ant init-data'",
-					e);
-		}
-		if (versionManagers.isEmpty()) {
-			VersionManager versionManager = new VersionManager();
-			versionManager.setVersion(VersionningUtils.VERSION_0);
-			addObject(versionManager);
-			return versionManager;
-		}
-		return versionManagers.get(0);
-	}
-
-	/**
-	 * @see org.esupportail.smsuapiadmin.dao.DaoService
-	 *     
-	 *     
-	 *      #updateVersionManager(org.esupportail.smsuapiadmin.domain.beans.VersionManager)
-	 */
-	public void updateVersionManager(final VersionManager versionManager) {
-		updateObject(versionManager);
 	}
 
 	// ////////////////////////////////////////////////////////////

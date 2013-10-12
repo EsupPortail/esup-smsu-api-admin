@@ -160,42 +160,6 @@ public class DomainServiceImpl implements DomainService, InitializingBean {
 	}
 
 	/**
-	 * @see org.esupportail.smsuapiadmin.domain.DomainService#getDatabaseVersion()
-	 */
-	public Version getDatabaseVersion() throws ConfigException {
-		VersionManager versionManager = daoService.getVersionManager();
-		if (versionManager == null) {
-			return null;
-		}
-		return new Version(versionManager.getVersion());
-	}
-
-	/**
-	 * @see org.esupportail.smsuapiadmin.domain.DomainService#setDatabaseVersion(java.lang.String)
-	 */
-	public void setDatabaseVersion(final String version) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("setting database version to '" + version + "'...");
-		}
-		VersionManager versionManager = daoService.getVersionManager();
-		versionManager.setVersion(version);
-		daoService.updateVersionManager(versionManager);
-		if (logger.isDebugEnabled()) {
-			logger.debug("database version set to '" + version + "'.");
-		}
-	}
-
-	/**
-	 * @see org.esupportail.smsuapiadmin.domain.DomainService
-	 *     
-	 *     
-	 *      #setDatabaseVersion(org.esupportail.commons.services.application.Version)
-	 */
-	public void setDatabaseVersion(final Version version) {
-		setDatabaseVersion(version.toString());
-	}
-
-	/**
 	 * @param daoService
 	 *            the daoService to set
 	 */

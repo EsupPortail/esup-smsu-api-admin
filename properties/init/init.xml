@@ -12,12 +12,4 @@
 		This file is referenced by /properties/applicationContext.xml.
 	-->
 
-	<bean 
-		id="versionningService"
-		class="org.esupportail.smsuapiadmin.services.application.VoidVersionningServiceImpl"
-		parent="abstractDomainAwareBean"
-		>
-		<property name="firstAdministratorId" value="${init.firstAdministratorId}" />
-	</bean>
-
 </beans>

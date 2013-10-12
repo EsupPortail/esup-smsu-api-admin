@@ -2,12 +2,14 @@ package org.esupportail.smsuapiadmin.business;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.esupportail.commons.beans.AbstractApplicationAwareBean;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
 import org.esupportail.smsuapiadmin.dao.DaoService;
 import org.esupportail.smsuapiadmin.dao.beans.UserBoSmsu;
+import org.esupportail.smsuapiadmin.domain.beans.EnumeratedFunction;
 import org.esupportail.smsuapiadmin.dto.DTOConverterService;
 import org.esupportail.smsuapiadmin.dto.beans.UIUser;
 
@@ -162,7 +164,7 @@ public class UserManager extends AbstractApplicationAwareBean {
 	 */
 	public void updateUser(final UIUser uiUser) {
 
-		UserBoSmsu user = dtoConverterService.convertFromUI(uiUser);
+		UserBoSmsu user = dtoConverterService.convertFromUI(uiUser, false);
 
 		String idStr = uiUser.getId();
 		Integer id = Integer.valueOf(idStr);
@@ -180,7 +182,7 @@ public class UserManager extends AbstractApplicationAwareBean {
 	 * @param uiUser
 	 */
 	public void addUser(final UIUser uiUser) {
-		UserBoSmsu user = dtoConverterService.convertFromUI(uiUser);
+		UserBoSmsu user = dtoConverterService.convertFromUI(uiUser, true);
 		daoService.addUser(user);
 	}
 
@@ -189,9 +191,7 @@ public class UserManager extends AbstractApplicationAwareBean {
 	 * 
 	 * @param uiUser
 	 */
-	public void delete(final UIUser uiUser) {
-		String idStr = uiUser.getId();
-		Integer id = Integer.valueOf(idStr);
+	public void delete(int id) {
 		UserBoSmsu userPersistent = daoService.getUserById(id);
 		daoService.deleteUser(userPersistent);
 	}
@@ -205,6 +205,11 @@ public class UserManager extends AbstractApplicationAwareBean {
 	public boolean loginAlreadyUsed(final String login) {
 		UIUser user = getUserByLogin(login);
 		return user != null;
+	}
+
+	public Set<EnumeratedFunction> getUserFunctions(String login) {
+		UserBoSmsu user = daoService.getUserByLogin(login);
+		return dtoConverterService.convertToEnum(user.getRole().getFonctions());
 	}
 
 }

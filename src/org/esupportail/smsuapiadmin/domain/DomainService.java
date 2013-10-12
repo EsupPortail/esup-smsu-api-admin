@@ -4,24 +4,17 @@
  */
 package org.esupportail.smsuapiadmin.domain;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.SortedSet;
+import java.util.Set;
 
-import net.sf.jasperreports.engine.JRException;
-
-import org.esupportail.commons.exceptions.ConfigException;
 import org.esupportail.commons.exceptions.UserNotFoundException;
-import org.esupportail.commons.services.application.Version;
-import org.esupportail.smsuapiadmin.business.FormatReport;
-import org.esupportail.smsuapiadmin.business.UpdateAccountsQuotaException;
+import org.esupportail.smsuapiadmin.domain.beans.EnumeratedFunction;
 import org.esupportail.smsuapiadmin.dto.beans.UIAccount;
 import org.esupportail.smsuapiadmin.dto.beans.UIApplication;
 import org.esupportail.smsuapiadmin.dto.beans.UIDetailedSummary;
-import org.esupportail.smsuapiadmin.dto.beans.UIInstitution;
 import org.esupportail.smsuapiadmin.dto.beans.UIRole;
 import org.esupportail.smsuapiadmin.dto.beans.UIStatistic;
 import org.esupportail.smsuapiadmin.dto.beans.UIUser;
@@ -79,32 +72,9 @@ public interface DomainService extends Serializable {
 	 * 
 	 * @param user
 	 */
-	void deleteUser(UIUser user);
+	void deleteUser(int id);
 
-	// ////////////////////////////////////////////////////////////
-	// VersionManager
-	// ////////////////////////////////////////////////////////////
-
-	/**
-	 * @return the database version.
-	 * @throws ConfigException
-	 *             when the database is not initialized
-	 */
-	Version getDatabaseVersion() throws ConfigException;
-
-	/**
-	 * Set the database version.
-	 * 
-	 * @param version
-	 */
-	void setDatabaseVersion(Version version);
-
-	/**
-	 * Set the database version.
-	 * 
-	 * @param version
-	 */
-	void setDatabaseVersion(String version);
+        Set<EnumeratedFunction> getUserFunctions(String login);
 
 	// ////////////////////////////////////////////////////////////
 	// Authorizations
@@ -115,6 +85,8 @@ public interface DomainService extends Serializable {
 	 * @return a list containing all the applications
 	 */
 	List<UIApplication> getApplications();
+
+	UIApplication getApplication(int id);
 
 	/**
 	 * Adds the application in the database.
@@ -135,33 +107,7 @@ public interface DomainService extends Serializable {
 	 * 
 	 * @param application
 	 */
-	void deleteApplication(UIApplication application);
-
-	/**
-	 * Makes an Excel file that contains informations about accounts.
-	 * 
-	 * @throws JRException
-	 * @throws IOException
-	 */
-	byte[] makeXLSReportForAccounts() throws IOException, JRException;
-
-	/**
-	 * Updates accounts quota with informations of the XML file.
-	 * 
-	 * @param importFile
-	 * @throws UpdateAccountsQuotaException
-	 */
-	void updateAccountsQuota(InputStream importFile)
-			throws UpdateAccountsQuotaException;
-
-	/**
-	 * Makes a PDF report about quotas.
-	 * 
-	 * @return
-	 * @throws IOException
-	 * @throws JRException
-	 */
-	byte[] makePDFReportForAccounts() throws JRException, IOException;
+	void deleteApplication(int id);
 
 	/**
 	 * 
@@ -170,10 +116,24 @@ public interface DomainService extends Serializable {
 	List<UIAccount> getAccounts();
 
 	/**
+	 * Adds the account in the database.
+	 * 
+	 * @param uiAccount
+	 */
+	void addAccount(UIAccount uiAccount);
+
+	/**
+	 * Updates the account in the database.
+	 * 
+	 * @param account
+	 */
+	void updateAccount(UIAccount account);
+
+	/**
 	 * 
 	 * @return a list containing all the institutions
 	 */
-	List<UIInstitution> getInstitutions();
+	List<String> getInstitutions();
 
 	/**
 	 * 
@@ -190,63 +150,27 @@ public interface DomainService extends Serializable {
 	/**
 	 * Searches statistics matching criterias.
 	 * 
-	 * @param institutionId
+	 * @param institution
 	 * @param accountId
 	 * @param applicationId
 	 * @param month
 	 * @return list containing all statistics matching criterias
 	 */
-	List<UIStatistic> searchStatistics(String institutionId, String accountId,
-			String applicationId, String month);
-
-	/**
-	 * Returns a report for consolidated summaries.
-	 * 
-	 * @param format
-	 * @param data
-	 * @param institutionId
-	 * @param applicationId
-	 * @param accountId
-	 * @param monthStr
-	 * @return
-	 * @throws IOException
-	 * @throws JRException
-	 */
-	byte[] makeReportForConsolidatedSummaries(FormatReport format,
-			List<UIStatistic> data, String institutionId, String applicationId,
-			String accountId, String monthStr) throws IOException, JRException;
+	List<UIStatistic> searchStatistics(String institution, Long accountId,
+			Long applicationId, String month);
 
 	/**
 	 * Searches detailed summaries matching criterias.
 	 * 
-	 * @param institutionId
+	 * @param institution
 	 * @param accountId
 	 * @param applicationId
 	 * @param startDate
 	 * @param endDate
 	 * @return
 	 */
-	List<UIDetailedSummary> searchDetailedSummaries(String institutionId,
-							String accountId, String applicationId, Date startDate, Date endDate, int maxResults);
-
-	/**
-	 * Returns a report for detailed summaries.
-	 * 
-	 * @param xls
-	 * @param data
-	 * @param institutionId
-	 * @param applicationId
-	 * @param accountId
-	 * @param startDate
-	 * @param endDate
-	 * @return
-	 * @throws JRException
-	 * @throws IOException
-	 */
-	byte[] makeReportForDetailedSummaries(FormatReport xls,
-			List<UIDetailedSummary> data, String institutionId,
-			String applicationId, String accountId, Date startDate, Date endDate)
-			throws IOException, JRException;
+	List<UIDetailedSummary> searchDetailedSummaries(String institution,
+							Long accountId, Long applicationId, Date startDate, Date endDate, int maxResults) throws Exception;
 
 	/**
 	 * Returns all the roles.

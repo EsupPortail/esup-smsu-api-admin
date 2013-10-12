@@ -4,37 +4,29 @@
  */
 package org.esupportail.smsuapiadmin.domain;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 
-import net.sf.jasperreports.engine.JRException;
-
-import org.esupportail.commons.exceptions.ConfigException;
 import org.esupportail.commons.exceptions.UserNotFoundException;
-import org.esupportail.commons.services.application.Version;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
 import org.esupportail.commons.utils.Assert;
 import org.esupportail.smsuapiadmin.business.AccountManager;
 import org.esupportail.smsuapiadmin.business.ApplicationManager;
-import org.esupportail.smsuapiadmin.business.FormatReport;
 import org.esupportail.smsuapiadmin.business.InstitutionManager;
 import org.esupportail.smsuapiadmin.business.RoleManager;
 import org.esupportail.smsuapiadmin.business.StatisticManager;
-import org.esupportail.smsuapiadmin.business.UpdateAccountsQuotaException;
 import org.esupportail.smsuapiadmin.business.UserManager;
 import org.esupportail.smsuapiadmin.dao.DaoService;
 import org.esupportail.smsuapiadmin.dao.beans.Account;
 import org.esupportail.smsuapiadmin.dao.beans.Application;
 import org.esupportail.smsuapiadmin.dao.beans.Institution;
-import org.esupportail.smsuapiadmin.domain.beans.VersionManager;
+import org.esupportail.smsuapiadmin.domain.beans.EnumeratedFunction;
 import org.esupportail.smsuapiadmin.dto.beans.UIAccount;
 import org.esupportail.smsuapiadmin.dto.beans.UIApplication;
 import org.esupportail.smsuapiadmin.dto.beans.UIDetailedSummary;
-import org.esupportail.smsuapiadmin.dto.beans.UIInstitution;
 import org.esupportail.smsuapiadmin.dto.beans.UIRole;
 import org.esupportail.smsuapiadmin.dto.beans.UIStatistic;
 import org.esupportail.smsuapiadmin.dto.beans.UIUser;
@@ -144,13 +136,13 @@ public class DomainServiceImpl implements DomainService, InitializingBean {
 		userManager.addUser(user);
 	}
 
-	public void deleteUser(final UIUser user) {
-		userManager.delete(user);
+	public void deleteUser(int id) {
+		userManager.delete(id);
 	}
 
-	// ////////////////////////////////////////////////////////////
-	// VersionManager
-	// ////////////////////////////////////////////////////////////
+	public Set<EnumeratedFunction> getUserFunctions(String login) {
+		return userManager.getUserFunctions(login);
+	}
 
 	/**
 	 * Setter for 'userManager'.
@@ -180,6 +172,10 @@ public class DomainServiceImpl implements DomainService, InitializingBean {
 		this.applicationManager = applicationManager;
 	}
 
+	public UIApplication getApplication(int id) {
+		return applicationManager.getUIApplication(id);
+	}
+
 	public void addApplication(final UIApplication uiApplication) {
 		applicationManager.addApplication(uiApplication);
 	}
@@ -188,8 +184,8 @@ public class DomainServiceImpl implements DomainService, InitializingBean {
 		applicationManager.updateApplication(uiApplication);
 	}
 
-	public void deleteApplication(final UIApplication uiApplication) {
-		applicationManager.deleteApplication(uiApplication);
+	public void deleteApplication(int id) {
+		applicationManager.deleteApplication(id);
 	}
 
 	/**
@@ -238,24 +234,19 @@ public class DomainServiceImpl implements DomainService, InitializingBean {
 		return statisticManager;
 	}
 
-	public void updateAccountsQuota(final InputStream importFile)
-			throws UpdateAccountsQuotaException {
-		accountManager.updateAccountsQuota(importFile);
-	}
-
-	public byte[] makePDFReportForAccounts() throws JRException, IOException {
-		return accountManager.makeAccountPdfReport();
-	}
-
-	public byte[] makeXLSReportForAccounts() throws IOException, JRException {
-		return accountManager.makeAccountInfosXlsFile();
-	}
-
 	public List<UIAccount> getAccounts() {
 		return accountManager.getAllUIAccounts();
 	}
 
-	public List<UIInstitution> getInstitutions() {
+	public void addAccount(final UIAccount uiAccount) {
+		accountManager.addAccount(uiAccount);
+	}
+
+	public void updateAccount(final UIAccount uiAccount) {
+		accountManager.updateAccount(uiAccount);
+	}
+
+	public List<String> getInstitutions() {
 		return institutionManager.getAllUIInstitutions();
 	}
 
@@ -267,75 +258,36 @@ public class DomainServiceImpl implements DomainService, InitializingBean {
 		return statisticManager.getMonthsOfStatistics();
 	}
 
-	public List<UIStatistic> searchStatistics(final String institutionId,
-			final String accountId, final String applicationId,
-			final String monthStr) {
+	public List<UIStatistic> searchStatistics(final String institution,
+			final Long accountId, final Long applicationId,
+			final String month) {
 
-		Institution inst = institutionManager.getInstitutionById(institutionId);
-		Account acc = accountManager.getAccountById(accountId);
-		Application app = applicationManager.getApplicationById(applicationId);
-		Date month = null;
-		try {
-			long date = Long.valueOf(monthStr);
-			if (date != -1) {
-				month = new Date(date);
-			}
-		} catch (NumberFormatException e) {
-			logger.debug("Impossible de parser la date choisie : "
-					+ "on en deduit que l'item 'Tous' a ete selectionne.", e);
-		}
+		Institution inst = institutionManager.getInstitutionByName(institution);
+		Account acc = accountId == null ? null : accountManager.getAccountById("" + accountId);
+		Application app = applicationId == null ? null : applicationManager.getApplicationById("" + applicationId);
 
 		return statisticManager.searchStatistics(inst, acc, app, month);
 	}
 
-	public byte[] makeReportForConsolidatedSummaries(final FormatReport format,
-			final List<UIStatistic> data, final String institutionId,
-			final String applicationId, final String accountId,
-			final String monthStr) throws IOException, JRException {
-
-		// on recupere les objets persistents
-		Institution inst = institutionManager.getInstitutionById(institutionId);
-		Account acc = accountManager.getAccountById(accountId);
-		Application app = applicationManager.getApplicationById(applicationId);
-		Date month = null;
-		try {
-			long date = Long.valueOf(monthStr);
-			if (date != -1) {
-				month = new Date(date);
-			}
-		} catch (NumberFormatException e) {
-			logger.debug("Impossible de parser la date choisie : "
-					+ "on en deduit que l'item 'Tous' a ete selectionne.", e);
-		}
-
-		return statisticManager.makeReportForConsolidatedSummaries(format,
-				data, inst, app, acc, month);
-	}
-
-	public byte[] makeReportForDetailedSummaries(final FormatReport format,
-			final List<UIDetailedSummary> data, final String institutionId,
-			final String applicationId, final String accountId,
-			final Date startDate, final Date endDate) throws IOException,
-			JRException {
-		// on recupere les objets persistents
-		Institution inst = institutionManager.getInstitutionById(institutionId);
-		Account acc = accountManager.getAccountById(accountId);
-		Application app = applicationManager.getApplicationById(applicationId);
-
-		return statisticManager.makeReportForDetailedSummaries(format, data,
-				inst, app, acc, startDate, endDate);
-	}
-
 	public List<UIDetailedSummary> searchDetailedSummaries(
-			final String institutionId, final String accountId,
-			final String applicationId, final Date startDate, final Date endDate, int maxResults) {
-		// on recupere les objets persistents
-		Institution inst = institutionManager.getInstitutionById(institutionId);
-		Account acc = accountManager.getAccountById(accountId);
-		Application app = applicationManager.getApplicationById(applicationId);
-
-		return statisticManager.searchDetailedSummaries(inst, acc, app,
-				startDate, endDate, maxResults);
+			final String institution, final Long accountId,
+			final Long applicationId, final Date startDate, final Date endDate, int maxResults) throws Exception {
+		Institution inst = null;
+		if (institution != null) {
+			inst = institutionManager.getInstitutionByName(institution);
+			if (inst == null) throw new Exception("invalid institution " + institution);
+		}
+		Account acc = null;
+		if (accountId != null) {
+			acc = accountManager.getAccountById(""+accountId);
+			if (acc == null) throw new Exception("invalid accountId " + accountId);
+		}
+		Application app = null;
+		if (applicationId != null) {
+			app = applicationManager.getApplicationById(""+applicationId);
+			if (app == null) throw new Exception("invalid applicationId " + applicationId);
+		}
+		return statisticManager.searchDetailedSummaries(inst, acc, app, startDate, endDate, maxResults);
 	}
 
 	public List<UIRole> getAllRoles() {

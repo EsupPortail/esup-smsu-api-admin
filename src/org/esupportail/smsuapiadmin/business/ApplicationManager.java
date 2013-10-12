@@ -95,6 +95,11 @@ public class ApplicationManager extends AbstractApplicationAwareBean {
 		return allUiApps;
 	}
 
+	public UIApplication getUIApplication(int id) {
+		Application app = daoService.getApplicationById(id);
+		return app == null ? null : dtoConverterService.convertToUI(app);
+	}
+
 	/**
 	 * Returns the application with the specified id.
 	 * 
@@ -122,10 +127,8 @@ public class ApplicationManager extends AbstractApplicationAwareBean {
 	 * @param uiApp
 	 */
 	public void addApplication(final UIApplication uiApp) {
-		final Application app;
-		// on convertit en application
-		app = dtoConverterService.convertFromUI(uiApp);
-		// on l'ajoute en base
+		logger.info("creating application " + uiApp.getName());
+		Application app = dtoConverterService.convertFromUI(uiApp, true);
 		daoService.addApplication(app);
 	}
 
@@ -135,14 +138,12 @@ public class ApplicationManager extends AbstractApplicationAwareBean {
 	 * @param uiApplication
 	 */
 	public void updateApplication(final UIApplication uiApplication) {
-		final Application app;
+		final Application app = dtoConverterService.convertFromUI(uiApplication, false);
 
-		app = dtoConverterService.convertFromUI(uiApplication);
+		logger.info("modify application " + app.getId() + " " + app.getName());
 
-		String idStr = uiApplication.getId();
-		Integer id = Integer.valueOf(idStr);
-
-		Application appPersistent = daoService.getApplicationById(id);
+		Application appPersistent = daoService.getApplicationById(app.getId());
+		if (appPersistent == null) throw new NotFoundException("invalid application " + app.getId());
 		appPersistent.setName(app.getName());
 		appPersistent.setCertificate(app.getCertificate());
 		appPersistent.setAccount(app.getAccount());
@@ -157,12 +158,9 @@ public class ApplicationManager extends AbstractApplicationAwareBean {
 	 * 
 	 * @param uiApplication
 	 */
-	public void deleteApplication(final UIApplication uiApplication) {
-
-		String idStr = uiApplication.getId();
-		Integer id = Integer.valueOf(idStr);
-
+	public void deleteApplication(int id) {
 		Application appPersistent = daoService.getApplicationById(id);
+		logger.info("removing application " + id + " " + appPersistent.getName());
 		daoService.deleteApplication(appPersistent);
 	}
 }

@@ -9,7 +9,6 @@ import org.esupportail.commons.services.logging.LoggerImpl;
 import org.esupportail.smsuapiadmin.dao.DaoService;
 import org.esupportail.smsuapiadmin.dao.beans.Institution;
 import org.esupportail.smsuapiadmin.dto.DTOConverterService;
-import org.esupportail.smsuapiadmin.dto.beans.UIInstitution;
 
 /**
  * AccountManager is the business layer between the web and the database for
@@ -81,15 +80,15 @@ public class InstitutionManager extends AbstractApplicationAwareBean {
 	 * 
 	 * @return
 	 */
-	public List<UIInstitution> getAllUIInstitutions() {
+	public List<String> getAllUIInstitutions() {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Retrieves the institutions from the database");
 		}
-		List<UIInstitution> allUiInstitutions = new ArrayList<UIInstitution>();
+		List<String> allUiInstitutions = new ArrayList<String>();
 		List<Institution> allInstitutions = daoService.getInstitutions();
 
 		for (Institution inst : allInstitutions) {
-			UIInstitution ui = dtoConverterService.convertToUI(inst);
+			String ui = dtoConverterService.convertToUI(inst);
 			allUiInstitutions.add(ui);
 		}
 		return allUiInstitutions;
@@ -115,6 +114,13 @@ public class InstitutionManager extends AbstractApplicationAwareBean {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Returns the institution with the specified name
+	 */
+	public Institution getInstitutionByName(final String name) {
+		return daoService.getInstitutionByName(name);
 	}
 
 }

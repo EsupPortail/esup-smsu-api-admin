@@ -134,7 +134,7 @@ public class StatisticManager
 	 */
 	public List<UIStatistic> searchStatistics(final Institution institution,
 			final Account account, final Application application,
-			final Date month) {
+			final String month) {
 
 		final List<UIStatistic> result = new ArrayList<UIStatistic>();
 		final List<Statistic> stats = daoService.searchStatistics(institution,
@@ -186,15 +186,10 @@ public class StatisticManager
 			// identique pour tous les sms d'un meme groupe
 			assert !smsList.isEmpty();
 			final Sms firstSms = smsList.get(0);
-			final UIInstitution uiInst = dtoConverterService
-					.convertToUI(firstSms.getApp().getInstitution());
-			final UIApplication uiApp = dtoConverterService
-					.convertToUI(firstSms.getApp());
-			final UIAccount uiAcc = dtoConverterService.convertToUI(firstSms
-					.getAcc());
+			final String uiInst = dtoConverterService.convertToUI(firstSms.getApp().getInstitution());
 			summary.setInstitution(uiInst);
-			summary.setApplication(uiApp);
-			summary.setAccount(uiAcc);
+			summary.setAppName(firstSms.getApp().getName());
+			summary.setAccountName(firstSms.getAcc().getLabel());
 
 			Date minDate = null;
 

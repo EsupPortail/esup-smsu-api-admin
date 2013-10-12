@@ -10,9 +10,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
-import org.esupportail.commons.dao.AbstractJdbcJndiHibernateDaoService;
-import org.esupportail.commons.services.application.UninitializedDatabaseException;
-import org.esupportail.commons.services.application.VersionningUtils;
+import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
 import org.esupportail.smsuapiadmin.dao.beans.Account;
@@ -30,7 +28,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.jdbc.BadSqlGrammarException;
 
 /**
  * The Hibernate implementation of the DAO service.
@@ -55,11 +52,6 @@ InitializingBean {
 	 */
 	@SuppressWarnings("unused")
 	private static final String ID_ATTRIBUTE = "id";
-
-	/**
-	 * The name of the 'admin' attribute.
-	 */
-	private static final String ADMIN_ATTRIBUTE = "admin";
 
 	/**
 	 * Bean constructor.
@@ -270,7 +262,7 @@ InitializingBean {
 
 	public List<Statistic> searchStatistics(final Institution institution,
 			final Account account, final Application application,
-			final Date month) {
+			final String month) {
 
 		List<Statistic> result = null;
 
@@ -306,9 +298,7 @@ InitializingBean {
 			whereClause = true;
 		}
 		if (month != null) {
-			long monthLong = month.getTime();
-			java.sql.Date monthSQL = new java.sql.Date(monthLong);
-			where.append(" stat.Id.Month='" + monthSQL + "'" + keywordAND);
+			where.append(" stat.Id.Month='" + month + "-01'" + keywordAND);
 			whereClause = true;
 		}
 
@@ -390,17 +380,14 @@ InitializingBean {
 		return criteria.list();
 	}
 
-	public Role getRoleById(final String id) {
-		Role result = null;
-		String queryString = "FROM Role role " + "WHERE role.Id=" + id;
+	public Role getRoleByName(final String name) {
+		String queryString = "FROM Role role " + "WHERE role.Name='" + name + "'";
 
-		List roles = getHibernateTemplate().find(queryString);
+		List<Role> roles = getHibernateTemplate().find(queryString);
 		if (roles.size() == 1) {
-			result = (Role) roles.get(0);
-		} else {
-			// TODO
+			return roles.get(0);
 		}
-		return result;
+		return null;
 	}
 
 

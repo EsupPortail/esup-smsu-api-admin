@@ -188,7 +188,7 @@ public interface DaoService extends Serializable {
 	 * @return
 	 */
 	List<Statistic> searchStatistics(Institution institution, Account account,
-			Application application, Date month);
+			Application application, String month);
 
 	/**
 	 * Returns all the sms.
@@ -212,12 +212,12 @@ public interface DaoService extends Serializable {
 
 
 	/**
-	 * Returns the role with the specified id.
+	 * Returns the role with the specified name.
 	 * 
-	 * @param id
+	 * @param name
 	 * @return
 	 */
-	Role getRoleById(String id);
+	Role getRoleByName(String name);
 
 	/**
 	 * Returns the user with the specified login.

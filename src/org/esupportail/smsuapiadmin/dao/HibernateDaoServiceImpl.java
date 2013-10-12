@@ -36,7 +36,7 @@ import org.springframework.jdbc.BadSqlGrammarException;
 /**
  * The Hibernate implementation of the DAO service.
  */
-@SuppressWarnings({"unused", "unchecked"})
+@SuppressWarnings({"unchecked"})
 public class HibernateDaoServiceImpl extends
 AbstractJdbcJndiHibernateDaoService implements DaoService,
 InitializingBean {
@@ -54,6 +54,7 @@ InitializingBean {
 	/**
 	 * The name of the 'id' attribute.
 	 */
+	@SuppressWarnings("unused")
 	private static final String ID_ATTRIBUTE = "id";
 
 	/**
@@ -382,8 +383,6 @@ InitializingBean {
 	public List<Map<String,?>> searchGroupSms(final Institution inst,
 			final Account acc, final Application app, final Date startDate,
 			final Date endDate, int maxResults) {
-
-		List<Map<String, ?>> result = null;
 
 		Criteria criteria = getCurrentSession().createCriteria(Sms.class);
 

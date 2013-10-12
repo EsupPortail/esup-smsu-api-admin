@@ -7,7 +7,6 @@ import org.esupportail.commons.beans.AbstractApplicationAwareBean;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
 import org.esupportail.smsuapiadmin.dao.DaoService;
-import org.esupportail.smsuapiadmin.dao.beans.Institution;
 import org.esupportail.smsuapiadmin.dao.beans.Role;
 import org.esupportail.smsuapiadmin.dto.DTOConverterService;
 import org.esupportail.smsuapiadmin.dto.beans.UIRole;
@@ -101,27 +100,6 @@ public class RoleManager extends AbstractApplicationAwareBean {
 				+ allUIRoles.size() + ")");
 		
 		return allUIRoles;
-	}
-
-
-	/**
-	 * Returns the institution with the specified id.
-	 * 
-	 * @param institutionId
-	 * @return
-	 */
-	public Institution getInstitutionById(final String institutionId) {
-		Institution result = null;
-
-		try {
-			int id = Integer.parseInt(institutionId);
-			result = daoService.getInstitutionById(id);
-		} catch (NumberFormatException e) {
-			logger.warn("L'identifiant d'une institution doit etre un entier",
-					e);
-		}
-
-		return result;
 	}
 
 }

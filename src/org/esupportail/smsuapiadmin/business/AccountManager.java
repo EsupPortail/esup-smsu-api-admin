@@ -512,4 +512,30 @@ public class AccountManager extends AbstractApplicationAwareBean {
 		return result;
 	}
 
+	/**
+	 * Adds the account in the database.
+	 * 
+	 * @param uiAccount
+	 */
+	public void addAccount(final UIAccount uiAccount) {
+		logger.info("creating account " + uiAccount.getName());
+		Account account = dtoConverterService.convertFromUI(uiAccount, true);
+		daoService.addAccount(account);
+	}
+
+	/**
+	 * Updates the account.
+	 * 
+	 * @param uiAccount
+	 */
+	public void updateAccount(final UIAccount uiAccount) {
+		final Account account = dtoConverterService.convertFromUI(uiAccount, false);
+		logger.info("modify account " + account.getId() + " " + account.getLabel());
+
+		Account accountPersistent = daoService.getAccountById(account.getId());
+		accountPersistent.setLabel(account.getLabel());
+		accountPersistent.setQuota(account.getQuota());
+		daoService.updateAccount(accountPersistent);
+	}
+
 }

@@ -1,0 +1,29 @@
+<div ng-show="groupedBy">
+
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Date</th>
+    <th>Nombre de SMS</th>
+  </tr>
+  </thead>
+  <tbody ng-repeat="group in groupedBy">
+    <tr>
+      <td colspan="5"><b>{{group.institution}}</b> {{group.app}} {{group.account}}</td>
+    </tr>
+    <tr ng-repeat="e in group.list">
+      <td>{{e.date | date:'short'}}</td>
+      <td>{{e.nbSmsAndDetails}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- margin-bottom is needed: -->
+<!-- * to make things more understable when the new results get displayed -->
+<!-- * on mobile phones, the onscroll event can be buggy, this blank fixes it -->
+<div style="margin-bottom: 8em" class="normalContent">
+  <a href="" ng-hide="inProgress || noMoreResults" name="{{nbResults}}" when-scrolled="showMoreResults()" ng-click="showMoreResults()">Voir plus</a>
+  <div ng-show="inProgress">En cours...</div>
+</div>
+
+</div>

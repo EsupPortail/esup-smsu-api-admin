@@ -1,0 +1,115 @@
+.content { max-width: 800px; }
+
+.iframeLogin {
+    z-index: 999;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    border: none;
+}
+.iframeLogin.delayed {
+    display: none;
+}
+
+#forceLoginIframe {
+   display: none;
+}
+#forceLoginIframe.showIt {
+   display: block;
+   box-sizing: border-box;
+   width: 100%;
+}
+
+.gridStyle {
+    border: 1px solid rgb(212,212,212);
+    height: 400px
+}
+
+.sidenav {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.sidenav > li:first-child > a {
+    border-radius: 6px 6px 0 0;
+}
+.sidenav > li:last-child > a {
+    border-radius: 0 0 6px 6px;
+}
+/* remove bootstrap stuff */
+.nav-stacked > li + li {
+    margin-top: 0;
+}
+.sidenav > li > a {
+    border: 1px solid #E5E5E5;
+    display: block;
+    margin: 0 0 -1px;
+    padding: 8px 14px;
+}
+.sidenav li.active a {
+    background-color: #428bca;
+}
+
+/* override uportal fss framework shit */
+.sidenav li { list-style: none; }
+.sidenav li.active a { color: white !important; }
+.sidenav, #page { font-family: "Helvetica Neue",Helvetica,Arial,sans-serif !important; }
+ul.breadcrumb { margin-left: 0; }
+.fl-theme-mist th { background-color: #eaeaea !important; border-left: none; border-right: none; }
+.container { background: white; }
+
+.sidenav .glyphicon-chevron-right {
+    float: right;
+    margin-right: -6px;
+    margin-top: 2px;
+    opacity: 0.25;
+}
+
+.loadInProgress {
+    opacity: 0.2;
+}
+
+@media (max-width: 767px) {
+  .row {
+    margin-right: 0;
+    margin-left: 0;
+  }
+  .page {
+    padding-left: 0;
+    padding-right: 0;
+
+  }
+  .normalContent {
+    margin-right: 15px;
+    margin-left: 15px;
+  }
+
+  .sidenav, .sidenavDiv {
+    padding: 0;
+  }
+}
+
+.breadcrumb .active {
+    font-size: 120%;
+}
+
+@media (min-width: 767px) {
+  .ifBottomNavbar, .breadcrumb .ifBottomNavbar { 
+     display: none;
+  }
+
+  /* if not displayed, hide the separator */
+  .breadcrumb li.ifBottomNavbar + li:before {
+     content: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .ifSideNavbar { 
+    display: none;
+  }
+
+  /* put navbar at bottom */
+  .row { display: table; width: 100%; }
+  .span3 { display: table-footer-group; }
+  .page { display: table-header-group; }
+}

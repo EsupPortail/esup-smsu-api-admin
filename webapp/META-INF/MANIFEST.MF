@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Title: esup-smsu-api-admin
-Implementation-Version: 1.0.4
-Implementation-Vendor: Copyright (c) 2009 SUP-Portail consortium

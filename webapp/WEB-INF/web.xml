@@ -70,6 +70,15 @@
         </filter-mapping>
 
 	<filter>
+	  <filter-name>CsrfPrevention</filter-name>
+	  <filter-class>org.esupportail.smsuapiadmin.web.CsrfPreventionFilterHttpHeader</filter-class>
+	</filter>
+	<filter-mapping>
+	  <filter-name>CsrfPrevention</filter-name>
+	  <url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
 	  <filter-name>OneHibernateSessionPerRequest</filter-name>
 	  <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
 	</filter>

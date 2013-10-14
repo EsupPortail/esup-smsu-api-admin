@@ -113,16 +113,11 @@ this.setLoggedUser = function (loggedUser) {
 };
 
 var xhrRequest401State = false;
+var xhrRequestInvalidCsrfState = false;
 function xhrRequest(args) {
     var onError = function(resp) {
 	var status = resp.status;
-	if (status == 400) {
-	    try {
-		var error = angular.fromJson(resp.data).error;
-		alert(error);
-		return $q.reject(error);
-	    } catch (e) {}
-	} else if (status == 401) {
+	if (status == 401) {
 	    if (xhrRequest401State) {
 		alert("fatal, relog failed");
 	    } else {
@@ -140,12 +135,26 @@ function xhrRequest(args) {
 	    }
 	} else if (status == 0) {
 	    alert("unknown failure (server seems to be down)");
+	} else {
+	    var msg = "unknown error " + status;
+	    if (resp.data) {
+		try {
+		    msg = angular.fromJson(resp.data).error;
+		    if (msg === "Invalid CRSF prevention token" && !xhrRequestInvalidCsrfState) {
+			console.log("retrying with new XSRF-TOKEN");
+			return xhrRequest(args);
+		    }
+		} catch (e) { }
+	    }
+	    alert(msg);
+	    return $q.reject(resp);
 	}
 	return resp;
     };
     return $http(args).then(function (resp) {
 	if (xhrRequest401State) { console.log('rest after relog success'); console.log(resp); }
 	xhrRequest401State = false;
+	xhrRequestInvalidCsrfState = false;
 	return resp;
     }, onError);
 }

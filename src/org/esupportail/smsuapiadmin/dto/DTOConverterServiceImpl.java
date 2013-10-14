@@ -24,6 +24,7 @@ import org.esupportail.smsuapiadmin.dto.beans.UIRole;
 import org.esupportail.smsuapiadmin.dto.beans.UISms;
 import org.esupportail.smsuapiadmin.dto.beans.UIStatistic;
 import org.esupportail.smsuapiadmin.dto.beans.UIUser;
+import org.esupportail.smsuapiadmin.business.NotFoundException;
 
 /**
  * Implementation of the interface 'DTOConverterService'.
@@ -208,12 +209,7 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 
 		// le compte d'imputation
 		Account account = daoService.getAccountByName(uiApp.getAccountName());
-		if (account == null) {
-			account = new Account();
-			account.setLabel(uiApp.getAccountName());
-			account.setQuota(uiApp.getQuota());
-			daoService.addAccount(account);
-		}
+		if (account == null) throw new NotFoundException("invalid account " + uiApp.getAccountName());
 		result.setAccount(account);
 
 		// l'etablissement

@@ -22,111 +22,35 @@
 		<mkdir dir="${build.classes}" />
 
 		<condition property="need-download-jars">
-		  <not> <available file="${build.dir}/WEB-INF/lib" type="dir" /> </not>
-		</condition>
-
-		<condition property="need-download-utils-jars">
-		  <not> <available file="tmp/lib" type="dir" /> </not>
+		  <not>
+		    <and>
+		      <available file="${build.dir}/WEB-INF/lib" type="dir" /> 
+		      <available file="tmp/compile-lib" type="dir" /> 
+		    </and>
+		  </not>
 		</condition>
 	</target>
 
-	<target name="download" depends="download-jars,download-utils-jars" />
+	<target name="download" depends="download-jars" />
 		
 	<property name="esup-commons-version" value="[0.3.3, 0.4)" />
 	<property name="spring-version" value="3.2.3.RELEASE" />
 	<property name="jetty-version" value="8.1.9.v20130131" />
 
 	<target name="download-jars" depends="prepare" if="need-download-jars">
-	      <artifact:remoteRepository id="esup" url="https://mvn.esup-portail.org/content/repositories/releases" />
-	      
+	      <artifact:pom id="mypom" file="pom.xml" />
+	      <artifact:dependencies filesetId="runtime.jar.fileset" useScope="runtime" pomRefId="mypom" />
+	      <artifact:dependencies filesetId="compile.jar.fileset" useScope="compile" pomRefId="mypom" />
 
-	      <artifact:dependencies filesetId="jar.fileset">
-
-
-		<dependency groupId="commons-collections" artifactId="commons-collections" version="[3.1, 4)" />
-		<dependency groupId="commons-io" artifactId="commons-io" version="[1.2, 2)" />
-		<dependency groupId="commons-lang" artifactId="commons-lang" version="[2.1, 3)" />
-
-		<dependency groupId="org.springframework" artifactId="spring-core" version="${spring-version}" />
-		<dependency groupId="org.springframework" artifactId="spring-orm" version="${spring-version}" />
-		<dependency groupId="org.springframework" artifactId="spring-context-support" version="${spring-version}" />
-		<dependency groupId="org.springframework" artifactId="spring-web" version="${spring-version}" />
-
-
-		<!-- below is required by jsr168forwardport.org.springframework.web.portlet (esup-commons2-web) -->
-		<!-- forcing our version -->
-		<dependency groupId="org.springframework" artifactId="spring-test" version="${spring-version}" />
-		<dependency groupId="org.springframework" artifactId="spring-webmvc" version="${spring-version}" />
-
-		<!-- aop ? -->
-		<dependency groupId="org.aspectj" artifactId="aspectjrt" version="[1.6.2, 2)" />
-
-		<dependency groupId="org.jasig.cas.client" artifactId="cas-client-core" version="[3.2.1, 4)" />
-		
-		<remoteRepository refid="esup" />
-
-		<dependency groupId="esup" artifactId="esup-uportal-ws-client" version="RELEASE" />
-
-		<dependency groupId="org.esupportail" artifactId="esup-commons2-ldap" version="${esup-commons-version}" >
-		  <!-- only used by StringUtils.removeUtf8Accents. Too big to keep unused -->
-		  <exclusion groupId="com.ibm.icu" artifactId="icu4j" />
-		</dependency>
-
-		<!-- hibernate connection pooling -->
-		<!--dependency groupId="org.hibernate" artifactId="hibernate-c3p0" version="3.3.2.GA" /-->
-
-		<dependency groupId="org.esupportail" artifactId="esup-commons2-hibernate" version="${esup-commons-version}" >
-		  <!-- remove unneeded -->
-		  <exclusion groupId="postgresql" artifactId="postgresql" />
-		  <exclusion groupId="hsqldb" artifactId="hsqldb" />
-		</dependency>
-		<dependency groupId="org.esupportail" artifactId="esup-commons2-web" version="${esup-commons-version}" >
-		  <!-- spring-asm is no more in spring 3.2.x -->
-		  <exclusion groupId="org.springframework" artifactId="spring-asm" />
-		</dependency>
-		<dependency groupId="org.esupportail" artifactId="esup-commons2-exceptionHandling" version="${esup-commons-version}" />
-		
-		<dependency groupId="com.sun.jersey.contribs" artifactId="jersey-spring" version="[1.17.1, 2)" >
-				<exclusion groupId="org.springframework" artifactId="spring-aop" />
-				<exclusion groupId="org.springframework" artifactId="spring-core" />
-				<exclusion groupId="org.springframework" artifactId="spring-web" />
-				<exclusion groupId="org.springframework" artifactId="spring-beans" />
-				<exclusion groupId="org.springframework" artifactId="spring-context" />
-		</dependency>
-		<dependency groupId="com.sun.jersey" artifactId="jersey-json" version="[1.17.1, 2)" >
-		  <!-- jackson is much better! -->
-		  <exclusion groupId="org.codehaus.jettison" artifactId="jettison" />
-		</dependency>
-		<!-- for @RolesAllowed : -->
-		<dependency groupId="javax.annotation" artifactId="jsr250-api" version="[1.0, 2)" />
-
-		<!-- for CORS filter (CrossOriginFilter) -->
-		<dependency groupId="org.eclipse.jetty" artifactId="jetty-servlets" version="${jetty-version}" >
-		  <exclusion groupId="org.eclipse.jetty" artifactId="jetty-continuation" />
-		  <exclusion groupId="org.eclipse.jetty" artifactId="jetty-http" />
-		  <exclusion groupId="org.eclipse.jetty" artifactId="jetty-io" />
-		</dependency>
-            
-	      </artifact:dependencies>
-
+	      <mkdir dir="${build.dir}/WEB-INF/lib" />
 	      <copy todir="${build.dir}/WEB-INF/lib">
-		<fileset refid="jar.fileset"/>
+		<fileset refid="runtime.jar.fileset"/>
 		<mapper type="flatten"/>
 	      </copy>
-	</target>
-
-	<target name="download-utils-jars" depends="prepare" if="need-download-utils-jars">
-	      <!-- servlet-api is for compilation/batch only. In a real tomcat, it is provided -->
-	      <!-- portlet-api is for compilation/batch only. In a real portal, it is provided -->
-	      <mkdir dir="tmp/lib" />
 	      
-	      <artifact:dependencies filesetId="utils.jar.fileset">
-		<dependency groupId="javax.servlet" artifactId="servlet-api" version="2.5" />
-		<dependency groupId="javax.portlet" artifactId="portlet-api" version="1.0" />
-	      </artifact:dependencies>
-	      
-	      <copy todir="tmp/lib">
-		<fileset refid="utils.jar.fileset"/>
+	      <mkdir dir="tmp/compile-lib" />
+	      <copy todir="tmp/compile-lib">
+		<fileset refid="compile.jar.fileset"/>
 		<mapper type="flatten"/>
 	      </copy>
 	</target>
@@ -138,12 +62,11 @@
 		<property name="compile.nowarn" value="false" />
 
 		<path id="compile.classpath">
-		  <fileset dir="${build.dir}/WEB-INF/lib" includes="**/*.jar" />
-		  <fileset dir="tmp/lib" includes="**/*.jar" />
+		  <fileset dir="tmp/compile-lib" includes="**/*.jar" />
 		</path>
 
 		<javac 
-			srcdir="src" 
+			srcdir="src/main/java" 
 			destdir="${build.classes}" 
 			debug="${compile.debug}" 
 			nowarn="${compile.nowarn}" 
@@ -153,7 +76,7 @@
 			<classpath refid="compile.classpath" />
 		</javac>
 		<copy todir="${build.classes}/properties" overwrite="true" >
-			<fileset dir="properties" />
+			<fileset dir="src/main/resources/properties" />
 		</copy>
 	</target>
 
@@ -162,7 +85,7 @@
 		<fail unless="deploy.home" message="Please set property deploy.home in build.properties" />
 
 		<sync todir="${deploy.home}" >
-			<fileset dir="webapp" />
+			<fileset dir="src/main/webapp" />
 			<fileset dir="${build.dir}" excludes="WEB-INF/classes/org/esupportail/commons/portal/ws/**/*" />
 		</sync>
 	</target>
@@ -221,7 +144,7 @@
 	  <taskdef classpathref="jetty.plugin.classpath" resource="tasks.properties" loaderref="jetty.loader" />
 
 	  <jetty tempDirectory="tmp/jetty-temp">
-	    <webApp name="esup-smsu-api-admin" warfile="webapp" contextpath="/esup-smsu-api-admin">
+	    <webApp name="esup-smsu-api-admin" warfile="src/main/webapp" contextpath="/esup-smsu-api-admin">
 	      <lib dir="${build.dir}/WEB-INF/lib" includes="*.jar" />
 	      <classes dir="${build.classes}" includes="*.class" />
 	      <attributes>
@@ -234,7 +157,7 @@
 	
 	<target name="_dist" description="build ZIP archives" >
 
-		<property file="properties/version.properties" />
+		<property file="src/main/resources/properties/version.properties" />
 		<property name="dist.dir" value="dist"/>
 		<property name="zip.file" value="${dist.dir}/${app.name}-${app.versionMajorNumber}.${app.versionMinorNumber}.${app.versionUpdate}-${app.release}.zip"/>
 
@@ -242,10 +165,10 @@
 		<property name="app.zip-files.include" value="
 		build.properties
 		build.xml
-		properties/**/*.*
-		src/**/*.java 
+		src/main/resources/properties/**/*.*
+		src/main/java/**/*.java 
 		utils/ant
-    	        webapp
+    	        src/main/webapp
 		" />
 
 		<mkdir dir="${dist.dir}"/>

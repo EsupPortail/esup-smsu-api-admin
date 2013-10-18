@@ -12,7 +12,7 @@ myAppTest.run(function($http, $httpBackend, h) {
     function create(list) {
 	return function(method, url, data) {
 	    var o = angular.fromJson(data);
-	    o.id = 1 + Math.max.apply(null, h.array_map(list, function(o) { return o.id }));
+	    o.id = 1 + Math.max.apply(null, h.array_map(list, function(o) { return o.id; }));
 	    list.push(o);
 	    return [200];
 	};
@@ -20,18 +20,18 @@ myAppTest.run(function($http, $httpBackend, h) {
     function modify(list) {
 	return function(method, url, data) {
 	    var id = url.match(/(\d+)$/)[0];
-	    var o = h.simpleFind(list, function (o) { return o.id == id });
+	    var o = h.simpleFind(list, function (o) { return o.id == id; });
 	    angular.extend(o, angular.fromJson(data));
 	    return [200];
-	}
+	};
     }
     function delete_(list) {
 	return function(method, url, data) {
 	    var id = url.match(/(\d+)$/)[0];
-	    var list_ = h.simpleFilter(list, function (o) { return o.id != id });
+	    var list_ = h.simpleFilter(list, function (o) { return o.id != id; });
 	    angular.copy(list_, list);
 	    return [200];
-	}
+	};
     }
 
     var data = {

@@ -264,7 +264,7 @@ app.controller('ConsolidatedSummaryCtrl', function($scope, h) {
 	    e.nbReceived = e.nbSendedSMS - e.nbSMSInError;
 	    e.failureRate = Math.round(e.nbSMSInError / e.nbSendedSMS * 100) + "%";
 	});
-	$scope.appAccountsTree = computeTree(flatList)
+	$scope.appAccountsTree = computeTree(flatList);
     });
 
     $scope.setAppAccount = function(e) {

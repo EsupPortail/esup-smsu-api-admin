@@ -108,7 +108,7 @@ this.setLoggedUser = function (loggedUser) {
     if ($rootScope.roles) {
 	setIt();
     } else {
-	h.getRolesInScope($rootScope).then(setIt)
+	h.getRolesInScope($rootScope).then(setIt);
     }
 };
 
@@ -198,11 +198,11 @@ this.userWithCapabilities = function (user, roles) {
 };
 
 this.findCurrentTab = function ($scope, templateUrl) {
-    var tab = h.simpleFind(routes.routes, function (tab) { return tab.templateUrl == templateUrl });
+    var tab = h.simpleFind(routes.routes, function (tab) { return tab.templateUrl == templateUrl; });
     if (!tab) return;
     var mainTab;
     if (tab.parent) {
-	mainTab = h.simpleFind(routes.routes, function (mainTab) { return mainTab.route == tab.parent });
+	mainTab = h.simpleFind(routes.routes, function (mainTab) { return mainTab.route == tab.parent; });
     } else {
 	mainTab = tab;
     }
@@ -238,7 +238,7 @@ function findName(base, existingHash) {
     var name = base;
     var i = 2;
     while (name in existingHash) {
-	name = base + ' ' + i++
+	name = base + ' ' + i++;
     }
     return name;
 }

@@ -25,12 +25,17 @@
 		<property name="hibernate.jdbc.use_scrollable_resultset">true</property>
 		<property name="hibernate.jdbc.use_streams_for_binary">true</property>
 		<property name="hibernate.max_fetch_depth">1</property>
-		<property name="hibernate.c3p0.min_size">10</property>
-        <property name="hibernate.c3p0.max_size">100</property>
-        <property name="hibernate.c3p0.timeout">0</property>
-        <property name="hibernate.c3p0.acquire_increment">5</property>
-        <property name="hibernate.c3p0.idle_test_period">300</property>
-        <property name="hibernate.c3p0.max_statements">50</property>
+
+<!-- to enable connection pooling, enable hibernate-c3p0 in build.xml
+		<property name="hibernate.connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property> 
+		<property name="hibernate.c3p0.min_size">1</property>
+		<property name="hibernate.c3p0.max_size">100</property>
+		<property name="hibernate.c3p0.timeout">0</property>
+		<property name="hibernate.c3p0.acquire_increment">5</property>
+		<property name="hibernate.c3p0.idle_test_period">300</property>
+		<property name="hibernate.c3p0.max_statements">50</property>
+-->
+
 		<property name="hibernate.cache.use_query_cache">false</property>
 		<property name="hibernate.cache.use_second_level_cache">false</property>
 		<property name="hibernate.cache.provider_class">org.hibernate.cache.NoCacheProvider</property>

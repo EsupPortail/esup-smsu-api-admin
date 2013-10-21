@@ -106,12 +106,8 @@ public class StatisticManager
 	}
 
 	/**
-	 * Returns accounts and applications for detailed statistics
+	 * Returns all statistics sorted
 	 * 
-	 * @param institutionId
-	 * @param accountId
-	 * @param applicationId
-	 * @param month
 	 * @return
 	 */
 	public List<UIStatistic> getStatisticsSorted() {

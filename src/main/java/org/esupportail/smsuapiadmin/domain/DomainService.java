@@ -136,14 +136,7 @@ public interface DomainService extends Serializable {
 
 	/**
 	 * 
-	 * @return a list containing all the statistics
-	 */
-	List<UIStatistic> getStatistics();
-
-	/**
-	 * Searches statistics matching criterias.
-	 * 
-	 * @return list containing all statistics matching criterias
+	 * @return a sorted list containing all the statistics
 	 */
 	List<UIStatistic> getStatisticsSorted();
 

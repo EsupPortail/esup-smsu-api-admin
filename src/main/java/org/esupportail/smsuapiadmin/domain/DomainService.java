@@ -152,7 +152,7 @@ public interface DomainService extends Serializable {
 	 * 
 	 * @return list containing all statistics matching criterias
 	 */
-	List<UIStatistic> searchStatistics();
+	List<UIStatistic> getStatisticsSorted();
 
 	/**
 	 * Searches detailed summaries matching criterias.

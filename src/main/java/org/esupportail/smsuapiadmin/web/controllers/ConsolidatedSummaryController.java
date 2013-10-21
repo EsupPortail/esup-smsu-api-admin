@@ -35,6 +35,6 @@ public class ConsolidatedSummaryController {
 
 	@GET
 	public List<UIStatistic> search() {
-		return domainService.searchStatistics();
+		return domainService.getStatisticsSorted();
 	}    
 }

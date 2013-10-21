@@ -258,9 +258,9 @@ public class DomainServiceImpl implements DomainService, InitializingBean {
 		return statisticManager.getMonthsOfStatistics();
 	}
 
-	public List<UIStatistic> searchStatistics() {
+	public List<UIStatistic> getStatisticsSorted() {
 
-		return statisticManager.searchStatistics();
+		return statisticManager.getStatisticsSorted();
 	}
 
 	public List<UIDetailedSummary> searchDetailedSummaries(

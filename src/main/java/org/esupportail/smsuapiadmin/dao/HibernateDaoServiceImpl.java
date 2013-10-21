@@ -260,7 +260,7 @@ InitializingBean {
 	}
 
 
-	public List<Statistic> searchStatistics() {
+	public List<Statistic> getStatisticsSorted() {
 		String select = "SELECT stat FROM Statistic stat";
 
 		String orderBy = " ORDER BY stat.Id.App.Institution.Label,  "

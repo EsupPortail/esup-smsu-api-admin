@@ -124,7 +124,7 @@ public class StatisticManager
 	}
 
 	/**
-	 * Searches statistics that respect criterias.
+	 * Returns accounts and applications for detailed statistics
 	 * 
 	 * @param institutionId
 	 * @param accountId
@@ -132,10 +132,10 @@ public class StatisticManager
 	 * @param month
 	 * @return
 	 */
-	public List<UIStatistic> searchStatistics() {
+	public List<UIStatistic> getStatisticsSorted() {
 
 		final List<UIStatistic> result = new ArrayList<UIStatistic>();
-		final List<Statistic> stats = daoService.searchStatistics();
+		final List<Statistic> stats = daoService.getStatisticsSorted();
 
 		for (final Statistic stat : stats) {
 			final UIStatistic uiStat = dtoConverterService.convertToUI(stat);

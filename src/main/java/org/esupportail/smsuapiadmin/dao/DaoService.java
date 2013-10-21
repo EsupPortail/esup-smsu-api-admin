@@ -187,8 +187,7 @@ public interface DaoService extends Serializable {
 	 * @param month
 	 * @return
 	 */
-	List<Statistic> searchStatistics(Institution institution, Account account,
-			Application application, String month);
+	List<Statistic> searchStatistics();
 
 	/**
 	 * Returns all the sms.

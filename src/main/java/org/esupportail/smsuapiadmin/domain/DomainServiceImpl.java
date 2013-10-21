@@ -258,15 +258,9 @@ public class DomainServiceImpl implements DomainService, InitializingBean {
 		return statisticManager.getMonthsOfStatistics();
 	}
 
-	public List<UIStatistic> searchStatistics(final String institution,
-			final Long accountId, final Long applicationId,
-			final String month) {
+	public List<UIStatistic> searchStatistics() {
 
-		Institution inst = institutionManager.getInstitutionByName(institution);
-		Account acc = accountId == null ? null : accountManager.getAccountById("" + accountId);
-		Application app = applicationId == null ? null : applicationManager.getApplicationById("" + applicationId);
-
-		return statisticManager.searchStatistics(inst, acc, app, month);
+		return statisticManager.searchStatistics();
 	}
 
 	public List<UIDetailedSummary> searchDetailedSummaries(

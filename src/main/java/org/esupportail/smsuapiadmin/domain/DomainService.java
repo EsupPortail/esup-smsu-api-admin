@@ -150,14 +150,9 @@ public interface DomainService extends Serializable {
 	/**
 	 * Searches statistics matching criterias.
 	 * 
-	 * @param institution
-	 * @param accountId
-	 * @param applicationId
-	 * @param month
 	 * @return list containing all statistics matching criterias
 	 */
-	List<UIStatistic> searchStatistics(String institution, Long accountId,
-			Long applicationId, String month);
+	List<UIStatistic> searchStatistics();
 
 	/**
 	 * Searches detailed summaries matching criterias.

@@ -132,13 +132,10 @@ public class StatisticManager
 	 * @param month
 	 * @return
 	 */
-	public List<UIStatistic> searchStatistics(final Institution institution,
-			final Account account, final Application application,
-			final String month) {
+	public List<UIStatistic> searchStatistics() {
 
 		final List<UIStatistic> result = new ArrayList<UIStatistic>();
-		final List<Statistic> stats = daoService.searchStatistics(institution,
-				account, application, month);
+		final List<Statistic> stats = daoService.searchStatistics();
 
 		for (final Statistic stat : stats) {
 			final UIStatistic uiStat = dtoConverterService.convertToUI(stat);

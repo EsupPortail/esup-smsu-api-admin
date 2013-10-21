@@ -260,69 +260,13 @@ InitializingBean {
 	}
 
 
-	public List<Statistic> searchStatistics(final Institution institution,
-			final Account account, final Application application,
-			final String month) {
+	public List<Statistic> searchStatistics() {
+		String select = "SELECT stat FROM Statistic stat";
 
-		List<Statistic> result = null;
-
-		// SELECT
-		StringBuffer select = new StringBuffer();
-		select.append("SELECT stat ");
-
-		// FROM
-		StringBuffer from = new StringBuffer();
-		from.append(" FROM Statistic stat ");
-		// on fait une jointure si le critere 'institution' est renseigne
-		if (institution != null) {
-			from.append(", Application app ");
-		}
-
-		// WHERE
-		StringBuffer where = new StringBuffer();
-		where.append(" WHERE ");
-		boolean whereClause = false;
-		String keywordAND = " AND ";
-		if (institution != null) {
-			where.append(" app.Institution.Id=" + institution.getId()
-					+ keywordAND);
-			where.append(" stat.Id.App.Id=app.Id" + keywordAND);
-			whereClause = true;
-		}
-		if (application != null) {
-			where.append(" stat.Id.App.Id=" + application.getId() + keywordAND);
-			whereClause = true;
-		}
-		if (account != null) {
-			where.append(" stat.Id.Acc.Id=" + account.getId() + keywordAND);
-			whereClause = true;
-		}
-		if (month != null) {
-			where.append(" stat.Id.Month='" + month + "-01'" + keywordAND);
-			whereClause = true;
-		}
-
-		// ORDER BY
 		String orderBy = " ORDER BY stat.Id.App.Institution.Label,  "
 			+ "stat.Id.App.Name, stat.Id.Acc.Label, " + "stat.Id.Month";
 
-		String queryString = "";
-
-		StringBuffer selectFrom = select.append(from.toString());
-
-		if (whereClause) {
-			final int sizeAND = 5;
-			String whereStr = where.substring(0, where.length() - sizeAND);
-			queryString = selectFrom.append(whereStr).toString();
-		} else {
-			queryString = selectFrom.toString();
-		}
-
-		queryString = queryString + orderBy;
-
-		result = getHibernateTemplate().find(queryString);
-
-		return result;
+		return getHibernateTemplate().find(select + orderBy);
 	}
 
 

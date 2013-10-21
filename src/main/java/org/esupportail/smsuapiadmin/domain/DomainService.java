@@ -7,7 +7,6 @@ package org.esupportail.smsuapiadmin.domain;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.SortedSet;
 import java.util.Set;
 
 import org.esupportail.commons.exceptions.UserNotFoundException;
@@ -140,12 +139,6 @@ public interface DomainService extends Serializable {
 	 * @return a list containing all the statistics
 	 */
 	List<UIStatistic> getStatistics();
-
-	/**
-	 * 
-	 * @return a set containing all the months of statistics
-	 */
-	SortedSet<Date> getMonthsOfStatistics();
 
 	/**
 	 * Searches statistics matching criterias.

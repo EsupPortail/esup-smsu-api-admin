@@ -7,7 +7,6 @@ package org.esupportail.smsuapiadmin.domain;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.SortedSet;
 
 import org.esupportail.commons.exceptions.UserNotFoundException;
 import org.esupportail.commons.services.logging.Logger;
@@ -252,10 +251,6 @@ public class DomainServiceImpl implements DomainService, InitializingBean {
 
 	public List<UIStatistic> getStatistics() {
 		return statisticManager.getAllUIStatistics();
-	}
-
-	public SortedSet<Date> getMonthsOfStatistics() {
-		return statisticManager.getMonthsOfStatistics();
 	}
 
 	public List<UIStatistic> getStatisticsSorted() {

@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.esupportail.commons.beans.AbstractApplicationAwareBean;
 import org.esupportail.commons.services.logging.Logger;
@@ -105,22 +103,6 @@ public class StatisticManager
 			allUIStatistics.add(ui);
 		}
 		return allUIStatistics;
-	}
-
-	/**
-	 * Returns months that appears in database.
-	 * 
-	 * @return
-	 */
-	public SortedSet<Date> getMonthsOfStatistics() {
-		final SortedSet<Date> result = new TreeSet<Date>();
-		final List<Statistic> allStatistics = getAllStatistics();
-
-		for (final Statistic stat : allStatistics) {
-			result.add(stat.getId().getMonth());
-		}
-
-		return result;
 	}
 
 	/**

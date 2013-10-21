@@ -159,9 +159,10 @@ function xhrRequest(args) {
     }, onError);
 }
 
-this.callRest = function ($function) {
+this.callRest = function ($function, params) {
     var url = globals.baseURL + '/rest/' + $function;
-    var params = { cacheSlayer: new Date().getTime() }; // for our beloved IE which caches every AJAX... ( http://stackoverflow.com/questions/16098430/angular-ie-caching-issue-for-http )
+    params = angular.extend({}, params);
+    params.cacheSlayer = new Date().getTime(); // for our beloved IE which caches every AJAX... ( http://stackoverflow.com/questions/16098430/angular-ie-caching-issue-for-http )
     var args = { method: 'get', url: url, params: params };
     return xhrRequest(args).then(function(resp) {
 	return resp.data;

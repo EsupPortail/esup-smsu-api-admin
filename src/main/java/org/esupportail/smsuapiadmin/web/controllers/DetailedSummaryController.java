@@ -11,13 +11,14 @@ import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Response;
-import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
 import org.esupportail.smsuapiadmin.domain.DomainService;
+import org.esupportail.smsuapiadmin.dto.beans.UIDetailedCriteria;
 import org.esupportail.smsuapiadmin.dto.beans.UIDetailedSummary;
 
 
@@ -31,11 +32,11 @@ public class DetailedSummaryController {
 	private final Logger logger = new LoggerImpl(getClass());
 
 	@GET
-	//@Produces({"application/json","application/pdf","application/vnd.ms-excel"})
-	public Response search(
+	@Produces("application/json")
+	public List<UIDetailedSummary> search(
 		@QueryParam("institution") String institution,
-		@QueryParam("account") Long accountId,
-		@QueryParam("application") Long applicationId,
+		@QueryParam("account") String accountName,
+		@QueryParam("app") String applicationName,
 		@QueryParam("startDate") Long startDate,
 		@QueryParam("endDate") Long endDate,
 		@QueryParam("maxResults") @DefaultValue("0" /* no limit */) int maxResults
@@ -44,14 +45,16 @@ public class DetailedSummaryController {
 		Date startDate_ = startDate == null ? null : new Date(startDate);
 		Date endDate_ = endDate == null ? null : new Date(endDate);
 
-		logger.debug("institution=" + institution + ", accountId=" + accountId + ", applicationId=" + 
-			    applicationId + ", startDate=" + startDate + ", endDate=" + endDate);
-		List<UIDetailedSummary> list = 
-			domainService.searchDetailedSummaries(institution, accountId, applicationId, startDate_, endDate_, maxResults);
-
-		String contentType = "application/json";
-		Object result = list;
-		return Response.status(200).entity(result).type(contentType).build();	
+		logger.debug("institution=" + institution + ", account=" + accountName + ", application=" + 
+			    applicationName + ", startDate=" + startDate + ", endDate=" + endDate);
+		return domainService.searchDetailedSummaries(institution, accountName, applicationName, startDate_, endDate_, maxResults);
 	}
-
+	 
+	@GET
+	@Produces("application/json")
+	@Path("/criteria")
+	public List<UIDetailedCriteria> searchCriteria() {
+		return domainService.getDetailedStatisticsCriteria();
+	}
+	
 }

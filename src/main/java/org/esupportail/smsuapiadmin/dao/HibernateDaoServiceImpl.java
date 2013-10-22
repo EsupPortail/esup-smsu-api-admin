@@ -146,6 +146,13 @@ InitializingBean {
 		return null;
 	}
 
+	public Application getApplicationByName(String name) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(Application.class);
+		criteria.add(Restrictions.eq(Application.PROP_NAME, name));
+		List<Application> l = getHibernateTemplate().findByCriteria(criteria); 
+		return l.size() != 0 ? l.get(0) : null;
+	}
+
 	// ////////////////////////////////////////////////////////////
 	// Account
 	// ////////////////////////////////////////////////////////////
@@ -274,6 +281,20 @@ InitializingBean {
 		return getHibernateTemplate().loadAll(Sms.class);
 	}
 
+
+	public List<Map<String,?>> getSmsAccountsAndApplications() {
+
+		Criteria criteria = getCurrentSession().createCriteria(Sms.class);
+
+		criteria.setProjection(Projections.projectionList()
+				.add( Projections.distinct(Projections.projectionList()
+						.add(Projections.property(Sms.PROP_APP), Sms.PROP_APP)
+						.add(Projections.property(Sms.PROP_ACC), Sms.PROP_ACC))));
+
+		criteria.setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP);
+
+		return criteria.list();
+	}
 
 	public List<Map<String,?>> searchGroupSms(final Institution inst,
 			final Account acc, final Application app, final Date startDate,

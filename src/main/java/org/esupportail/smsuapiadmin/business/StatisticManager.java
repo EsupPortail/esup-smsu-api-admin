@@ -17,6 +17,7 @@ import org.esupportail.smsuapiadmin.dao.beans.Sms;
 import org.esupportail.smsuapiadmin.dao.beans.SmsStatus;
 import org.esupportail.smsuapiadmin.dao.beans.Statistic;
 import org.esupportail.smsuapiadmin.dto.DTOConverterService;
+import org.esupportail.smsuapiadmin.dto.beans.UIDetailedCriteria;
 import org.esupportail.smsuapiadmin.dto.beans.UIDetailedSummary;
 import org.esupportail.smsuapiadmin.dto.beans.UIStatistic;
 
@@ -120,6 +121,21 @@ public class StatisticManager
 			result.add(uiStat);
 		}
 
+		return result;
+	}
+
+	/**
+	 * Returns accounts and applications for detailed statistics
+	 * 
+	 * @return
+	 */
+	public List<UIDetailedCriteria> getDetailedStatisticsCriteria() {
+		final List<UIDetailedCriteria> result = new ArrayList<UIDetailedCriteria>();
+		for (Map<String,?> map : daoService.getSmsAccountsAndApplications()) {			
+			final Application app = (Application) map.get(Sms.PROP_APP);
+			final Account acc = (Account) map.get(Sms.PROP_ACC);
+			result.add(new UIDetailedCriteria(acc.getLabel(), app.getName(), app.getInstitution().getLabel()));
+		}
 		return result;
 	}
 

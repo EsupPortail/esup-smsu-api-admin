@@ -13,6 +13,7 @@ import org.esupportail.commons.exceptions.UserNotFoundException;
 import org.esupportail.smsuapiadmin.domain.beans.EnumeratedFunction;
 import org.esupportail.smsuapiadmin.dto.beans.UIAccount;
 import org.esupportail.smsuapiadmin.dto.beans.UIApplication;
+import org.esupportail.smsuapiadmin.dto.beans.UIDetailedCriteria;
 import org.esupportail.smsuapiadmin.dto.beans.UIDetailedSummary;
 import org.esupportail.smsuapiadmin.dto.beans.UIRole;
 import org.esupportail.smsuapiadmin.dto.beans.UIStatistic;
@@ -140,6 +141,8 @@ public interface DomainService extends Serializable {
 	 */
 	List<UIStatistic> getStatisticsSorted();
 
+	List<UIDetailedCriteria> getDetailedStatisticsCriteria();
+
 	/**
 	 * Searches detailed summaries matching criterias.
 	 * 
@@ -151,7 +154,7 @@ public interface DomainService extends Serializable {
 	 * @return
 	 */
 	List<UIDetailedSummary> searchDetailedSummaries(String institution,
-							Long accountId, Long applicationId, Date startDate, Date endDate, int maxResults) throws Exception;
+							String accountName, String applicationName, Date startDate, Date endDate, int maxResults) throws Exception;
 
 	/**
 	 * Returns all the roles.

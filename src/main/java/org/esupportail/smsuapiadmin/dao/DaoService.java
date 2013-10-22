@@ -118,6 +118,8 @@ public interface DaoService extends Serializable {
 	 */
 	Application getApplicationById(int id);
 
+	Application getApplicationByName(String name);
+	
 	/**
 	 * Returns all the SMS's that reference the application.
 	 * 
@@ -196,6 +198,8 @@ public interface DaoService extends Serializable {
 	 */
 	List<Sms> getSms();
 
+	List<Map<String,?>> getSmsAccountsAndApplications();
+	
 	/**
 	 * Returns identifiers of all sms' group matching criterias.
 	 * 

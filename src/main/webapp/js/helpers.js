@@ -20,7 +20,8 @@ this.objectValues = function (o) {
 this.objectSlice = function (o, fields) {
     var r = {};
     angular.forEach(fields, function (field) {
-	r[field] = o[field];
+	if (field in o)
+	    r[field] = o[field];
     });
     return r;
 };
@@ -28,6 +29,14 @@ this.array2hash = function (array, field) {
     var h = {};
     angular.forEach(array, function (e) {
 	h[e[field]] = e;
+    });
+    return h;
+};
+this.array2hashMulti = function (array, field) {
+    var h = {};
+    angular.forEach(array, function (e) {
+	var k = e[field];
+	(h[k] = h[k] || []).push(e);
     });
     return h;
 };
@@ -51,6 +60,14 @@ this.simpleFind = function (array, f) {
 	if (f(e)) r = e; 
     });
     return r;
+};
+this.uniqWith = function (array, f) {
+    var o = {};
+    angular.forEach(array, function (e) {
+	var k = f(e);
+	if (!(k in o)) o[k] = e;
+    });
+    return h.objectValues(o);
 };
 
 this.jsonpLogin = function () {

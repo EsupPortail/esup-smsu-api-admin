@@ -1,3 +1,16 @@
+// taken verbatim from angular.js (except for forEach -> angular.forEach)
+function isDefined(value){return typeof value != 'undefined';}
+function parseKeyValue(/**string*/keyValue) {
+  var obj = {}, key_value, key;
+  angular.forEach((keyValue || "").split('&'), function(keyValue){
+    if (keyValue) {
+      key_value = keyValue.split('=');
+      key = decodeURIComponent(key_value[0]);
+      obj[key] = isDefined(key_value[1]) ? decodeURIComponent(key_value[1]) : true;
+    }
+  });
+  return obj;
+}
 
 var myAppTest = angular.module('myAppTest', ['myApp', 'ngMockE2E']);
 
@@ -103,16 +116,30 @@ myAppTest.run(function($http, $httpBackend, h) {
 	{"institution":"Université Rouge","appName":"ent.univ-rouge.fr","accountName":"ent.univ-rouge.fr","date":1380101835000,"nbDelivered":21,"nbInProgress":1,"errors":"0","nbSms":22},
 	{"institution":"Université Rouge","appName":"ent.univ-rouge.fr","accountName":"ent.univ-rouge.fr","date":1380099148000,"nbDelivered":2,"nbInProgress":1,"errors":"0","nbSms":3},
     ];
+    function summary_detailed_criteria() {
+	var r = h.array_map(summary_detailed_base, function (e) {
+	    return h.objectSlice(e, ["institution", "appName", "accountName"]);
+	});
+	r = h.uniqWith(r, angular.toJson);
+	return [200,r];
+    }
     function summary_detailed(method, url, data) {
-	var nbResults = url.match(/maxResults=(.*)/)[1];
-	nbResults = Math.min(nbResults, 80);
-	var nbBase = summary_detailed_base.length;
+	var search = parseKeyValue(url.match(/\?(.*)/)[1].replace('+', ' '));
+
+	var filteredBase = h.simpleFilter(summary_detailed_base, function (e) {
+	    return !('account' in search && search.account !== e.accountName) &&
+		   !('app' in search && search.app !== e.appName) &&
+		   !('institution' in search && search.institution !== e.institution);
+	});
+	var nbBase = filteredBase.length;
+	var nbResults = nbBase < 5 ? nbBase : Math.min(search.maxResults, 80);
 	var r = [];
 	for (var i = 0; i < nbResults; i++) {
-	    r.push(angular.copy(summary_detailed_base[i % nbBase]));
+	    r.push(angular.copy(filteredBase[i % nbBase]));
 	}
 	return [200,r];
     }
+    $httpBackend.whenGET(/rest.summary.detailed.criteria/).respond(summary_detailed_criteria);
     $httpBackend.whenGET(/rest.summary.detailed/).respond(summary_detailed);
 
 

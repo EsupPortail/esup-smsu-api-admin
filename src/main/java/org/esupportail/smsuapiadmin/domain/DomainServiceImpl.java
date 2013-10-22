@@ -15,6 +15,7 @@ import org.esupportail.commons.utils.Assert;
 import org.esupportail.smsuapiadmin.business.AccountManager;
 import org.esupportail.smsuapiadmin.business.ApplicationManager;
 import org.esupportail.smsuapiadmin.business.InstitutionManager;
+import org.esupportail.smsuapiadmin.business.NotFoundException;
 import org.esupportail.smsuapiadmin.business.RoleManager;
 import org.esupportail.smsuapiadmin.business.StatisticManager;
 import org.esupportail.smsuapiadmin.business.UserManager;
@@ -25,6 +26,7 @@ import org.esupportail.smsuapiadmin.dao.beans.Institution;
 import org.esupportail.smsuapiadmin.domain.beans.EnumeratedFunction;
 import org.esupportail.smsuapiadmin.dto.beans.UIAccount;
 import org.esupportail.smsuapiadmin.dto.beans.UIApplication;
+import org.esupportail.smsuapiadmin.dto.beans.UIDetailedCriteria;
 import org.esupportail.smsuapiadmin.dto.beans.UIDetailedSummary;
 import org.esupportail.smsuapiadmin.dto.beans.UIRole;
 import org.esupportail.smsuapiadmin.dto.beans.UIStatistic;
@@ -254,27 +256,30 @@ public class DomainServiceImpl implements DomainService, InitializingBean {
 	}
 
 	public List<UIStatistic> getStatisticsSorted() {
-
 		return statisticManager.getStatisticsSorted();
 	}
 
+	public List<UIDetailedCriteria> getDetailedStatisticsCriteria() {
+		return statisticManager.getDetailedStatisticsCriteria();
+	}
+
 	public List<UIDetailedSummary> searchDetailedSummaries(
-			final String institution, final Long accountId,
-			final Long applicationId, final Date startDate, final Date endDate, int maxResults) throws Exception {
+			final String institution, final String accountLabel,
+			final String applicationName, final Date startDate, final Date endDate, int maxResults) throws Exception {
 		Institution inst = null;
 		if (institution != null) {
 			inst = institutionManager.getInstitutionByName(institution);
-			if (inst == null) throw new Exception("invalid institution " + institution);
+			if (inst == null) throw new NotFoundException("invalid institution " + institution);
 		}
 		Account acc = null;
-		if (accountId != null) {
-			acc = accountManager.getAccountById(""+accountId);
-			if (acc == null) throw new Exception("invalid accountId " + accountId);
+		if (accountLabel != null) {
+			acc = daoService.getAccountByName(accountLabel);
+			if (acc == null) throw new NotFoundException("invalid account " + accountLabel);
 		}
 		Application app = null;
-		if (applicationId != null) {
-			app = applicationManager.getApplicationById(""+applicationId);
-			if (app == null) throw new Exception("invalid applicationId " + applicationId);
+		if (applicationName != null) {
+			app = daoService.getApplicationByName(applicationName);
+			if (app == null) throw new NotFoundException("invalid application " + applicationName);
 		}
 		return statisticManager.searchDetailedSummaries(inst, acc, app, startDate, endDate, maxResults);
 	}

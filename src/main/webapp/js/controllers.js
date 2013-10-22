@@ -272,9 +272,23 @@ app.controller('ConsolidatedSummaryCtrl', function($scope, h) {
     };
 });
 
-app.controller('DetailedSummaryCtrl', function($scope, h) {
+app.controller('DetailedSummaryCtrl', function($scope, h, $location, $route) {
     $scope.initialNbResults = 50;
     $scope.nbResults = $scope.initialNbResults;
+    $scope.accountFilter = $location.search();
+
+    $scope.setAppAccount = function (e) {
+	e = h.objectSlice(e, ['institution', 'app', 'account']); // all but hashKey
+	$location.search(e);
+	$route.reload();
+    };
+
+    h.callRest('summary/detailed/criteria').then(function(flatList) {
+	flatList = h.array_map(flatList, function (e) {
+	    return h.getInstAppAccount(e);
+	});
+	$scope.appAccountsTree = h.array2hashMulti(flatList, 'institution');
+    });
 
     $scope.inProgress = false;
 
@@ -306,12 +320,18 @@ app.controller('DetailedSummaryCtrl', function($scope, h) {
     var computeGroupedBy = function() {
 	if ($scope.inProgress) return;
 	$scope.inProgress = true;
-	// select ACC_ID, APP_ID, SMS_DATE, count(sms_id) as nbSms, count(if (sms_state = "DELIVERED", 1, NULL)) as nbDelivered, count(if (sms_state = "ERROR", 1, NULL)) as nbErrors, count(if (sms_state = "IN_PROGRESS", 1, NULL)) as nbInProgress from sms  group by SMS_INITIAL_ID order by SMS_DATE DESC;
-	h.callRest('summary/detailed?maxResults=' + $scope.nbResults)
+	var fullFilter = angular.extend({ maxResults: $scope.nbResults }, $scope.accountFilter);
+	h.callRest('summary/detailed', fullFilter)
 	    .then(function (flatList) {
 		$scope.noMoreResults = flatList.length < $scope.nbResults;
 		$scope.groupedBy = computeGroupedByRaw(flatList);
 		$scope.inProgress = false;
+	    }, function (resp) {
+		// an error occured.
+		if (resp && resp.status == 404 && $scope.accountFilter.account) {
+		    // try removing accountFilter
+		    $scope.setAppAccount({});
+		}
 	    });
     };
 

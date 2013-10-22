@@ -8,7 +8,7 @@
 
 	<bean
 		id="domainService"
-		class="org.esupportail.smsuapiadmin.domain.DomainServiceImpl"
+		class="org.esupportail.smsuapiadmin.domain.DomainService"
 		>
 		<property name="daoService" ref="daoService" />
 		<property name="applicationManager" ref="applicationManager" />

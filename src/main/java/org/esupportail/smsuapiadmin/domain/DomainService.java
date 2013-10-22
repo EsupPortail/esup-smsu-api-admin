@@ -4,12 +4,25 @@
  */
 package org.esupportail.smsuapiadmin.domain;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 import org.esupportail.commons.exceptions.UserNotFoundException;
+import org.esupportail.commons.services.logging.Logger;
+import org.esupportail.commons.services.logging.LoggerImpl;
+import org.esupportail.commons.utils.Assert;
+import org.esupportail.smsuapiadmin.business.AccountManager;
+import org.esupportail.smsuapiadmin.business.ApplicationManager;
+import org.esupportail.smsuapiadmin.business.InstitutionManager;
+import org.esupportail.smsuapiadmin.business.NotFoundException;
+import org.esupportail.smsuapiadmin.business.RoleManager;
+import org.esupportail.smsuapiadmin.business.StatisticManager;
+import org.esupportail.smsuapiadmin.business.UserManager;
+import org.esupportail.smsuapiadmin.dao.DaoService;
+import org.esupportail.smsuapiadmin.dao.beans.Account;
+import org.esupportail.smsuapiadmin.dao.beans.Application;
+import org.esupportail.smsuapiadmin.dao.beans.Institution;
 import org.esupportail.smsuapiadmin.domain.beans.EnumeratedFunction;
 import org.esupportail.smsuapiadmin.dto.beans.UIAccount;
 import org.esupportail.smsuapiadmin.dto.beans.UIApplication;
@@ -18,157 +31,277 @@ import org.esupportail.smsuapiadmin.dto.beans.UIDetailedSummary;
 import org.esupportail.smsuapiadmin.dto.beans.UIRole;
 import org.esupportail.smsuapiadmin.dto.beans.UIStatistic;
 import org.esupportail.smsuapiadmin.dto.beans.UIUser;
+import org.springframework.beans.factory.InitializingBean;
 
 /**
- * The domain service interface.
+ * The basic implementation of DomainService.
+ * 
+ * See /properties/domain/domain-example.xml
  */
-public interface DomainService extends Serializable {
+public class DomainService implements InitializingBean {
+
+	/**
+	 * The serialization id.
+	 */
+	private static final long serialVersionUID = -8200845058340254019L;
+
+	/**
+	 * {@link DaoService}.
+	 */
+	private DaoService daoService;
+
+	/**
+	 * {@link SecurityManager}.
+	 */
+	private UserManager userManager;
+
+	/**
+	 * The application manager.
+	 */
+	private ApplicationManager applicationManager;
+
+	/**
+	 * The account manager.
+	 */
+	private AccountManager accountManager;
+
+	/**
+	 * The institution manager.
+	 */
+	private InstitutionManager institutionManager;
+
+	/**
+	 * The month manager.
+	 */
+	private StatisticManager statisticManager;
+
+	/**
+	 * The month manager.
+	 */
+	private RoleManager roleManager;
+
+	/**
+	 * Logger de classe.
+	 */
+	private final Logger logger = new LoggerImpl(getClass());
+
+	/**
+	 * Bean constructor.
+	 */
+	public DomainService() {
+		super();
+	}
+
+	/**
+	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
+	 */
+	public void afterPropertiesSet() throws Exception {
+		Assert.notNull(this.daoService, "property daoService of class "
+				+ this.getClass().getName() + " can not be null");
+	}
 
 	// ////////////////////////////////////////////////////////////
 	// User
 	// ////////////////////////////////////////////////////////////
 
-	/**
-	 * @param id
-	 * @return the User instance that corresponds to an id.
-	 * @throws UserNotFoundException
-	 */
-	UIUser getUserById(Integer id) throws UserNotFoundException;
+	public UIUser getUserById(final Integer id) throws UserNotFoundException {
+		logger.info("Recherche du user : id=" + id);
+		return userManager.getUserById(id);
+	}
+
+	public UIUser getUserByLogin(final String login) {
+		logger.info("Recherche du user : login=" + login);
+		return userManager.getUserByLogin(login);
+	}
 
 	/**
-	 * Returns the user with the specified 'login'.
-	 * 
-	 * @param id
-	 * @return
+	 * @see org.esupportail.smsuapiadmin.domain.DomainService#getUsers()
 	 */
-	UIUser getUserByLogin(String id);
+	public List<UIUser> getUsers() {
+		return userManager.getUsers();
+	}
 
 	/**
-	 * @return the list of all the users.
+	 * @see org.esupportail.smsuapiadmin.domain.DomainService#getUsers(beans.UIUser)
 	 */
-	List<UIUser> getUsers();
+	public List<UIUser> getUsers(final UIUser currentUser) {
+		return userManager.getUsers(currentUser);
+	}
 
-	/**
-	 * @return the list of all the users.
-	 */
-	List<UIUser> getUsers(UIUser currentUser);
 	
-	/**
-	 * Creates a new user.
-	 * 
-	 * @param user
-	 */
-	void addUser(UIUser user);
+	public void updateUser(final UIUser user) {
+		userManager.updateUser(user);
+	}
+
+	public void addUser(final UIUser user) {
+		userManager.addUser(user);
+	}
+
+	public void deleteUser(int id) {
+		userManager.delete(id);
+	}
+
+	public Set<EnumeratedFunction> getUserFunctions(String login) {
+		return userManager.getUserFunctions(login);
+	}
 
 	/**
-	 * Update a user.
-	 * 
-	 * @param user
+	 * Setter for 'userManager'.
 	 */
-	void updateUser(UIUser user);
+	public void setUserManager(final UserManager userManager) {
+		this.userManager = userManager;
+	}
 
 	/**
-	 * Deletes a user.
-	 * 
-	 * @param user
+	 * @param daoService
+	 *            the daoService to set
 	 */
-	void deleteUser(int id);
+	public void setDaoService(final DaoService daoService) {
+		this.daoService = daoService;
+	}
 
-        Set<EnumeratedFunction> getUserFunctions(String login);
-
-	// ////////////////////////////////////////////////////////////
-	// Authorizations
-	// ////////////////////////////////////////////////////////////
-
-	/**
-	 * 
-	 * @return a list containing all the applications
-	 */
-	List<UIApplication> getApplications();
-
-	UIApplication getApplication(int id);
-
-	/**
-	 * Adds the application in the database.
-	 * 
-	 * @param uiApplication
-	 */
-	void addApplication(UIApplication uiApplication);
-
-	/**
-	 * Updates the application in the database.
-	 * 
-	 * @param application
-	 */
-	void updateApplication(UIApplication application);
-
-	/**
-	 * Deletes the application from the database.
-	 * 
-	 * @param application
-	 */
-	void deleteApplication(int id);
+	public List<UIApplication> getApplications() {
+		return applicationManager.getAllUIApplications();
+	}
 
 	/**
 	 * 
-	 * @return a list containing all the accounts
+	 * @param applicationManager
 	 */
-	List<UIAccount> getAccounts();
+	public void setApplicationManager(
+			final ApplicationManager applicationManager) {
+		this.applicationManager = applicationManager;
+	}
+
+	public UIApplication getApplication(int id) {
+		return applicationManager.getUIApplication(id);
+	}
+
+	public void addApplication(final UIApplication uiApplication) {
+		applicationManager.addApplication(uiApplication);
+	}
+
+	public void updateApplication(final UIApplication uiApplication) {
+		applicationManager.updateApplication(uiApplication);
+	}
+
+	public void deleteApplication(int id) {
+		applicationManager.deleteApplication(id);
+	}
 
 	/**
-	 * Adds the account in the database.
+	 * Setter for 'accountManager'.
 	 * 
-	 * @param uiAccount
+	 * @param accountManager
 	 */
-	void addAccount(UIAccount uiAccount);
+	public void setAccountManager(final AccountManager accountManager) {
+		this.accountManager = accountManager;
+	}
 
 	/**
-	 * Updates the account in the database.
+	 * Setter for 'institutionManager'.
 	 * 
-	 * @param account
+	 * @param institutionManager
 	 */
-	void updateAccount(UIAccount account);
+	public void setInstitutionManager(
+			final InstitutionManager institutionManager) {
+		this.institutionManager = institutionManager;
+	}
 
 	/**
-	 * 
-	 * @return a list containing all the institutions
-	 */
-	List<String> getInstitutions();
-
-	/**
-	 * 
-	 * @return a sorted list containing all the statistics
-	 */
-	List<UIStatistic> getStatisticsSorted();
-
-	List<UIDetailedCriteria> getDetailedStatisticsCriteria();
-
-	/**
-	 * Searches detailed summaries matching criterias.
-	 * 
-	 * @param institution
-	 * @param accountId
-	 * @param applicationId
-	 * @param startDate
-	 * @param endDate
-	 * @return
-	 */
-	List<UIDetailedSummary> searchDetailedSummaries(String institution,
-							String accountName, String applicationName, Date startDate, Date endDate, int maxResults) throws Exception;
-
-	/**
-	 * Returns all the roles.
+	 * Getter for 'institutionManager'.
 	 * 
 	 * @return
 	 */
-	List<UIRole> getAllRoles();
+	public InstitutionManager getInstitutionManager() {
+		return institutionManager;
+	}
 
 	/**
-	 * Returns true if the login is already used.
+	 * Setter for 'statisticManager'.
 	 * 
-	 * @param strValue
+	 * @param statisticManager
+	 */
+	public void setStatisticManager(final StatisticManager statisticManager) {
+		this.statisticManager = statisticManager;
+	}
+
+	/**
+	 * Getter for 'statisticManager'.
+	 * 
 	 * @return
 	 */
-	boolean loginAlreadyUsed(String login);
+	public StatisticManager getStatisticManager() {
+		return statisticManager;
+	}
+
+	public List<UIAccount> getAccounts() {
+		return accountManager.getAllUIAccounts();
+	}
+
+	public void addAccount(final UIAccount uiAccount) {
+		accountManager.addAccount(uiAccount);
+	}
+
+	public void updateAccount(final UIAccount uiAccount) {
+		accountManager.updateAccount(uiAccount);
+	}
+
+	public List<String> getInstitutions() {
+		return institutionManager.getAllUIInstitutions();
+	}
+
+	public List<UIStatistic> getStatistics() {
+		return statisticManager.getAllUIStatistics();
+	}
+
+	public List<UIStatistic> getStatisticsSorted() {
+		return statisticManager.getStatisticsSorted();
+	}
+
+	public List<UIDetailedCriteria> getDetailedStatisticsCriteria() {
+		return statisticManager.getDetailedStatisticsCriteria();
+	}
+
+	public List<UIDetailedSummary> searchDetailedSummaries(
+			final String institution, final String accountLabel,
+			final String applicationName, final Date startDate, final Date endDate, int maxResults) throws Exception {
+		Institution inst = null;
+		if (institution != null) {
+			inst = institutionManager.getInstitutionByName(institution);
+			if (inst == null) throw new NotFoundException("invalid institution " + institution);
+		}
+		Account acc = null;
+		if (accountLabel != null) {
+			acc = daoService.getAccountByName(accountLabel);
+			if (acc == null) throw new NotFoundException("invalid account " + accountLabel);
+		}
+		Application app = null;
+		if (applicationName != null) {
+			app = daoService.getApplicationByName(applicationName);
+			if (app == null) throw new NotFoundException("invalid application " + applicationName);
+		}
+		return statisticManager.searchDetailedSummaries(inst, acc, app, startDate, endDate, maxResults);
+	}
+
+	public List<UIRole> getAllRoles() {
+		return roleManager.getAllUIRoles();
+	}
+
+	/**
+	 * Setter for 'roleManager'.
+	 * 
+	 * @param roleManager
+	 */
+	public void setRoleManager(final RoleManager roleManager) {
+		this.roleManager = roleManager;
+	}
+
+	/**
+	 * Returns true if the login is used.
+	 */
+	public boolean loginAlreadyUsed(final String login) {
+		return userManager.loginAlreadyUsed(login);
+	}
 
 }

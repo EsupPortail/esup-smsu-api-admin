@@ -16,7 +16,7 @@ import org.esupportail.smsuapiadmin.dao.beans.SmsStatus;
  * @author MZRL3760
  * 
  */
-public class UIDetailedSummary {
+public class UIDetailedSummary implements Comparable<UIDetailedSummary> {
 
 	/**
 	 * Log4j logger.
@@ -182,5 +182,10 @@ public class UIDetailedSummary {
 			result += cpt;
 		}
 		return result;
+	}
+
+	@Override
+	public int compareTo(UIDetailedSummary arg0) {
+		return date.compareTo(arg0.getDate());
 	}
 }

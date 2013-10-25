@@ -198,6 +198,8 @@ public interface DaoService extends Serializable {
 	 */
 	List<Sms> getSms();
 
+	Sms getSmsById(Integer id);
+
 	List<Map<String,?>> getSmsAccountsAndApplications();
 	
 	/**
@@ -210,9 +212,11 @@ public interface DaoService extends Serializable {
 	 * @param endDate
 	 * @return
 	 */
-	List<Map<String,?>> searchGroupSms(Institution inst, Account acc,
+	List<Sms> searchGroupSmsWithNullInitialId(Institution inst, Account acc,
 			Application app, Date startDate, Date endDate, int maxResults);
 
+	List<List<?>> searchGroupSmsWithInitialId(Institution inst, Account acc,
+			Application app, Date startDate, Date endDate, int maxResults);
 
 	/**
 	 * Returns the role with the specified name.

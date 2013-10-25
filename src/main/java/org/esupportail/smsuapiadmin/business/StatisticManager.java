@@ -1,6 +1,7 @@
 package org.esupportail.smsuapiadmin.business;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.EnumMap;
 import java.util.List;
@@ -160,52 +161,71 @@ public class StatisticManager
 		// les statistiques concernent ce groupe d'envoi.
 
 		// on commence par recuperer tous les groupes d'envois correspondant
-		// aux criteres
-		final List<Map<String,?>> groupSms = daoService.searchGroupSms(inst, acc, app, startDate, endDate, maxResults);
+		// aux criteres et ayant un SMS_INITIAL_ID
+		final List<List<?>> groupSms = daoService.searchGroupSmsWithInitialId(inst, acc, app, startDate, endDate, maxResults);
 		
 		// pour chaque groupe d'envoi, on construit le releve detaille
-		//for (final Integer smsInitialId : groupSms) {
-		for (final Map<String,?> map : groupSms) {
-
-			final Application application = (Application) map.get("application");
-			final Integer smsInitialId = (Integer) map.get(Sms.PROP_INITIAL_ID);
+		for (final List<?> map : groupSms) {
+			final Application application = (Application) map.get(0);
+			final Integer smsInitialId = (Integer) map.get(1);
+			
 			final List<Sms> smsList = daoService
 					.getSmsByApplicationAndInitialId(application, smsInitialId);
-			final UIDetailedSummary summary = new UIDetailedSummary(getI18nService());
-
-			// on recupere les objets institution, application et account
-			// identique pour tous les sms d'un meme groupe
-			assert !smsList.isEmpty();
-			final Sms firstSms = smsList.get(0);
-			final String uiInst = dtoConverterService.convertToUI(firstSms.getApp().getInstitution());
-			summary.setInstitution(uiInst);
-			summary.setAppName(firstSms.getApp().getName());
-			summary.setAccountName(firstSms.getAcc().getLabel());
-
-			Date minDate = null;
-
-			// le decompte
-			final Map<SmsStatus, Integer> stats = new EnumMap<SmsStatus, Integer>(SmsStatus.class);
-			for (SmsStatus status : SmsStatus.values()) stats.put(status, new Integer(0));
-
-			// on parcourt les sms
-			for (final Sms sms : smsList) {
-				// gestion de la date
-				final Date smsDate = sms.getDate();
-				if (minDate == null || smsDate.before(minDate)) {
-					minDate = smsDate;
-				}
-				// gestion du statut
-				final SmsStatus status = SmsStatus.valueOf(sms.getState());
-				stats.put(status, stats.get(status) + 1);
-			}
-			// la date
-			summary.setDate(minDate);
-			summary.setStatistics(stats);
-
-			result.add(summary);
+			result.add(computeDetailedSummary(smsList));
 		}
-		return result;
+
+		// on recommence avec les envois n'ayant pas de SMS_INITIAL_ID
+		List<Sms> smsNoInitialId = daoService.searchGroupSmsWithNullInitialId(inst, acc, app, startDate, endDate, maxResults);		
+		for (Sms sms : smsNoInitialId) {
+			result.add(computeDetailedSummary(Collections.singletonList(sms)));
+		}
+				
+		// il faut retrier le tout, puis limiter le nombre de results a maxResults
+		Collections.sort(result, Collections.reverseOrder());	
+		return truncateList(result, maxResults);
+	}
+
+	private <T> List<T> truncateList(List<T> list, int nb) {
+		try {
+			return list.subList(0, nb);
+		} catch (IndexOutOfBoundsException e) {
+			// the list is smaller than maxResults, keeping result unchanged
+			return list;
+		}
+	}
+
+	private UIDetailedSummary computeDetailedSummary(final List<Sms> smsList) {
+		assert !smsList.isEmpty();
+		final Sms firstSms = smsList.get(0);
+		final UIDetailedSummary summary = new UIDetailedSummary(getI18nService());
+
+		// on recupere les objets institution application et account qui sont identiques pour tous les sms d'un meme groupe
+		summary.setInstitution(firstSms.getApp().getInstitution().getLabel());
+		summary.setAppName(firstSms.getApp().getName());
+		summary.setAccountName(firstSms.getAcc().getLabel());
+
+		computeMinDateAndStats(smsList, summary);
+
+		return summary;
+	}
+
+	private void computeMinDateAndStats(final List<Sms> smsList, final UIDetailedSummary summary) {
+		Date minDate = null;
+
+		// le decompte
+		final Map<SmsStatus, Integer> stats = new EnumMap<SmsStatus, Integer>(SmsStatus.class);
+		for (SmsStatus status : SmsStatus.values()) stats.put(status, new Integer(0));
+
+		for (final Sms sms : smsList) {
+			final Date smsDate = sms.getDate();
+			if (minDate == null || smsDate.before(minDate)) {
+				minDate = smsDate;
+			}
+			final SmsStatus status = SmsStatus.valueOf(sms.getState());
+			stats.put(status, stats.get(status) + 1);
+		}
+		summary.setDate(minDate);
+		summary.setStatistics(stats);
 	}
 
 

@@ -27,6 +27,7 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
@@ -281,6 +282,12 @@ InitializingBean {
 		return getHibernateTemplate().loadAll(Sms.class);
 	}
 
+	public Sms getSmsById(Integer id) {
+		DetachedCriteria criteria = DetachedCriteria.forClass(Sms.class);
+		criteria.add(Restrictions.eq(Sms.PROP_ID, id));
+		List<Sms> l = getHibernateTemplate().findByCriteria(criteria); 
+		return l.size() != 0 ? l.get(0) : null;
+	}
 
 	public List<Map<String,?>> getSmsAccountsAndApplications() {
 
@@ -296,17 +303,40 @@ InitializingBean {
 		return criteria.list();
 	}
 
-	public List<Map<String,?>> searchGroupSms(final Institution inst,
+	public List<List<?>> searchGroupSmsWithInitialId(final Institution inst,
+			final Account acc, final Application app, final Date startDate,
+			final Date endDate, int maxResults) {
+
+		Criteria criteria = criteriaSearchSms(inst, acc, app, startDate, endDate, maxResults);
+
+		criteria.add(Restrictions.isNotNull(Sms.PROP_INITIAL_ID));
+
+		criteria.setProjection(Projections.projectionList()
+				.add( Projections.distinct(Projections.projectionList()
+						.add(Projections.property(Sms.PROP_APP))
+						.add(Projections.property(Sms.PROP_INITIAL_ID)))));
+
+		criteria.setResultTransformer(Transformers.TO_LIST);
+		return criteria.list();
+	}
+
+	public List<Sms> searchGroupSmsWithNullInitialId(final Institution inst,
+			final Account acc, final Application app, final Date startDate,
+			final Date endDate, int maxResults) {
+
+		Criteria criteria = criteriaSearchSms(inst, acc, app, startDate, endDate, maxResults);
+
+		criteria.add(Restrictions.isNull(Sms.PROP_INITIAL_ID));
+
+		return (List<Sms>) criteria.list();
+	}
+
+	private Criteria criteriaSearchSms(final Institution inst,
 			final Account acc, final Application app, final Date startDate,
 			final Date endDate, int maxResults) {
 
 		Criteria criteria = getCurrentSession().createCriteria(Sms.class);
-
-		criteria.setProjection(Projections.projectionList()
-				.add( Projections.distinct(Projections.projectionList()
-						.add(Projections.property(Sms.PROP_APP), "application")
-						.add(Projections.property(Sms.PROP_INITIAL_ID), Sms.PROP_INITIAL_ID))));
-
+		
 		if (inst != null) {
 			criteria.createCriteria(Sms.PROP_APP).add(Restrictions.eq(Application.PROP_INS, inst));
 		}
@@ -339,10 +369,8 @@ InitializingBean {
 
 		criteria.addOrder(Order.desc(Sms.PROP_DATE));
 		if (maxResults > 0) criteria.setMaxResults(maxResults);
-
-		criteria.setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP);
-
-		return criteria.list();
+		
+		return criteria;
 	}
 
 	public Role getRoleByName(final String name) {

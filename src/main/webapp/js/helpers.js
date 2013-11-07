@@ -145,6 +145,7 @@ function xhrRequest(args) {
 	if (status == 401) {
 	    if (xhrRequest401State) {
 		alert("fatal, relog failed");
+		return $q.reject(resp);
 	    } else {
 		xhrRequest401State = true;
 		return h.iframeLogin().then(function (loggedUser) {
@@ -160,6 +161,7 @@ function xhrRequest(args) {
 	    }
 	} else if (status == 0) {
 	    alert("unknown failure (server seems to be down)");
+	    return $q.reject(resp);
 	} else {
 	    var msg = "unknown error " + status;
 	    if (resp.data) {
@@ -179,7 +181,6 @@ function xhrRequest(args) {
 	    alert(msg);
 	    return $q.reject(resp);
 	}
-	return resp;
     };
     return $http(args).then(function (resp) {
 	if (xhrRequest401State) { console.log('rest after relog success'); console.log(resp); }

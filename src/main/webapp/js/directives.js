@@ -8,6 +8,7 @@ app.directive('whenScrolled', function() {
         $(window).bind('scroll', function() {
 	    var docViewBottom = $(window).scrollTop() + $(window).height();
 	    var elemBottom = $(elem).offset().top + $(elem).height();
+	    if (elemBottom === 0) return; // why? in some cases, the event is triggered and the height/position is unknown (on chromium at least)
 	    //var t = elemBottom + " <= " + docViewBottom
 	    //$("#debug").text(t);
 	    if ((elemBottom <= docViewBottom)) {

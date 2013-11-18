@@ -323,7 +323,7 @@ app.controller('DetailedSummaryCtrl', function($scope, h, $location, $route) {
 	var fullFilter = angular.extend({ maxResults: $scope.nbResults }, $scope.accountFilter);
 	h.callRest('summary/detailed', fullFilter)
 	    .then(function (flatList) {
-		$scope.noMoreResults = flatList.length < $scope.nbResults;
+		$scope.noMoreResults = flatList.length < fullFilter.maxResults;
 		$scope.groupedBy = computeGroupedByRaw(flatList);
 		$scope.inProgress = false;
 	    }, function (resp) {
@@ -336,6 +336,7 @@ app.controller('DetailedSummaryCtrl', function($scope, h, $location, $route) {
     };
 
     $scope.showMoreResults = function () {
+	if ($scope.noMoreResults) return;
 	$scope.nbResults = $scope.nbResults + $scope.initialNbResults;
 	computeGroupedBy();
     };

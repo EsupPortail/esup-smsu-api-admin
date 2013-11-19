@@ -264,11 +264,22 @@ app.controller('ConsolidatedSummaryCtrl', function($scope, h) {
 	    e.nbReceived = e.nbSendedSMS - e.nbSMSInError;
 	    e.failureRate = Math.round(e.nbSMSInError / e.nbSendedSMS * 100) + "%";
 	});
+	$scope.flatList = flatList;
 	$scope.appAccountsTree = computeTree(flatList);
     });
 
     $scope.setAppAccount = function(e) {
 	$scope.appAccount = e;
+    };
+
+    function toStringListList(list, attrs) {
+	return list.map(function (o) {
+	    return attrs.map(function (attr) { return ""+o[attr]; });
+	});
+    }
+    $scope.exportCSV = function (event) {
+	var rows = toStringListList($scope.flatList, ['institution', 'app', 'account', 'month', 'nbSendedSMS', 'nbReceived']);
+	h.exportCSV(event.target.parentElement, rows, "smsuapi-consolidated.csv");
     };
 });
 

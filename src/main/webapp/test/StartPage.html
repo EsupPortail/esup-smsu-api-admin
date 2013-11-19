@@ -23,7 +23,8 @@
 <!--script src="//ticetest.univ-paris1.fr/prigaux/ui-bootstrap-popover-tpls-0.4.0.min.js"></script-->
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-route.js"></script>
 
 
 <script src="../js/angular-locale_fr-fr.js"></script>
@@ -41,8 +42,9 @@
 
 <div style="position: fixed; bottom: 10px; right: 10px; display: none" id="debug"> XXX</div>
 
-<div ng-app="myAppTest" ng-show="loggedUser" ng-include="'../partials/main.html'" ng-controller="MainCtrl"></div>
-
+<div ng-app="myAppTest" ng-show="loggedUser" ng-controller="MainCtrl">
+  <div ng-include="'../partials/main.html'"></div>
+</div>
   
 </body>
 </html>

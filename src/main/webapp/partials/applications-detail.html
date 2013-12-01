@@ -16,16 +16,7 @@
     </div>
   </div>
 
-  <div class="form-group">
-    <label class="col-md-3 control-label">Authentification</label>
-    <div class="col-md-6">
-      <select ng-model="authKind" ng-options="authKind.id as authKind.text for authKind in authKinds" class="form-control"></select>
-    </div>
-  </div>
-
- <div class="animate-switch-container" ng-switch on="authKind">
-
-  <div ng-switch-when="password" class="form-group"
+  <div class="form-group"
        ng-class="{'has-error': submitted && myForm.password.$invalid}">
     <label class="col-md-3 control-label" for="password">Mot de passe</label>
     <div class="col-md-6">
@@ -33,16 +24,6 @@
       <span ng-show="submitted && myForm.password.$error.required" class="help-block">Required</span>
     </div>
   </div>
-
-  <div ng-switch-when="certificate" class="form-group">
-    <label class="col-md-3 control-label" for="certificate">Certificat</label>
-    <div class="col-md-6">
-      <input type="file" name="certificate" base64content="app.certificate" class="form-control" required>
-      <span ng-show="app.certificate" class="help-block">a certificate: {{app.certificate.length}} : {{app.certificate}}</span>
-    </div>
-  </div>
-
- </div>
 
  <div class="form-group" ng-class="{'has-error': submitted && myForm.institution.$invalid}">
     <label class="col-md-3 control-label" for="institution">Etablissement</label>

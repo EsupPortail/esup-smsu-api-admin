@@ -145,7 +145,7 @@ public class ApplicationManager extends AbstractApplicationAwareBean {
 		Application appPersistent = daoService.getApplicationById(app.getId());
 		if (appPersistent == null) throw new NotFoundException("invalid application " + app.getId());
 		appPersistent.setName(app.getName());
-		appPersistent.setCertificate(app.getCertificate());
+		appPersistent.setPassword(app.getPassword());
 		appPersistent.setAccount(app.getAccount());
 		appPersistent.setInstitution(app.getInstitution());
 		appPersistent.setQuota(app.getQuota());

@@ -82,7 +82,7 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 
 		result.setId(app.getId());
 		result.setName(app.getName());
-		result.setCertificateOrPassword(app.getCertificate());
+		result.setPassword(app.getPassword());
 
 		result.setAccountName(app.getAccount().getLabel());
 		String uiInst = convertToUI(app.getInstitution());
@@ -202,8 +202,7 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 		// le nom
 		result.setName(uiApp.getName());
 
-		// le certificat
-		result.setCertificate(uiApp.computeCertificateOrPassword());
+		result.setPassword(uiApp.getPassword());
 
 		result.setQuota(uiApp.getQuota());
 

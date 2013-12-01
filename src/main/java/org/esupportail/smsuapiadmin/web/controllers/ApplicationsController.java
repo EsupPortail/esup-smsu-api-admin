@@ -85,17 +85,8 @@ public class ApplicationsController {
 			throw new InvalidParameterException("APPLICATION.ERROR.INVALIDINSTITUTION");
 		if (quota == null || quota < 0)
 			throw new InvalidParameterException("APPLICATION.ERROR.INVALIDQUOTA");
-
-		if (application.getPassword() == null) {		
-			if (application.getCertificate() == null)
-				throw new InvalidParameterException("APPLICATION.ERROR.INVALIDCERTIFICATE");
-
-			application.setPassword(null); 
-		} else {
-			if (StringUtils.isBlank(application.getPassword())) {
-				throw new InvalidParameterException("APPLICATION.ERROR.EMPTYPASSWORD");
-			}
-			application.setCertificate(null);
+		if (StringUtils.isBlank(application.getPassword())) {
+			throw new InvalidParameterException("APPLICATION.ERROR.EMPTYPASSWORD");
 		}
 	}
 

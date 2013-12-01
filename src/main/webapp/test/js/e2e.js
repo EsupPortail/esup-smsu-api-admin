@@ -152,8 +152,6 @@ describe('Existing application view', function() {
 	expect(input('app.institution').val()).toBe("inst1");
 	//expect(input('app.accountName').val()).toBe("0");
 	expect(input('app.quota').val()).toBe("20000");
-	//expect(input('app.certificate').val()).toMatch(/^MIIDM/);
-	expect(element('form input[name="certificate"]').count()).toBe(1);
 	expect(element('form input[name="password"]').count()).toBe(0);
 
 	input('app.name').enter('app0');
@@ -191,8 +189,6 @@ describe('New application view', function() {
 	expect(element("a[ng-click='delete()']:visible").count()).toBe(0);
 	expect(input('app.name').val()).toBe("");
 	expect(input('app.password').val()).toBe("");
-	expect(element('form input[name="certificate"]').count()).toBe(0);
-	expect(element('form input[name="password"]').count()).toBe(1);
 
 	element("form button").click();
 

@@ -86,9 +86,6 @@ app.controller('UsersDetailCtrl', function($scope, h, $routeParams, $location) {
 app.controller('ApplicationsDetailCtrl', function($scope, h, $routeParams, $location) {
     var id = $routeParams.id;
 
-    $scope.authKinds = [{id:'certificate', text: 'Certificat'}, 
-			{id:'password', text: 'Mot de passe'}];
-
     h.getAccounts().then(function (list) {
 	$scope.accounts = list;
     });	
@@ -134,13 +131,11 @@ app.controller('ApplicationsDetailCtrl', function($scope, h, $routeParams, $loca
 
 	if (id === "new") {
 	    $scope.app = { isNew: true, accountName: null, quota: 0 };
-	    $scope.authKind = 'password';
 	} else {
 	    var id2app = h.array2hash(applications, 'id');
 
 	    if (id in id2app) {
 		$scope.app = id2app[id];
-		$scope.authKind = $scope.app.password ? 'password' : 'certificate';
 	    } else {
 		alert("invalid application " + id);
 	    }

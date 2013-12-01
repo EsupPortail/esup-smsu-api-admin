@@ -9,8 +9,6 @@ package org.esupportail.smsuapiadmin.dto.beans;
  */
 public class UIApplication {
 
-	private String PASSWORD_PREFIX_IN_CERTIFCATE = "PASSWORD:";
-
 	/** identifier (database) of the application. */
 	private Integer id;
 
@@ -20,28 +18,12 @@ public class UIApplication {
 	private String accountName;
 	private Long quota;
 	private java.lang.Long consumedSms;
-	private byte[] certificate;
 	private boolean deletable = true;
 
 	/**
 	 * Constructor.
 	 */
 	public UIApplication() {
-	}
-
-	public byte[] computeCertificateOrPassword() {
-		if (password != null)
-			return (PASSWORD_PREFIX_IN_CERTIFCATE + password).getBytes();
-		else
-			return certificate;
-	}
-
-	public void setCertificateOrPassword(byte[] certificate) {
-		String password = null;
-		if (certificate != null) 
-			password = removePrefixOrNull(new String(certificate), PASSWORD_PREFIX_IN_CERTIFCATE);
-		setCertificate(password == null ? certificate : null);
-		setPassword(password);
 	}
 
 	/**
@@ -133,24 +115,6 @@ public class UIApplication {
 	}
 
 	/**
-	 * Setter for 'certificate'.
-	 * 
-	 * @param certificate
-	 */
-	public void setCertificate(final byte[] certificate) {
-		this.certificate = certificate;
-	}
-
-	/**
-	 * Getter for 'certificate'.
-	 * 
-	 * @return
-	 */
-	public byte[] getCertificate() {
-		return certificate;
-	}
-
-	/**
 	 * Setter for 'password'.
 	 * 
 	 * @param password
@@ -184,10 +148,6 @@ public class UIApplication {
 	 */
 	public boolean isDeletable() {
 		return deletable;
-	}
-
-	private String removePrefixOrNull(String s, String prefix) {
-		return s.startsWith(prefix) ? s.substring(prefix.length()) : null;
 	}
 
 }

@@ -251,7 +251,7 @@ this.getInstAppAccount = function (e) {
     return { institution: e.institution, app: e.appName, account: e.accountName };
 };
 
-this.getUsers = function (roles) {
+this.getUsers = function () {
     return h.callRest('users').then(function(users) {
 	return h.array2hash(users, 'id');
     });

@@ -36,7 +36,7 @@ app.controller('MainCtrl', function($scope, h, $route, $parse, routes) {
 app.controller('EmptyCtrl', function($scope) {});
 
 app.controller('UsersCtrl', function($scope, h) {
-    h.getUsers($scope.roles).then(function (users) {
+    h.getUsers().then(function (users) {
 	$scope.users = users;
     });
 });
@@ -71,7 +71,7 @@ app.controller('UsersDetailCtrl', function($scope, h, $routeParams, $location) {
 	modify('delete');
     };
 
-    h.getUsers($scope.roles).then(function (users) {
+    h.getUsers().then(function (users) {
 	$scope.login2user = h.array2hash(h.objectValues(users), 'login');
 	if (id === "new") {
 	    $scope.user = { isNew: true };

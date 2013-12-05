@@ -24,8 +24,8 @@
 }
 
 .sidenav {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
 }
 .sidenav > li:first-child > a {
     border-radius: 6px 6px 0 0;
@@ -35,16 +35,16 @@
 }
 /* remove bootstrap stuff */
 .nav-stacked > li + li {
-    margin-top: 0;
+    margin-top: 0 !important;
 }
 .sidenav > li > a {
     border: 1px solid #E5E5E5;
     display: block;
     margin: 0 0 -1px;
-    padding: 8px 14px;
+    padding: 8px 14px !important;
 }
 .sidenav li.active a {
-    background-color: #428bca;
+    background-color: #428bca !important;
 }
 
 /* override uportal fss framework shit */
@@ -87,17 +87,17 @@ ul.breadcrumb { margin-left: 0; }
 }
 
 .breadcrumb .active {
-    font-size: 120%;
+    font-size: 120% !important;
 }
 
 @media (min-width: 767px) {
   .ifBottomNavbar, .breadcrumb .ifBottomNavbar { 
-     display: none;
+     display: none !important;
   }
 
   /* if not displayed, hide the separator */
   .breadcrumb li.ifBottomNavbar + li:before {
-     content: none;
+     content: none !important;
   }
 }
 

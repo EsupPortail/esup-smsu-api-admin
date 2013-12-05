@@ -3,7 +3,7 @@
   document.esupSmsuApiAdmin = { baseURL: '{{baseURL}}', useTestStaticJson: {{useTestStaticJson}} };
 </script>
 
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="{{baseURL}}/css/bootstrap-scoped.css" rel="stylesheet">
 
 <!--link href="//angular-ui.github.com/ng-grid/css/ng-grid.css" rel="stylesheet" type="text/css" /-->
 <link href="{{baseURL}}/css/ng-grid.css" rel="stylesheet" type="text/css" />
@@ -30,7 +30,7 @@
 <div style="position: fixed; bottom: 10px; right: 10px; display: none" id="debug"> XXX</div>
 
 
-<div class="myAppDiv">
+<div class="myAppDiv bootstrap-smsuapiadmin">
   <div ng-app="myApp" ng-show="loggedUser" ng-controller="MainCtrl">
     <div ng-include="'{{baseURL}}/partials/main.html'"></div>
   </div>

@@ -13,7 +13,11 @@
   document.esupSmsuApiAdmin = { baseURL: '..' };
 </script>
 
-<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+<style>
+body { margin: 0 }
+</style>
+
+<link href="../css/bootstrap-scoped.css" rel="stylesheet">
 
 <!--link href="//angular-ui.github.com/ng-grid/css/ng-grid.css" rel="stylesheet" type="text/css" /-->
 <link href="../css/ng-grid.css" rel="stylesheet" type="text/css" />
@@ -43,7 +47,7 @@
 <div style="position: fixed; bottom: 10px; right: 10px; display: none" id="debug"> XXX</div>
 
 
-<div class="myAppDiv">
+<div class="myAppDiv bootstrap-smsuapiadmin">
   <div ng-app="myAppTest" ng-show="loggedUser" ng-controller="MainCtrl">
     <div ng-include="'../partials/main.html'"></div>
   </div>

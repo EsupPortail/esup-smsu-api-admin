@@ -147,10 +147,6 @@
 	    <webApp name="esup-smsu-api-admin" warfile="src/main/webapp" contextpath="/esup-smsu-api-admin">
 	      <lib dir="${build.dir}/WEB-INF/lib" includes="*.jar" />
 	      <classes dir="${build.classes}" includes="*.class" />
-	      <attributes>
-		<!-- disable "servlet api 3.0 classpath scanning" otherwise dead slow startup -->
-		<attribute name="org.eclipse.jetty.server.webapp.WebInfIncludeJarPattern" value="no jar!"/>
-	      </attributes>
 	    </webApp>
 	  </jetty>
 	</target>

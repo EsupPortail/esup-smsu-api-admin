@@ -18,7 +18,10 @@ package org.esupportail.smsuapiadmin.web;
 
 import java.io.IOException;
 import java.security.SecureRandom;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -26,7 +29,6 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -36,26 +38,46 @@ import org.esupportail.commons.services.logging.LoggerImpl;
 
 /**
  * Provides basic CSRF protection for a web application. 
- * The filter assumes that accesses from client have a HTTP header X-XSRF-TOKEN with value from cookie XSRF-TOKEN
- * (as done for example by AngularJS).
- * 
- * With a short cookieMaxAge, it is the responsability of the client to resend non-GET requests with new token
+ * The filter assumes that accesses from client have a HTTP header X-CSRF-TOKEN with value returned with previous 403 request.
+ * This means the first request will always fail, and it is the responsability of the client to resend request with the token.
+ *
+ * NB : we do not go the "standard" angular way of setting a cookie since the application is a web-widget,
+ *      which implies the cookie will not be accessible in javascript:
+ *      the cookie would be set for web-widget app foo.com 
+ *      whereas the web-widget app will be included in app bar.com which won't have access to foo.com cookies
+ *
+ * NB2: it could be much simpler to use jersey's very simple CsrfProtectionFilter 
+ *           &lt;param-name&gt;com.sun.jersey.spi.container.ContainerRequestFilters&lt;/param-name&gt;
+ *           &lt;param-value&gt;com.sun.jersey.api.container.filter.CsrfProtectionFilter&lt;/param-value&gt;
+ *      which checks "X-Requested-By" HTTP header for POST/PUT/DELETE
+ *      but it's not clear wether it is enough
+ *      such HTTP header can only be set using XHR... except when there are bugs
+ *      http://lists.webappsec.org/pipermail/websecurity_lists.webappsec.org/2011-February/007533.html
+ *      (CSRF: Flash + 307 redirect = Game Over)
+ *      issue fixed long time ago in firefox: 3.5.17, 3.6.14 (http://www.mozilla.org/security/announce/2011/mfsa2011-10.html)
+ *      but what about safari?
+ *      Ruby on Rails and Django have given up the X-Requested-By technique...
  *
  * inspired from org.apache.catalina.filters.CsrfPreventionFilter
  */
 public class CsrfPreventionFilterHttpHeader implements Filter {
 
-    @SuppressWarnings("unused")
     private final Logger logger = new LoggerImpl(getClass());
     private Random randomSource = new SecureRandom();
 
-    private int cookieMaxAge = 10 * 60; // 10 minutes
     private int denyStatus = HttpServletResponse.SC_FORBIDDEN;
-    private String cookieName = "XSRF-TOKEN";
-    private String httpHeaderName = "X-XSRF-TOKEN";
-    private String sessionAttrName = "org.esupportail.smsuapiadmin.web.CSRF_TOKEN";
-    private String jsonErrorMessage = "{ \"error\": \"Invalid CRSF prevention token\" }";
-    
+    private String httpHeaderName = "X-CSRF-TOKEN";
+    private String sessionAttrName = "org.esupportail.smsu.web.CSRF_TOKEN";
+    private static final Set<String> METHODS_TO_IGNORE;
+
+    static {
+        Set<String> mti = new HashSet<String>();
+        mti.add("GET");
+        mti.add("OPTIONS");
+        mti.add("HEAD");
+        METHODS_TO_IGNORE = Collections.unmodifiableSet(mti);
+    }
+
     public void destroy() {}
     public void init(FilterConfig config) {}
 
@@ -65,51 +87,46 @@ public class CsrfPreventionFilterHttpHeader implements Filter {
 
         if (request instanceof HttpServletRequest &&
                 response instanceof HttpServletResponse) {
-
-            HttpServletRequest req = (HttpServletRequest) request;
-            HttpServletResponse res = (HttpServletResponse) response;
-
-            HttpSession session = req.getSession(false);
-
-            String existingToken = (session == null) ? null
-		: (String) session.getAttribute(sessionAttrName);
-
-            boolean skipTokenCheck = "GET".equals(req.getMethod());
-            boolean deny = false;
-            if (!skipTokenCheck) {
-                String previousToken = req.getHeader(httpHeaderName);
-
-                deny = existingToken == null || previousToken == null ||
-                        !existingToken.equals(previousToken);
-            }
-
-            if (existingToken == null || deny) {
-                if (session == null) {
-                    session = req.getSession(true);
-                }
-		String newToken = generateToken();
-                session.setAttribute(sessionAttrName, newToken);
-		setCookie(req, res, newToken);
-            }
-            
-            if (deny) {
-                res.setStatus(denyStatus);
-                res.setContentType("application/json");
-                res.getOutputStream().println(jsonErrorMessage);
-                return;
-            }
+            if (!check((HttpServletRequest) request, (HttpServletResponse) response))
+            	return;
         }
         chain.doFilter(request, response);
     }
+    
+	private boolean check(HttpServletRequest req, HttpServletResponse res)
+			throws IOException {
+		if (METHODS_TO_IGNORE.contains(req.getMethod())) return true;
 
-    private void setCookie(HttpServletRequest req, HttpServletResponse res, String newToken) {
-	Cookie c = new Cookie(cookieName, newToken);
-	String path = req.getContextPath();
-	if (path.equals("")) path = "/";
-	c.setPath(path);
-	c.setMaxAge(cookieMaxAge);
-	res.addCookie(c);
-    }
+		HttpSession session = req.getSession(false);
+		String existingToken = (session == null) ? null : (String) session.getAttribute(sessionAttrName);
+		String previousToken = req.getHeader(httpHeaderName);
+
+	    boolean deny = existingToken == null || previousToken == null ||
+	    		!existingToken.equals(previousToken);
+		    
+		if (!deny) return true;
+
+		String denyReason = 
+				existingToken == null && previousToken == null ? "no token in HTTP header, no token in session" :
+		    	existingToken == null ? "no token in session" :
+		    	previousToken == null ? "no token in HTTP header" :
+		    		"expected token and token in cookie are different";
+
+	  	if (session == null) {
+	  		session = req.getSession(true);
+    	}
+	  	String newToken = generateToken();
+	  	session.setAttribute(sessionAttrName, newToken);
+
+	  	logger.error("CsrfPreventionFilter: " + denyReason);
+	  	res.setStatus(denyStatus);
+	  	res.setContentType("application/json");
+	  	res.getOutputStream().println(
+  				"{ \"error\": \"Invalid CRSF prevention token\"" +
+	  			", \"reason\": \"" + denyReason + "\"" +
+				", \"token\": \"" + newToken + "\" }");
+	  	return false;
+	}
 
     /**
      * Generate a token for authenticating subsequent

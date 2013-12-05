@@ -129,6 +129,14 @@ this.setLoggedUser = function (loggedUser) {
     }
 };
 
+function setHttpHeader(methods, name, val) {
+    var headers = $http.defaults.headers;
+    angular.forEach(methods, function (method) {
+	if (!headers[method]) headers[method] = {};
+	headers[method][name] = val;
+    });
+}
+
 var xhrRequest401State = false;
 var xhrRequestInvalidCsrfState = false;
 function xhrRequest(args) {
@@ -156,12 +164,17 @@ function xhrRequest(args) {
 	    var msg = "unknown error " + status;
 	    if (resp.data) {
 		try {
-		    msg = angular.fromJson(resp.data).error;
+		    var err = angular.fromJson(resp.data);
+		    msg = err.error;
 		    if (msg === "Invalid CRSF prevention token" && !xhrRequestInvalidCsrfState) {
-			console.log("retrying with new XSRF-TOKEN");
+			console.log("retrying with new CSRF token");
+			setHttpHeader(['post','put','delete'], "X-CSRF-TOKEN", err.token);
+			xhrRequestInvalidCsrfState = true;
 			return xhrRequest(args);
 		    }
-		} catch (e) { }
+		} catch (e) {
+		    console.log("??"); console.log(e);
+		}
 	    }
 	    alert(msg);
 	    return $q.reject(resp);

@@ -13,28 +13,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
-import org.esupportail.smsuapiadmin.domain.DomainService;
+import org.esupportail.smsuapiadmin.business.StatisticManager;
 import org.esupportail.smsuapiadmin.dto.beans.UIStatistic;
 
 /**
  * AccountsQuotaController is the controller for all actions on pages about
  * consolidated summary.
- * 
- * @author MZRL3760
- * 
  */
 @Path("/summary/consolidated")
 @RolesAllowed("FCTN_API_EDITION_RAPPORT")
 public class ConsolidatedSummaryController {
 	
 	@Autowired
-	private DomainService domainService;
+	private StatisticManager statisticManager;
 
         @SuppressWarnings("unused")
 	private final Logger logger = new LoggerImpl(getClass());
 
 	@GET
 	public List<UIStatistic> search() {
-		return domainService.getStatisticsSorted();
+		return statisticManager.getStatisticsSorted();
 	}    
 }

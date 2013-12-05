@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
-import org.esupportail.smsuapiadmin.domain.DomainService;
+import org.esupportail.smsuapiadmin.business.RoleManager;
 import org.esupportail.smsuapiadmin.dto.beans.UIRole;
 
 
@@ -21,7 +21,7 @@ import org.esupportail.smsuapiadmin.dto.beans.UIRole;
 public class RolesController {
 	
 	@Autowired
-	private DomainService domainService;
+	private RoleManager roleManager;
 
         @SuppressWarnings("unused")
 	private final Logger logger = new LoggerImpl(getClass());
@@ -29,7 +29,7 @@ public class RolesController {
 	@GET
 	@Produces("application/json")
 	public List<UIRole> getRoles() {
-		return domainService.getAllRoles();
+		return roleManager.getAllUIRoles();
 	}
 
 }

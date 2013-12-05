@@ -17,7 +17,7 @@ import javax.ws.rs.QueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
-import org.esupportail.smsuapiadmin.domain.DomainService;
+import org.esupportail.smsuapiadmin.business.StatisticManager;
 import org.esupportail.smsuapiadmin.dto.beans.UIDetailedCriteria;
 import org.esupportail.smsuapiadmin.dto.beans.UIDetailedSummary;
 
@@ -25,9 +25,9 @@ import org.esupportail.smsuapiadmin.dto.beans.UIDetailedSummary;
 @Path("/summary/detailed")
 @RolesAllowed("FCTN_API_EDITION_RAPPORT")
 public class DetailedSummaryController {
-	
+		
 	@Autowired
-	private DomainService domainService;
+	private StatisticManager statisticManager;
 
 	private final Logger logger = new LoggerImpl(getClass());
 
@@ -47,14 +47,14 @@ public class DetailedSummaryController {
 
 		logger.debug("institution=" + institution + ", account=" + accountName + ", application=" + 
 			    applicationName + ", startDate=" + startDate + ", endDate=" + endDate);
-		return domainService.searchDetailedSummaries(institution, accountName, applicationName, startDate_, endDate_, maxResults);
+		return statisticManager.searchDetailedSummaries(institution, accountName, applicationName, startDate_, endDate_, maxResults);
 	}
 	 
 	@GET
 	@Produces("application/json")
 	@Path("/criteria")
 	public List<UIDetailedCriteria> searchCriteria() {
-		return domainService.getDetailedStatisticsCriteria();
+		return statisticManager.getDetailedStatisticsCriteria();
 	}
 	
 }

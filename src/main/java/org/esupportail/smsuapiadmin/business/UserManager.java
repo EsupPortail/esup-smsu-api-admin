@@ -82,6 +82,7 @@ public class UserManager extends AbstractApplicationAwareBean {
 	public UIUser getUserById(final Integer id) {
 		UIUser result = null;
 
+		logger.info("Recherche du user : id=" + id);
 		UserBoSmsu user = daoService.getUserById(id);
 		result = dtoConverterService.convertToUI(user);
 
@@ -97,6 +98,7 @@ public class UserManager extends AbstractApplicationAwareBean {
 	public UIUser getUserByLogin(final String login) {
 		UIUser result = null;
 
+		logger.info("Recherche du user : login=" + login);
 		UserBoSmsu user = daoService.getUserByLogin(login);
 		if (user != null) {
 			result = dtoConverterService.convertToUI(user);

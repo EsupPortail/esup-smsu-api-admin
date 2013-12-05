@@ -116,11 +116,4 @@ public class InstitutionManager extends AbstractApplicationAwareBean {
 		return result;
 	}
 
-	/**
-	 * Returns the institution with the specified name
-	 */
-	public Institution getInstitutionByName(final String name) {
-		return daoService.getInstitutionByName(name);
-	}
-
 }

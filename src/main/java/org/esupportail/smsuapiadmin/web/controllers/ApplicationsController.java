@@ -19,8 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.commons.lang.StringUtils;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
+import org.esupportail.smsuapiadmin.business.ApplicationManager;
 import org.esupportail.smsuapiadmin.business.NotFoundException;
-import org.esupportail.smsuapiadmin.domain.DomainService;
 import org.esupportail.smsuapiadmin.dto.beans.UIApplication;
 
 
@@ -29,7 +29,7 @@ import org.esupportail.smsuapiadmin.dto.beans.UIApplication;
 public class ApplicationsController {
 	
 	@Autowired
-	private DomainService domainService;
+	private ApplicationManager applicationManager;
 
         @SuppressWarnings("unused")
 	private final Logger logger = new LoggerImpl(getClass());
@@ -37,14 +37,14 @@ public class ApplicationsController {
 	@GET
 	@Produces("application/json")
 	public List<UIApplication> getApplications() {
-		return domainService.getApplications();
+		return applicationManager.getAllUIApplications();
 	}
 
 	@GET
 	@Path("/{id:\\d+}")
 	@Produces("application/json")
 	public UIApplication getApplication(@PathParam("id") int id) {
-		UIApplication app = domainService.getApplication(id);
+		UIApplication app = applicationManager.getUIApplication(id);
 		if (app == null) throw new NotFoundException("invalid application " + id); 
 		return app;
 	}
@@ -52,7 +52,7 @@ public class ApplicationsController {
 	@POST
 	public void create(UIApplication application) {
 		checkMandatoryUIParameters(application);
-		domainService.addApplication(application);
+		applicationManager.addApplication(application);
 	}
 
 	@PUT
@@ -60,13 +60,13 @@ public class ApplicationsController {
 	public void modify(@PathParam("id") int id, UIApplication application) {
 		application.setId(id);
 		checkMandatoryUIParameters(application);
-		domainService.updateApplication(application);
+		applicationManager.updateApplication(application);
 	}
 
 	@DELETE
 	@Path("/{id:\\d+}")
 	public void delete(@PathParam("id") int id) {
-		domainService.deleteApplication(id);
+		applicationManager.deleteApplication(id);
 	}
 
 	/**

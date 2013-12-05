@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
-import org.esupportail.smsuapiadmin.domain.DomainService;
+import org.esupportail.smsuapiadmin.business.UserManager;
 import org.esupportail.smsuapiadmin.dto.beans.UIUser;
 
 
@@ -27,7 +27,7 @@ import org.esupportail.smsuapiadmin.dto.beans.UIUser;
 public class UsersController {
 	
 	@Autowired
-	private DomainService domainService;
+	private UserManager userManager;
 
         @SuppressWarnings("unused")
 	private final Logger logger = new LoggerImpl(getClass());
@@ -35,12 +35,12 @@ public class UsersController {
 	@GET
 	@Produces("application/json")
 	public List<UIUser> getUsers() {
-		return domainService.getUsers();
+		return userManager.getUsers();
 	}
 
 	@POST
 	public void create(UIUser user) {
-		domainService.addUser(user);
+		userManager.addUser(user);
 	}
 
 	@PUT
@@ -48,13 +48,13 @@ public class UsersController {
 	public void modify(@PathParam("id") int id, UIUser user) {
 		user.setId("" + id);
 		validateLogin(user, user.getLogin());
-		domainService.updateUser(user);
+		userManager.updateUser(user);
 	}
 
 	@DELETE
 	@Path("/{id:\\d+}")
 	public void delete(@PathParam("id") int id) {
-		domainService.deleteUser(id);
+		userManager.delete(id);
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class UsersController {
         public void validateLogin(UIUser user, String login) {
 
 		if (!login.equals(user.getLogin())) {
-			boolean inUse = domainService.loginAlreadyUsed(login);
+			boolean inUse = userManager.loginAlreadyUsed(login);
 			if (inUse) throw new InvalidParameterException("USER.ERROR.LOGINUSED");
 		}
 	}

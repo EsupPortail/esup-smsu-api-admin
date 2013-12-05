@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.commons.lang.StringUtils;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
-import org.esupportail.smsuapiadmin.domain.DomainService;
+import org.esupportail.smsuapiadmin.business.AccountManager;
 import org.esupportail.smsuapiadmin.dto.beans.UIAccount;
 
 /**
@@ -33,7 +33,7 @@ import org.esupportail.smsuapiadmin.dto.beans.UIAccount;
 public class AccountsController {
 	
 	@Autowired
-	private DomainService domainService;
+	private AccountManager accountManager;
 
         @SuppressWarnings("unused")
 	private final Logger logger = new LoggerImpl(getClass());
@@ -41,13 +41,13 @@ public class AccountsController {
 	@GET
 	@Produces("application/json")
 	public List<UIAccount> getAccounts() {
-		return domainService.getAccounts();
+		return accountManager.getAllUIAccounts();
 	}
 
 	@POST
 	public void create(UIAccount account) {
 		checkMandatoryUIParameters(account);
-		domainService.addAccount(account);
+		accountManager.addAccount(account);
 	}
 
 	@PUT
@@ -55,7 +55,7 @@ public class AccountsController {
 	public void modify(@PathParam("id") int id, UIAccount account) {
 		account.setId(id);
 		checkMandatoryUIParameters(account);
-		domainService.updateAccount(account);
+		accountManager.updateAccount(account);
 	}
 
 

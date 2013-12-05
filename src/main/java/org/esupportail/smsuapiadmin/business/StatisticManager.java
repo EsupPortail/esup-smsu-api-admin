@@ -141,6 +141,27 @@ public class StatisticManager
 	}
 
 
+	public List<UIDetailedSummary> searchDetailedSummaries(
+			final String institution, final String accountLabel,
+			final String applicationName, final Date startDate, final Date endDate, int maxResults) throws Exception {
+		Institution inst = null;
+		if (institution != null) {
+			inst = daoService.getInstitutionByName(institution);
+			if (inst == null) throw new NotFoundException("invalid institution " + institution);
+		}
+		Account acc = null;
+		if (accountLabel != null) {
+			acc = daoService.getAccountByName(accountLabel);
+			if (acc == null) throw new NotFoundException("invalid account " + accountLabel);
+		}
+		Application app = null;
+		if (applicationName != null) {
+			app = daoService.getApplicationByName(applicationName);
+			if (app == null) throw new NotFoundException("invalid application " + applicationName);
+		}
+		return searchDetailedSummaries(inst, acc, app, startDate, endDate, maxResults);
+	}
+
 	/**
 	 * Searches sms that respect criterias and makes detailed summaries.
 	 * 
@@ -151,7 +172,7 @@ public class StatisticManager
 	 * @param endDate
 	 * @return
 	 */
-	public List<UIDetailedSummary> searchDetailedSummaries(
+	private List<UIDetailedSummary> searchDetailedSummaries(
 			final Institution inst, final Account acc, final Application app,
 			final Date startDate, final Date endDate, int maxResults) {
 

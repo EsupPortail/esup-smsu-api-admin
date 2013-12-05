@@ -17,13 +17,13 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
-import org.esupportail.smsuapiadmin.domain.DomainService;
+import org.esupportail.smsuapiadmin.business.UserManager;
 import org.esupportail.smsuapiadmin.domain.beans.EnumeratedFunction;
 
 public final class RoleWrapperFilter implements Filter {
 	
     @Autowired
-    private DomainService domainService;
+    private UserManager userManager;
 
     private final Logger logger = new LoggerImpl(getClass());
 
@@ -51,7 +51,7 @@ public final class RoleWrapperFilter implements Filter {
 
     protected Set<EnumeratedFunction> retrieveRoles(final HttpServletRequest request) {
         String user = request.getRemoteUser();
-	return domainService.getUserFunctions(user);
+	return userManager.getUserFunctions(user);
     }
 
     final class MyHttpServletRequestWrapper extends HttpServletRequestWrapper {

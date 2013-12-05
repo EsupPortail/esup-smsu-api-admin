@@ -211,6 +211,7 @@ public class UserManager extends AbstractApplicationAwareBean {
 
 	public Set<EnumeratedFunction> getUserFunctions(String login) {
 		UserBoSmsu user = daoService.getUserByLogin(login);
+		if (user == null) return new java.util.TreeSet<EnumeratedFunction>();
 		return dtoConverterService.convertToEnum(user.getRole().getFonctions());
 	}
 

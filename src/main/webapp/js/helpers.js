@@ -129,6 +129,14 @@ this.setLoggedUser = function (loggedUser) {
     }
 };
 
+function fromJsonOrNull(json) {
+    try {
+	return angular.fromJson(json);
+    } catch (e) {
+	return null;
+    }
+}
+
 function setHttpHeader(methods, name, val) {
     var headers = $http.defaults.headers;
     angular.forEach(methods, function (method) {
@@ -140,47 +148,56 @@ function setHttpHeader(methods, name, val) {
 var xhrRequest401State = false;
 var xhrRequestInvalidCsrfState = false;
 function xhrRequest(args) {
-    var onError = function(resp) {
-	var status = resp.status;
-	if (status == 401) {
-	    if (xhrRequest401State) {
-		alert("fatal, relog failed");
-		return $q.reject(resp);
-	    } else {
-		xhrRequest401State = true;
-		return h.iframeLogin().then(function (loggedUser) {
-		    console.log('relog success');
-		    h.setLoggedUser(loggedUser);
-		    return xhrRequest(args);
-		}, function (resp) {
-		    console.log('relog failed');
-		    console.log(resp);
-		    alert("relog failed");
-		    return $q.reject("needIframe");
-		});
-	    }
-	} else if (status == 0) {
-	    alert("unknown failure (server seems to be down)");
-	    return $q.reject(resp);
-	} else {
-	    var msg = "unknown error " + status;
-	    if (resp.data) {
-		try {
-		    var err = angular.fromJson(resp.data);
-		    msg = err.error;
-		    if (msg === "Invalid CRSF prevention token" && !xhrRequestInvalidCsrfState) {
-			console.log("retrying with new CSRF token");
-			setHttpHeader(['post','put','delete'], "X-CSRF-TOKEN", err.token);
-			xhrRequestInvalidCsrfState = true;
-			return xhrRequest(args);
-		    }
-		} catch (e) {
-		    console.log("??"); console.log(e);
-		}
-	    }
-	    alert(msg);
+    var onError401 = function (resp) {
+	if (xhrRequest401State) {
+	    alert("fatal, relog failed");
 	    return $q.reject(resp);
 	}
+	xhrRequest401State = true;
+	return h.iframeLogin().then(function (loggedUser) {
+	    console.log('relog success');
+	    h.setLoggedUser(loggedUser);
+	    return xhrRequest(args);
+	}, function (resp) {
+	    console.log('relog failed');
+	    console.log(resp);
+	    alert("relog failed");
+	    return $q.reject("needIframe");
+	});
+    };
+    var onErrorCsrf = function (resp, err) {
+	if (xhrRequestInvalidCsrfState) {
+	    alert("Invalid CRSF prevention token failed twice");
+	    return $q.reject(resp);
+	}
+	xhrRequestInvalidCsrfState = true;
+	setHttpHeader(['post','put','delete'], "X-CSRF-TOKEN", err.token);
+	console.log("retrying with new CSRF token");
+	return xhrRequest(args);
+    };
+    var onErrorFromJson = function(resp, err) {
+	if (err.error === "Invalid CRSF prevention token")
+	    return onErrorCsrf(resp, err);
+	else {
+	    alert(err.error);
+	    return $q.reject(resp);
+	}
+    };
+    var onError = function(resp) {
+	var status = resp.status;
+	if (status == 0) {
+	    alert("unknown failure (server seems to be down)");
+	    return $q.reject(resp);
+	} else if (status == 401) {
+	    return onError401(resp);
+	} else if (resp.data) {
+	    var err = fromJsonOrNull(resp.data);
+	    if (err && err.error)
+		return onErrorFromJson(resp, err);
+
+	}
+	alert("unknown error " + status);
+	return $q.reject(resp);
     };
     return $http(args).then(function (resp) {
 	if (xhrRequest401State) { console.log('rest after relog success'); console.log(resp); }

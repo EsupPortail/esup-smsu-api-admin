@@ -84,10 +84,9 @@ myAppTest.run(function($http, $httpBackend, h) {
     function summary_consolidated() {
 	var r = [];
 	angular.forEach(summary_consolidated_compact, function (e) {
-	    var stats = e.stats;
-	    delete e.stats;
-	    angular.forEach(stats, function (stat) {
+	    angular.forEach(e.stats, function (stat) {
 		var e_ = angular.copy(e);
+		delete e_.stats;
 		e_.month = stat[0];
 		e_.nbSendedSMS = stat[1];
 		e_.nbSMSInError = stat[2];
@@ -96,7 +95,7 @@ myAppTest.run(function($http, $httpBackend, h) {
 	});
 	return [200,r];
     }
-    $httpBackend.whenGET(/rest.summary.consolidated$/).respond(summary_consolidated);
+    $httpBackend.whenGET(/rest.summary.consolidated/).respond(summary_consolidated);
 
 
     var summary_detailed_base = [

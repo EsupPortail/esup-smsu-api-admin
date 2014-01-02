@@ -1,5 +1,5 @@
 /**
- * ESUP-Portail esup-smsu-api-admin - Copyright (c) 2006 ESUP-Portail consortium
+ * ESUP-Portail esup-smsu-api-admin - Copyright (c) 2006-2014 ESUP-Portail consortium
  * http://sourcesup.cru.fr/projects/esup-smsu-api-admin
  */
 package org.esupportail.smsuapiadmin.web.controllers;

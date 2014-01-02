@@ -44,7 +44,7 @@
 	    		The update of the application (3 for version 1.2.3).
 	    	</description>
     	</property>
-    	<property name="copyright" value="Copyright (c) 2009 ESUP-Portail consortium" >
+    	<property name="copyright" value="Copyright (c) 2009-2014 ESUP-Portail consortium" >
 	    	<description>
 	    		The copyright.
 	    	</description>

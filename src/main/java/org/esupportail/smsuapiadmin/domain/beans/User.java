@@ -1,5 +1,5 @@
 /**
- * ESUP-Portail Example Application - Copyright (c) 2006 ESUP-Portail consortium
+ * ESUP-Portail Example Application - Copyright (c) 2006-2014 ESUP-Portail consortium
  * http://sourcesup.cru.fr/projects/esup-example
  */
 package org.esupportail.smsuapiadmin.domain.beans;

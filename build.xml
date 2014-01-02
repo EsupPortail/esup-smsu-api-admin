@@ -33,8 +33,6 @@
 
 	<target name="download" depends="download-jars" />
 		
-	<property name="esup-commons-version" value="[0.3.3, 0.4)" />
-	<property name="spring-version" value="3.2.3.RELEASE" />
 	<property name="jetty-version" value="8.1.9.v20130131" />
 
 	<target name="download-jars" depends="prepare" if="need-download-jars">

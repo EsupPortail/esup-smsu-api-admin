@@ -1,23 +1,21 @@
 .content { max-width: 800px; }
 
-.iframeLogin {
+.windowOpenLoginDiv {
+    display: block;
     z-index: 999;
     position: absolute;
-    height: 100%;
-    width: 100%;
-    border: none;
+    left: 25%;
+    right: 25%;
+    top: 25%;
+    height: 10em;
+    cursor: pointer;
 }
-.iframeLogin.delayed {
-    display: none;
-}
-
-#forceLoginIframe {
-   display: none;
-}
-#forceLoginIframe.showIt {
-   display: block;
-   box-sizing: border-box;
-   width: 100%;
+.windowOpenLoginDiv .glyphicon {
+    display: block;
+    width: 100% !important;
+    font-size: 200%;
+    text-align: center;
+    margin-top: 1em;
 }
 
 .gridStyle {

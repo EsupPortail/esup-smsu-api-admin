@@ -76,44 +76,48 @@ this.jsonpLogin = function () {
     });
 };
 
-var iframeLoginDOM;
-var iframeLoginOnMessage;
-function iframeLoginCleanup() {
-    if (iframeLoginDOM) iframeLoginDOM.remove();   
-    //if (iframeLoginOnMessage) angular.element($window).unbind("message", iframeLoginOnMessage);
-    if (iframeLoginOnMessage) $window.removeEventListener("message", iframeLoginOnMessage);  
-    iframeLoginDOM = iframeLoginOnMessage = undefined;
-};
+function windowOpenLoginDivCreate() {
+    var elt = angular.element('<div>', {'class': 'windowOpenLoginDiv alert alert-warning'});
+    elt.html('Votre session a expiré. Veuillez vous identifier à nouveau. <span class="glyphicon glyphicon-log-in"></span>');
+    angular.element('.myAppDiv').prepend(elt);
+    return elt;
+}
+function windowOpenLoginOnMessage(state) {
+    var onmessage = function(e) {
+	if (typeof e.data !== "string") return;
+	var m = e.data.match(/^loggedUser=(.*)$/);
+	if (!m) return;
 
-this.iframeLogin = function () {
-    iframeLoginCleanup();
-
-    var deferred = $q.defer();
-    iframeLoginOnMessage = function(e) {
-	console.log('iframeLoginOnMessage');
-	console.log(e);
-	if (typeof e.data === "string") {
-	    var m = e.data.match(/^loggedUser=(.*)$/);
-	    if (m) {
-		iframeLoginCleanup();
-		$rootScope.$apply(function () { 
-		    deferred.resolve(angular.fromJson(m[1]));
-		});
-	    }
-	}
+	windowOpenLoginCleanup(state);
+	$rootScope.$apply(function () { 
+	    state.deferred.resolve(angular.fromJson(m[1]));
+	});
     };
-    // below is not working, why?
-    //angular.element('window').bind("message", iframeLoginOnMessage);
-    $window.addEventListener("message", iframeLoginOnMessage);  
+    $window.addEventListener("message", onmessage);  
+    return onmessage;
+}
+var windowOpenLoginState = {}
+function windowOpenLoginCleanup(state) {
+    try {
+	if (state.div) state.div.remove();
+	if (state.listener) $window.removeEventListener("message", state.listener);  
+	if (state.window) state.window.close(); 
+    } catch (e) {}
+    windowOpenLoginState = {};
+};
+this.windowOpenLogin = function () {
+    $rootScope.loggedUser = undefined; // hide app
 
-    iframeLoginDOM = angular.element('<iframe>', {src: globals.baseURL + '/rest/login', 'class': 'iframeLogin delayed'});
-    angular.element('body').prepend(iframeLoginDOM);
+    windowOpenLoginCleanup(windowOpenLoginState);
+    var state = windowOpenLoginState = {};
 
-    $timeout(function () {
-	if (iframeLoginDOM) iframeLoginDOM.removeClass('delayed');
-    }, 500);
-
-    return deferred.promise;
+    state.deferred = $q.defer();
+    state.div = windowOpenLoginDivCreate();
+    state.div.bind("click", function () {
+	state.listener = windowOpenLoginOnMessage(state); 
+	state.window = $window.open(globals.baseURL + '/rest/login');
+    });
+    return state.deferred.promise;
 };
 
 this.setLoggedUser = function (loggedUser) {
@@ -154,7 +158,7 @@ function xhrRequest(args) {
 	    return $q.reject(resp);
 	}
 	xhrRequest401State = true;
-	return h.iframeLogin().then(function (loggedUser) {
+	return h.windowOpenLogin().then(function (loggedUser) {
 	    console.log('relog success');
 	    h.setLoggedUser(loggedUser);
 	    return xhrRequest(args);

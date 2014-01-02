@@ -30,6 +30,8 @@
 <div style="position: fixed; bottom: 10px; right: 10px; display: none" id="debug"> XXX</div>
 
 
-<div ng-app="myApp" ng-show="loggedUser" ng-controller="MainCtrl">
-  <div ng-include="'{{baseURL}}/partials/main.html'"></div>
+<div class="myAppDiv">
+  <div ng-app="myApp" ng-show="loggedUser" ng-controller="MainCtrl">
+    <div ng-include="'{{baseURL}}/partials/main.html'"></div>
+  </div>
 </div>

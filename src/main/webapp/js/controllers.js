@@ -78,7 +78,7 @@ app.controller('UsersDetailCtrl', function($scope, h, $routeParams, $location) {
 	} else if (id in users) {
 	    $scope.user = users[id];
 	} else {
-	    alert("invalid application " + id);
+	    alert("invalid user " + id);
 	}
     });	
 });

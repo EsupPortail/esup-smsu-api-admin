@@ -120,6 +120,13 @@ this.windowOpenLogin = function () {
     return state.deferred.promise;
 };
 
+this.jsonpFallbackWindowOpenLogin = function () {
+    return h.jsonpLogin().then(null, function () {
+	console.log("jsonpLogin failed, trying windowOpenLogin");
+	return h.windowOpenLogin();
+    });
+};
+
 this.setLoggedUser = function (loggedUser) {
     console.log('user logged in: ' + loggedUser.login + " " + loggedUser.role);
 
@@ -158,7 +165,7 @@ function xhrRequest(args) {
 	    return $q.reject(resp);
 	}
 	xhrRequest401State = true;
-	return h.windowOpenLogin().then(function (loggedUser) {
+	return h.jsonpFallbackWindowOpenLogin().then(function (loggedUser) {
 	    console.log('relog success');
 	    h.setLoggedUser(loggedUser);
 	    return xhrRequest(args);

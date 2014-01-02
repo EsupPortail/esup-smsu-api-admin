@@ -14,7 +14,7 @@ app.controller('MainCtrl', function($scope, h, $route, $parse, routes) {
 	});
     });
 
-    h.windowOpenLogin().then(h.setLoggedUser);
+    h.jsonpFallbackWindowOpenLogin().then(h.setLoggedUser);
 
     $scope.$on('$locationChangeSuccess', function(){
 	h.findCurrentTab($scope, $route.current.templateUrl);

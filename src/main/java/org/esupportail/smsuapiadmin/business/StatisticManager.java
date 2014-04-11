@@ -195,6 +195,11 @@ public class StatisticManager
 			result.add(computeDetailedSummary(smsList));
 		}
 
+		// BELOW IS DEPRECATED: smsuapi do not create sms entries with NULL SMS_INITIAL_ID
+		// for migration, run the following mysql command:
+		//   SELECT @n := MAX(sms_initial_id) FROM sms;
+		//   UPDATE sms SET sms_initial_id = (@n := @n + 1) WHERE sms_initial_id IS NULL;		
+		//
 		// on recommence avec les envois n'ayant pas de SMS_INITIAL_ID
 		List<Sms> smsNoInitialId = daoService.searchGroupSmsWithNullInitialId(inst, acc, app, startDate, endDate, maxResults);		
 		for (Sms sms : smsNoInitialId) {

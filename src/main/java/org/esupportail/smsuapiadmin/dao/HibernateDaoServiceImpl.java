@@ -23,17 +23,16 @@ import org.esupportail.smsuapiadmin.dao.beans.UserBoSmsu;
 import org.hibernate.classic.Session;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.CriteriaSpecification;
-import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.SimpleExpression;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
  * The Hibernate implementation of the DAO service.
  */
-@SuppressWarnings({"unchecked"})
 public class HibernateDaoServiceImpl extends
 HibernateDaoSupport implements DaoService,
 InitializingBean {
@@ -68,26 +67,12 @@ InitializingBean {
 
 
 	public UserBoSmsu getUserById(final Integer id) {
-		String queryString = "FROM UserBoSmsu user " + "WHERE user.Id="
-		+ id + "";
-
-		List<UserBoSmsu> users = getHibernateTemplate().find(queryString);
-		if (users.size() == 1) {
-			return users.get(0);
-		}
-		return null;
+		return getWithRestriction(UserBoSmsu.class, Restrictions.eq(UserBoSmsu.PROP_ID, id)); 
 	}
 
 
 	public UserBoSmsu getUserByLogin(final String login) {
-		String queryString = "FROM UserBoSmsu user " + "WHERE user.Login='"
-		+ login + "'";
-
-		List<UserBoSmsu> users = getHibernateTemplate().find(queryString);
-		if (users.size() == 1) {
-			return (UserBoSmsu) users.get(0);
-		}
-		return null;
+		return getWithRestriction(UserBoSmsu.class, Restrictions.eq(UserBoSmsu.PROP_LOGIN, login)); 
 	}
 
 	/**
@@ -138,20 +123,11 @@ InitializingBean {
 
 
 	public Application getApplicationById(final int id) {
-		String queryString = "FROM Application app " + "WHERE app.Id=" + id;
-
-		List<Application> apps = getHibernateTemplate().find(queryString);
-		if (apps.size() == 1) {
-			return apps.get(0);
-		}
-		return null;
+		return getWithRestriction(Application.class, Restrictions.eq(Application.PROP_ID, id)); 
 	}
 
 	public Application getApplicationByName(String name) {
-		DetachedCriteria criteria = DetachedCriteria.forClass(Application.class);
-		criteria.add(Restrictions.eq(Application.PROP_NAME, name));
-		List<Application> l = getHibernateTemplate().findByCriteria(criteria); 
-		return l.size() != 0 ? l.get(0) : null;
+		return getWithRestriction(Application.class, Restrictions.eq(Application.PROP_NAME, name)); 
 	}
 
 	// ////////////////////////////////////////////////////////////
@@ -160,14 +136,7 @@ InitializingBean {
 
 
 	public Account getAccountByName(final String name) {
-		String queryString = "FROM Account account 	" + "WHERE account.Label='"
-		+ name + "'";
-
-		List<Account> accounts = getHibernateTemplate().find(queryString);
-		if (accounts.size() == 1) {
-			return accounts.get(0);
-		}
-		return null;
+		return getWithRestriction(Account.class, Restrictions.eq(Account.PROP_LABEL, name)); 
 	}
 
 	public void addAccount(final Account account) {
@@ -179,14 +148,7 @@ InitializingBean {
 	// ////////////////////////////////////////////////////////////
 
 	public Institution getInstitutionByName(final String name) {
-		String queryString = "FROM Institution institution 	"
-			+ "WHERE institution.Label='" + name + "'";
-
-		List<Institution> institutions = getHibernateTemplate().find(queryString);
-		if (institutions.size() == 1) {
-			return institutions.get(0);
-		}
-		return null;
+		return getWithRestriction(Institution.class, Restrictions.eq(Institution.PROP_LABEL, name));
 	}
 
 
@@ -203,18 +165,16 @@ InitializingBean {
 		return getHibernateTemplate().getSessionFactory().getCurrentSession();
 	}
 
+	private <A> Criteria createCriteria(Class<A> clazz) {
+		return getCurrentSession().createCriteria(clazz);
+	}
 
 	public List<Sms> getSMSByApplication(final Application app) {
-		List<Sms> result = null;
-		String queryString = "FROM Sms sms " + "WHERE sms.App.Id="
-		+ app.getId();
-
-		result = getHibernateTemplate().find(queryString);
-
-		return result;
+		return findWithRestriction(Sms.class, Restrictions.eq(Sms.PROP_APP, app));
 	}
 
 
+	@SuppressWarnings("unchecked")
 	public List<Statistic> getStatisticByApplication(final Application app) {
 		List<Statistic> result = null;
 		String queryString = "FROM Statistic statistic "
@@ -240,34 +200,20 @@ InitializingBean {
 		return getHibernateTemplate().loadAll(Institution.class);
 	}
 
-
 	public List<Statistic> getStatistics() {
 		return getHibernateTemplate().loadAll(Statistic.class);
 	}
 
-
 	public Account getAccountById(final int id) {
-		String queryString = "FROM Account acc " + "WHERE acc.Id=" + id;
-
-		List<Account> accs = getHibernateTemplate().find(queryString);
-		if (accs.size() == 1) {
-			return accs.get(0);
-		}
-		return null;
+		return getWithRestriction(Account.class, Restrictions.eq(Account.PROP_ID, id));
 	}
-
 
 	public Institution getInstitutionById(final int id) {
-		String queryString = "FROM Institution inst " + "WHERE inst.Id=" + id;
-
-		List<Institution> institutions = getHibernateTemplate().find(queryString);
-		if (institutions.size() == 1) {
-			return institutions.get(0);
-		}
-		return null;
+		return getWithRestriction(Institution.class, Restrictions.eq(Institution.PROP_ID, id));
 	}
 
 
+	@SuppressWarnings("unchecked")
 	public List<Statistic> getStatisticsSorted() {
 		String select = "SELECT stat FROM Statistic stat";
 
@@ -283,15 +229,13 @@ InitializingBean {
 	}
 
 	public Sms getSmsById(Integer id) {
-		DetachedCriteria criteria = DetachedCriteria.forClass(Sms.class);
-		criteria.add(Restrictions.eq(Sms.PROP_ID, id));
-		List<Sms> l = getHibernateTemplate().findByCriteria(criteria); 
-		return l.size() != 0 ? l.get(0) : null;
+		return getWithRestriction(Sms.class, Restrictions.eq(Sms.PROP_ID, id));
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Map<String,?>> getSmsAccountsAndApplications() {
 
-		Criteria criteria = getCurrentSession().createCriteria(Sms.class);
+		Criteria criteria = createCriteria(Sms.class);
 
 		criteria.setProjection(Projections.projectionList()
 				.add( Projections.distinct(Projections.projectionList()
@@ -303,6 +247,7 @@ InitializingBean {
 		return criteria.list();
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<List<?>> searchGroupSmsWithInitialId(final Institution inst,
 			final Account acc, final Application app, final Date startDate,
 			final Date endDate, int maxResults) {
@@ -320,6 +265,7 @@ InitializingBean {
 		return criteria.list();
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Sms> searchGroupSmsWithNullInitialId(final Institution inst,
 			final Account acc, final Application app, final Date startDate,
 			final Date endDate, int maxResults) {
@@ -335,7 +281,7 @@ InitializingBean {
 			final Account acc, final Application app, final Date startDate,
 			final Date endDate, int maxResults) {
 
-		Criteria criteria = getCurrentSession().createCriteria(Sms.class);
+		Criteria criteria = createCriteria(Sms.class);
 		
 		if (inst != null) {
 			criteria.createCriteria(Sms.PROP_APP).add(Restrictions.eq(Application.PROP_INS, inst));
@@ -374,34 +320,38 @@ InitializingBean {
 	}
 
 	public Role getRoleByName(final String name) {
-		String queryString = "FROM Role role " + "WHERE role.Name='" + name + "'";
-
-		List<Role> roles = getHibernateTemplate().find(queryString);
-		if (roles.size() == 1) {
-			return roles.get(0);
-		}
-		return null;
+		return getWithRestriction(Role.class, Restrictions.eq(Role.PROP_NAME, name));
 	}
-
 
 	public List<Role> getRoles() {
 		return getHibernateTemplate().loadAll(Role.class);
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Sms> getSmsByApplicationAndInitialId(final Application application,
 			final Integer smsInitialId) {
 
-		DetachedCriteria criteria = DetachedCriteria.forClass(Sms.class);
+		Criteria criteria = createCriteria(Sms.class);
 		criteria.add(Restrictions.eq(Sms.PROP_APP, application));
 		if (smsInitialId != null) {
 			criteria.add(Restrictions.eq(Sms.PROP_INITIAL_ID, smsInitialId));
 		} else {
 			criteria.add(Restrictions.isNull(Sms.PROP_INITIAL_ID));
 		}
-		return getHibernateTemplate().findByCriteria(criteria);
+		return criteria.list();
 	}
 
 
+	@SuppressWarnings("unchecked")
+	private <A> A getWithRestriction(Class<A> clazz, SimpleExpression restriction) {
+		return (A) createCriteria(clazz).add(restriction).uniqueResult();
+	}
+
+	@SuppressWarnings("unchecked")
+	private <A> List<A> findWithRestriction(Class<A> clazz,
+			SimpleExpression restriction) {
+		return createCriteria(clazz).add(restriction).list();
+	}
 
 	protected void addObject(final Object object) {
 		if (logger.isDebugEnabled()) {

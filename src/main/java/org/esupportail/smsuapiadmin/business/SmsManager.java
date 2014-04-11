@@ -7,8 +7,8 @@ import org.esupportail.commons.beans.AbstractApplicationAwareBean;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
 import org.esupportail.smsuapiadmin.dao.DaoService;
-import org.esupportail.smsuapiadmin.dao.beans.Account;
-import org.esupportail.smsuapiadmin.dao.beans.Sms;
+import org.esupportail.smsuapi.dao.beans.Account;
+import org.esupportail.smsuapi.dao.beans.Sms;
 import org.esupportail.smsuapiadmin.dto.DTOConverterService;
 import org.esupportail.smsuapiadmin.dto.beans.UISms;
 

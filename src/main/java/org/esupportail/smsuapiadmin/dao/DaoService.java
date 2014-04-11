@@ -9,12 +9,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.esupportail.smsuapiadmin.dao.beans.Account;
-import org.esupportail.smsuapiadmin.dao.beans.Application;
-import org.esupportail.smsuapiadmin.dao.beans.Institution;
+import org.esupportail.smsuapi.dao.beans.Account;
+import org.esupportail.smsuapi.dao.beans.Application;
+import org.esupportail.smsuapi.dao.beans.Institution;
 import org.esupportail.smsuapiadmin.dao.beans.Role;
-import org.esupportail.smsuapiadmin.dao.beans.Sms;
-import org.esupportail.smsuapiadmin.dao.beans.Statistic;
+import org.esupportail.smsuapi.dao.beans.Sms;
+import org.esupportail.smsuapi.dao.beans.Statistic;
 import org.esupportail.smsuapiadmin.dao.beans.UserBoSmsu;
 
 

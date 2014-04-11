@@ -7,7 +7,7 @@ import java.util.Map;
 import org.esupportail.commons.services.i18n.I18nService;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
-import org.esupportail.smsuapiadmin.dao.beans.SmsStatus;
+import org.esupportail.smsuapi.domain.beans.sms.SmsStatus;
 
 
 /**

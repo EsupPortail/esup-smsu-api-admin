@@ -7,7 +7,7 @@ import org.esupportail.commons.beans.AbstractApplicationAwareBean;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
 import org.esupportail.smsuapiadmin.dao.DaoService;
-import org.esupportail.smsuapiadmin.dao.beans.Application;
+import org.esupportail.smsuapi.dao.beans.Application;
 import org.esupportail.smsuapiadmin.dto.DTOConverterService;
 import org.esupportail.smsuapiadmin.dto.beans.UIApplication;
 
@@ -146,8 +146,8 @@ public class ApplicationManager extends AbstractApplicationAwareBean {
 		if (appPersistent == null) throw new NotFoundException("invalid application " + app.getId());
 		appPersistent.setName(app.getName());
 		appPersistent.setPassword(app.getPassword());
-		appPersistent.setAccount(app.getAccount());
-		appPersistent.setInstitution(app.getInstitution());
+		appPersistent.setAcc(app.getAcc());
+		appPersistent.setIns(app.getIns());
 		appPersistent.setQuota(app.getQuota());
 
 		daoService.updateApplication(appPersistent);

@@ -27,6 +27,9 @@
 		<property name="mappingLocations">
 			<list>
 				<value>
+					classpath*:/properties/dao/hibernate/mapping-smsuapi/*.hbm.xml
+				</value>
+				<value>
 					classpath:/properties/dao/hibernate/mapping/*.hbm.xml
 				</value>
 			</list>

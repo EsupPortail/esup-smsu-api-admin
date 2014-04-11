@@ -2,13 +2,13 @@ package org.esupportail.smsuapiadmin.dto;
 
 import java.util.Set;
 
-import org.esupportail.smsuapiadmin.dao.beans.Account;
-import org.esupportail.smsuapiadmin.dao.beans.Application;
+import org.esupportail.smsuapi.dao.beans.Account;
+import org.esupportail.smsuapi.dao.beans.Application;
 import org.esupportail.smsuapiadmin.dao.beans.Fonction;
-import org.esupportail.smsuapiadmin.dao.beans.Institution;
+import org.esupportail.smsuapi.dao.beans.Institution;
 import org.esupportail.smsuapiadmin.dao.beans.Role;
-import org.esupportail.smsuapiadmin.dao.beans.Sms;
-import org.esupportail.smsuapiadmin.dao.beans.Statistic;
+import org.esupportail.smsuapi.dao.beans.Sms;
+import org.esupportail.smsuapi.dao.beans.Statistic;
 import org.esupportail.smsuapiadmin.dao.beans.UserBoSmsu;
 import org.esupportail.smsuapiadmin.domain.beans.EnumeratedFunction;
 import org.esupportail.smsuapiadmin.domain.beans.EnumeratedRole;

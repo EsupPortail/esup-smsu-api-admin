@@ -11,12 +11,12 @@ import org.esupportail.commons.beans.AbstractApplicationAwareBean;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
 import org.esupportail.smsuapiadmin.dao.DaoService;
-import org.esupportail.smsuapiadmin.dao.beans.Account;
-import org.esupportail.smsuapiadmin.dao.beans.Application;
-import org.esupportail.smsuapiadmin.dao.beans.Institution;
-import org.esupportail.smsuapiadmin.dao.beans.Sms;
-import org.esupportail.smsuapiadmin.dao.beans.SmsStatus;
-import org.esupportail.smsuapiadmin.dao.beans.Statistic;
+import org.esupportail.smsuapi.dao.beans.Account;
+import org.esupportail.smsuapi.dao.beans.Application;
+import org.esupportail.smsuapi.dao.beans.Institution;
+import org.esupportail.smsuapi.dao.beans.Sms;
+import org.esupportail.smsuapi.domain.beans.sms.SmsStatus;
+import org.esupportail.smsuapi.dao.beans.Statistic;
 import org.esupportail.smsuapiadmin.dto.DTOConverterService;
 import org.esupportail.smsuapiadmin.dto.beans.UIDetailedCriteria;
 import org.esupportail.smsuapiadmin.dto.beans.UIDetailedSummary;
@@ -135,7 +135,7 @@ public class StatisticManager
 		for (Map<String,?> map : daoService.getSmsAccountsAndApplications()) {			
 			final Application app = (Application) map.get(Sms.PROP_APP);
 			final Account acc = (Account) map.get(Sms.PROP_ACC);
-			result.add(new UIDetailedCriteria(acc.getLabel(), app.getName(), app.getInstitution().getLabel()));
+			result.add(new UIDetailedCriteria(acc.getLabel(), app.getName(), app.getIns().getLabel()));
 		}
 		return result;
 	}
@@ -226,7 +226,7 @@ public class StatisticManager
 		final UIDetailedSummary summary = new UIDetailedSummary(getI18nService());
 
 		// on recupere les objets institution application et account qui sont identiques pour tous les sms d'un meme groupe
-		summary.setInstitution(firstSms.getApp().getInstitution().getLabel());
+		summary.setInstitution(firstSms.getApp().getIns().getLabel());
 		summary.setAppName(firstSms.getApp().getName());
 		summary.setAccountName(firstSms.getAcc().getLabel());
 
@@ -247,7 +247,7 @@ public class StatisticManager
 			if (minDate == null || smsDate.before(minDate)) {
 				minDate = smsDate;
 			}
-			final SmsStatus status = SmsStatus.valueOf(sms.getState());
+			final SmsStatus status = sms.getStateAsEnum();
 			stats.put(status, stats.get(status) + 1);
 		}
 		summary.setDate(minDate);

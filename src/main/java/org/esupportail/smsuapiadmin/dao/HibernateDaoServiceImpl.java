@@ -13,12 +13,12 @@ import java.util.Map;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
-import org.esupportail.smsuapiadmin.dao.beans.Account;
-import org.esupportail.smsuapiadmin.dao.beans.Application;
-import org.esupportail.smsuapiadmin.dao.beans.Institution;
+import org.esupportail.smsuapi.dao.beans.Account;
+import org.esupportail.smsuapi.dao.beans.Application;
+import org.esupportail.smsuapi.dao.beans.Institution;
 import org.esupportail.smsuapiadmin.dao.beans.Role;
-import org.esupportail.smsuapiadmin.dao.beans.Sms;
-import org.esupportail.smsuapiadmin.dao.beans.Statistic;
+import org.esupportail.smsuapi.dao.beans.Sms;
+import org.esupportail.smsuapi.dao.beans.Statistic;
 import org.esupportail.smsuapiadmin.dao.beans.UserBoSmsu;
 import org.hibernate.classic.Session;
 import org.hibernate.Criteria;
@@ -217,7 +217,7 @@ InitializingBean {
 	public List<Statistic> getStatisticsSorted() {
 		String select = "SELECT stat FROM Statistic stat";
 
-		String orderBy = " ORDER BY stat.Id.App.Institution.Label,  "
+		String orderBy = " ORDER BY stat.Id.App.Ins.Label,  "
 			+ "stat.Id.App.Name, stat.Id.Acc.Label, " + "stat.Id.Month";
 
 		return getHibernateTemplate().find(select + orderBy);

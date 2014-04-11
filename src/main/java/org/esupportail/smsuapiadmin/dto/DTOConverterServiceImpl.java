@@ -6,15 +6,15 @@ import java.util.Set;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
 import org.esupportail.smsuapiadmin.dao.DaoService;
-import org.esupportail.smsuapiadmin.dao.beans.Account;
-import org.esupportail.smsuapiadmin.dao.beans.Application;
+import org.esupportail.smsuapi.dao.beans.Account;
+import org.esupportail.smsuapi.dao.beans.Application;
 import org.esupportail.smsuapiadmin.dao.beans.Fonction;
-import org.esupportail.smsuapiadmin.dao.beans.Institution;
+import org.esupportail.smsuapi.dao.beans.Institution;
 import org.esupportail.smsuapiadmin.dao.beans.Role;
-import org.esupportail.smsuapiadmin.dao.beans.Sms;
-import org.esupportail.smsuapiadmin.dao.beans.SmsStatus;
-import org.esupportail.smsuapiadmin.dao.beans.Statistic;
-import org.esupportail.smsuapiadmin.dao.beans.StatisticPK;
+import org.esupportail.smsuapi.dao.beans.Sms;
+import org.esupportail.smsuapi.domain.beans.sms.SmsStatus;
+import org.esupportail.smsuapi.dao.beans.Statistic;
+import org.esupportail.smsuapi.dao.beans.StatisticPK;
 import org.esupportail.smsuapiadmin.dao.beans.UserBoSmsu;
 import org.esupportail.smsuapiadmin.domain.beans.EnumeratedFunction;
 import org.esupportail.smsuapiadmin.domain.beans.EnumeratedRole;
@@ -84,8 +84,8 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 		result.setName(app.getName());
 		result.setPassword(app.getPassword());
 
-		result.setAccountName(app.getAccount().getLabel());
-		String uiInst = convertToUI(app.getInstitution());
+		result.setAccountName(app.getAcc().getLabel());
+		String uiInst = convertToUI(app.getIns());
 		result.setInstitution(uiInst);
 		result.setQuota(app.getQuota());
 		result.setConsumedSms(app.getConsumedSms());
@@ -134,7 +134,7 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 
 		result.setAccountName(id.getAcc().getLabel());
 		result.setAppName(id.getApp().getName());
-		result.setInstitution(id.getApp().getInstitution().getLabel());
+		result.setInstitution(id.getApp().getIns().getLabel());
 
 		result.setNbSendedSMS(stat.getNbSms());
 		result.setNbSMSInError(stat.getNbSmsInError());
@@ -209,7 +209,7 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 		// le compte d'imputation
 		Account account = daoService.getAccountByName(uiApp.getAccountName());
 		if (account == null) throw new NotFoundException("invalid account " + uiApp.getAccountName());
-		result.setAccount(account);
+		result.setAcc(account);
 
 		// l'etablissement
 		Institution institution = daoService.getInstitutionByName(uiApp
@@ -219,7 +219,7 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 			institution.setLabel(uiApp.getInstitution());
 			daoService.addInstitution(institution);
 		}
-		result.setInstitution(institution);
+		result.setIns(institution);
 
 		// le nombre de sms consomme est nul;
 		result.setConsumedSms(new Long(0));
@@ -247,7 +247,7 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 		// senderId
 		result.setSenderId(sms.getSenderId() + "");
 		// state
-		SmsStatus smsStatus = SmsStatus.valueOf(sms.getState());
+		SmsStatus smsStatus = sms.getStateAsEnum();
 		result.setState(smsStatus);
 		// phone
 		result.setPhone(sms.getPhone());

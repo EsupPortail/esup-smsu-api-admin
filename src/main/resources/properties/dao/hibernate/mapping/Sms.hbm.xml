@@ -9,9 +9,10 @@
 		</id>
 		<property name="InitialId" column="SMS_INITIAL_ID" type="integer" not-null="false" length="10"/>
 		<property name="SenderId" column="SMS_SENDER_ID" type="integer" not-null="false" length="10"/>
+		<property name="BrokerId" column="BROKER_SMS_ID" type="integer" not-null="false" length="10"/>
 		<property name="State" column="SMS_STATE" type="string" not-null="true" length="32"/>
-		<property name="Date" column="SMS_DATE" type="timestamp" not-null="false" generated="always" insert="false" update="false"/>
-		<property name="Phone" column="SMS_PHONE" type="string" not-null="false" length="10"/>
+		<property name="Date" column="SMS_DATE" type="timestamp" not-null="true"/>
+		<property name="Phone" column="SMS_PHONE" type="string" not-null="false" length="255"/>
 		<many-to-one name="App" column="APP_ID" class="Application" not-null="true">
 		</many-to-one>
 		<many-to-one name="Acc" column="ACC_ID" class="Account" not-null="true">

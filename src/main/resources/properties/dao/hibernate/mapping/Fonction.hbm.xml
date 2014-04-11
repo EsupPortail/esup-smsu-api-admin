@@ -7,7 +7,7 @@
 		<id name="Id" type="integer" column="FCT_ID">
 			<generator class="native"/>
 		</id>
-		<property name="Name" column="FTC_NAME" type="string" not-null="true" length="32"/>
+		<property name="Name" column="FTC_NAME" type="string" not-null="true" length="32" unique="true"/>
 		<set name="Roles" table="role_composition" cascade="all">
 			<key column="FCT_ID"/>
 			<many-to-many column="ROL_ID" class="Role"/>

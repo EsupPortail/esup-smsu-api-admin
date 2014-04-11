@@ -18,6 +18,11 @@ public class Sms  implements Serializable {
 	 */
 
 	/**
+	 * Hibernate property for the sms id given by the broker (if any).
+	 */
+	public static final String PROP_BROKER_SMS_ID = "BrokerId";
+
+	/**
 	 * Hibernate property for the sender identifier.
 	 */
 	public static final String PROP_SENDER_ID = "SenderId";
@@ -76,6 +81,11 @@ public class Sms  implements Serializable {
 	 * Sender identifier of the sms (in the application source).
 	 */
 	private java.lang.Integer senderId;
+
+	/**
+	 * Broker id associated to the Sms.
+	 */
+	private java.lang.Integer brokerId;
 
 	/**
 	 * Sms state.
@@ -180,18 +190,59 @@ public class Sms  implements Serializable {
 	}
 
 	/**
+	 * Return the value associated with the column: BROKER_SMS_ID.
+	 */
+	public java.lang.Integer getBrokerId() {
+		return brokerId;
+	}
+
+	/**
+	 * Set the value related to the column: BROKER_SMS_ID.
+	 * @param brokerId the BROKER_SMS_ID value
+	 */
+	public void setBrokerId(final java.lang.Integer brokerId) {
+		this.brokerId = brokerId;
+	}
+
+
+
+	/**
 	 * Return the value associated with the column: SMS_STATE.
 	 */
+	@Deprecated 
 	public java.lang.String getState() {
 		return state;
 	}
 
 	/**
+	 * 
+	 * @return
+	 */
+	public SmsStatus getStateAsEnum() {
+		final SmsStatus state = SmsStatus.valueOf(this.state);
+		return state;
+		
+	}
+	
+	/**
 	 * Set the value related to the column: SMS_STATE.
 	 * @param state the SMS_STATE value
 	 */
+	@Deprecated
 	public void setState(final java.lang.String state) {
 		this.state = state;
+	}
+	
+	/**
+	 * 
+	 * @param stateAsEnum
+	 */
+	public void setStateAsEnum(final SmsStatus stateAsEnum) {
+		if (stateAsEnum != null) {
+			this.state = stateAsEnum.name();
+		} else {
+			this.state = null;
+		}
 	}
 
 
@@ -299,7 +350,8 @@ public class Sms  implements Serializable {
 	@Override
 	public String toString() {
 		return "Sms#" + hashCode() + "[id=[" + id + "], initial id=[" + initialId 
-		+ "], sender id=[" + senderId + "], phone=[" + phone 
+		+ "], sender id=[" + senderId
+		+ "], broker id=[" + brokerId + "], phone=[" + phone 
 		+ "], state=[" + state + "], date=[" + date + "]]";
 	}
 

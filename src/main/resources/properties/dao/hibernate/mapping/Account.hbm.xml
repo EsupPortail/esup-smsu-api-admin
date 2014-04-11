@@ -7,7 +7,7 @@
 		<id name="Id" type="integer" column="ACC_ID">
 			<generator class="native"/>
 		</id>
-		<property name="Label" column="ACC_LABEL" type="string" not-null="true" length="32"/>
+		<property name="Label" column="ACC_LABEL" type="string" not-null="true" length="32" unique="true"/>
 		<property name="Quota" column="ACC_QUOTA" type="java.lang.Long" not-null="false" length="19"/>
 		<property name="ConsumedSms" column="ACC_CONSUMED_SMS" type="java.lang.Long" not-null="true" length="19"/>
 		<set name="Sms" inverse="true">

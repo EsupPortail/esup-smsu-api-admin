@@ -7,8 +7,8 @@
 		<id name="Id" type="integer" column="APP_ID">
 			<generator class="native"/>
 		</id>
-		<property name="Name" column="APP_NAME" type="string" not-null="true" length="32"/>
-		<property name="PasswordWasCertificate" column="APP_CERTIFCATE" type="byte[]" not-null="false"/>
+		<property name="Name" column="APP_NAME" type="string" not-null="true" length="32" unique="true"/>
+		<property name="PasswordWasCertificate" column="APP_CERTIFCATE" type="byte[]" length="4096" not-null="false"/>
 		<property name="Quota" column="APP_QUOTA" type="java.lang.Long" not-null="true" length="19"/>
 		<property name="ConsumedSms" column="APP_CONSUMED_SMS" type="java.lang.Long" not-null="true" length="19"/>
 		<many-to-one name="Account" column="ACC_ID" class="Account" not-null="true">

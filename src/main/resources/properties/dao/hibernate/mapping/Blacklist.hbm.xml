@@ -8,7 +8,7 @@
 			<generator class="native"/>
 		</id>
 		<property name="Date" column="BLA_DATE" type="timestamp" not-null="true"/>
-		<property name="Phone" column="BLA_PHONE" type="string" not-null="true" length="10"/>
+		<property name="Phone" column="BLA_PHONE" type="string" not-null="true" length="255" unique="true"/>
 		<many-to-one name="App" column="APP_ID" class="Application" not-null="true">
 		</many-to-one>
 	</class>

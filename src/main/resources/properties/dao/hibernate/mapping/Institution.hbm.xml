@@ -7,7 +7,7 @@
 		<id name="Id" type="integer" column="INS_ID">
 			<generator class="native"/>
 		</id>
-		<property name="Label" column="INS_LABEL" type="string" not-null="true" length="32"/>
+		<property name="Label" column="INS_LABEL" type="string" not-null="true" length="32" unique="true"/>
 		<set name="Applications" inverse="true">
 			<key column="INS_ID"/>
 			<one-to-many class="Application"/>

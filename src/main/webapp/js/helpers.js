@@ -277,18 +277,27 @@ function xhrRequest(args) {
     }, onError);
 }
 
+this.callRest_headers = function () {
+    var r = {};
+    if ($rootScope.impersonatedUser) {
+	r["X-Impersonate-User"] = $rootScope.impersonatedUser;
+    }
+    console.log(r);
+    return r;
+};
+
 this.callRest = function ($function, params) {
     var url = globals.baseURL + '/rest/' + $function;
     params = angular.extend({}, params);
     params.cacheSlayer = new Date().getTime(); // for our beloved IE which caches every AJAX... ( http://stackoverflow.com/questions/16098430/angular-ie-caching-issue-for-http )
-    var args = { method: 'get', url: url, params: params };
+    var args = { method: 'get', url: url, params: params, headers: h.callRest_headers() };
     return xhrRequest(args).then(function(resp) {
 	return resp.data;
     });
 };
 
 this.callRestModify = function (method, restPath, o) {
-    var args = { method: method, url: globals.baseURL + '/rest/' + restPath };
+    var args = { method: method, url: globals.baseURL + '/rest/' + restPath, headers: h.callRest_headers() };
     if (method !== 'post') {
 	var id = o.id;
 	if (typeof id === "undefined") return alert("internal error: missing id");

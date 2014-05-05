@@ -35,12 +35,18 @@ public final class RoleWrapperFilter implements Filter {
      */
     public void doFilter(final ServletRequest servletRequest, final ServletResponse response, final FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-	if (request.getRemoteUser() == null) {
+        String user = request.getRemoteUser();
+	if (user == null) {
 	    unauthorized((HttpServletResponse) response);
 	    return;
 	}
 
-        filterChain.doFilter(new MyHttpServletRequestWrapper(request, retrieveRoles(request)), 
+        Set<EnumeratedFunction> roles = userManager.getUserFunctions(user);
+        if (request.getHeader("X-Impersonate-User") != null) {
+        	user = request.getHeader("X-Impersonate-User");
+        	roles = userManager.getUserFunctions(user);
+        }
+	filterChain.doFilter(new MyHttpServletRequestWrapper(request, user, roles),
 			     response);
     }
 
@@ -49,20 +55,21 @@ public final class RoleWrapperFilter implements Filter {
 	response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
     }
 
-    protected Set<EnumeratedFunction> retrieveRoles(final HttpServletRequest request) {
-        String user = request.getRemoteUser();
-	return userManager.getUserFunctions(user);
-    }
-
     final class MyHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
         private final java.util.Set<EnumeratedFunction> roles;
+        private String user;
 
-        MyHttpServletRequestWrapper(final HttpServletRequest request, final Set<EnumeratedFunction> roles) {
+        MyHttpServletRequestWrapper(final HttpServletRequest request, String user, final Set<EnumeratedFunction> roles) {
             super(request);
+            this.user = user;
             this.roles = roles;
         }
 
+        public String getRemoteUser() {
+        	return user;
+        }
+        
         public boolean isUserInRole(final String role) {
 	    for (EnumeratedFunction r : roles) {
 		if (r.toString().equals(role)) {
@@ -70,7 +77,6 @@ public final class RoleWrapperFilter implements Filter {
 		    return true;
 		}
             }
-	    String user = getRemoteUser();
 	    logger.warn("user " + user + " has not role " + role);
 	    for (EnumeratedFunction r : roles) logger.warn("it has role " + r);
 	    return false;

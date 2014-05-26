@@ -73,6 +73,8 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 		result.setLabel(acc.getName());
 		result.setQuota(acc.getQuota());
 
+		if (isAddMode) result.setConsumedSms(new Long(0));
+
 		return result;
 	}
 

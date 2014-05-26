@@ -1,6 +1,5 @@
 /**
- * ESUP-Portail esup-smsu-api-admin - Copyright (c) 2006-2014 xESUP-Portail consortium
- * http://sourcesup.cru.fr/projects/esup-smsu-api-admin
+ * SMS-U - Copyright (c) 2009-2014 Universite Paris 1 Pantheon-Sorbonne
  */
 package org.esupportail.smsuapiadmin.dao;
 

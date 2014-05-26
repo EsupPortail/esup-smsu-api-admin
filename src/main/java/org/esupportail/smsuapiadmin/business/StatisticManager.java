@@ -7,7 +7,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import org.esupportail.commons.beans.AbstractApplicationAwareBean;
+import org.esupportail.commons.services.i18n.I18nService;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
 import org.esupportail.smsuapiadmin.dao.DaoService;
@@ -21,59 +21,20 @@ import org.esupportail.smsuapiadmin.dto.DTOConverterService;
 import org.esupportail.smsuapiadmin.dto.beans.UIDetailedCriteria;
 import org.esupportail.smsuapiadmin.dto.beans.UIDetailedSummary;
 import org.esupportail.smsuapiadmin.dto.beans.UIStatistic;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * StatisticManager is the business layer between the web and the database for
  * 'statistic' objects.
  * 
- * @author MZRL3760
- * 
  */
-@SuppressWarnings("serial")
-public class StatisticManager 
-	extends	AbstractApplicationAwareBean {
+public class StatisticManager {
 
-	/**
-	 * Log4j logger.
-	 */
 	private final Logger logger = new LoggerImpl(getClass());
 
-	/**
-	 * {@link DaoService}.
-	 */
-	private DaoService daoService;
-
-	/**
-	 * {@link DTOConverterService}.
-	 */
-	private DTOConverterService dtoConverterService;
-
-	/**
-	 * constructor.
-	 */
-	public StatisticManager() {
-		super();
-	}
-
-	/**
-	 * Setter for 'dtoConverterService'.
-	 * 
-	 * @param dtoConverterService
-	 */
-	public void setDtoConverterService(
-			final DTOConverterService dtoConverterService) {
-		this.dtoConverterService = dtoConverterService;
-	}
-
-	/**
-	 * Setter for 'daoService'.
-	 * 
-	 * @param daoService
-	 *            the daoService to set
-	 */
-	public void setDaoService(final DaoService daoService) {
-		this.daoService = daoService;
-	}
+	@Autowired private DaoService daoService;
+	@Autowired private DTOConverterService dtoConverterService;
+	@Autowired private I18nService i18nService;
 
 	/**
 	 * Retrieves all the accounts defined in database.
@@ -223,7 +184,7 @@ public class StatisticManager
 	private UIDetailedSummary computeDetailedSummary(final List<Sms> smsList) {
 		assert !smsList.isEmpty();
 		final Sms firstSms = smsList.get(0);
-		final UIDetailedSummary summary = new UIDetailedSummary(getI18nService());
+		final UIDetailedSummary summary = new UIDetailedSummary(i18nService);
 
 		// on recupere les objets institution application et account qui sont identiques pour tous les sms d'un meme groupe
 		summary.setInstitution(firstSms.getApp().getIns().getLabel());

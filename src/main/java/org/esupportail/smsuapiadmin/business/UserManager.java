@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.esupportail.commons.beans.AbstractApplicationAwareBean;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
 import org.esupportail.smsuapiadmin.dao.DaoService;
@@ -12,31 +11,19 @@ import org.esupportail.smsuapiadmin.dao.beans.UserBoSmsu;
 import org.esupportail.smsuapiadmin.domain.beans.EnumeratedFunction;
 import org.esupportail.smsuapiadmin.dto.DTOConverterService;
 import org.esupportail.smsuapiadmin.dto.beans.UIUser;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * UserManager is the business layer between the web and the database for 'user'
  * objects.
  * 
- * @author MZRL3760
- * 
  */
-@SuppressWarnings("serial")
-public class UserManager extends AbstractApplicationAwareBean {
+public class UserManager {
 
-	/**
-	 * Log4j logger.
-	 */
 	private final Logger logger = new LoggerImpl(getClass());
 
-	/**
-	 * {@link DaoService}.
-	 */
-	private DaoService daoService;
-
-	/**
-	 * {@link DTOConverterService}.
-	 */
-	private DTOConverterService dtoConverterService;
+	@Autowired private DaoService daoService;
+	@Autowired private DTOConverterService dtoConverterService;
 
 	/**
 	 * isDeletable.
@@ -48,31 +35,6 @@ public class UserManager extends AbstractApplicationAwareBean {
 	 */
 	private Boolean isUpdateable;
 	
-	/**
-	 * constructor.
-	 */
-	public UserManager() {
-		super();
-	}
-
-	/**
-	 * @param daoService
-	 *            the daoService to set
-	 */
-	public void setDaoService(final DaoService daoService) {
-		this.daoService = daoService;
-	}
-
-	/**
-	 * Setter for 'dtoConverterService'.
-	 * 
-	 * @param dtoConverterService
-	 */
-	public void setDtoConverterService(
-			final DTOConverterService dtoConverterService) {
-		this.dtoConverterService = dtoConverterService;
-	}
-
 	/**
 	 * Returns the user with the specified id.
 	 * 

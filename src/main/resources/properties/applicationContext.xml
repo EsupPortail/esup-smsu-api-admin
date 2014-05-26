@@ -3,9 +3,12 @@
 <beans 
 	xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"	
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
-		http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+		http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
 	<!-- 
 		/properties/applicationContext.xml
@@ -19,22 +22,20 @@
 	  <property name="locations" > 
 	      <list>
 	      	<value>classpath:/properties/config.properties</value>
-	      	<value>classpath:/properties/version.properties</value>
 	      </list>
 	  </property>
 	</bean>
+
+   <!-- for spring annotation @Autowired -->
+   <context:annotation-config />
 
 	<import resource="auth/auth.xml" />
 	<import resource="business/business.xml" />
 	<import resource="cache/cache.xml" />
 	<import resource="dao/dao.xml" />
 	<import resource="dto/dto.xml" />
-	<import resource="exceptionHandling/exceptionHandling.xml" />
 	<import resource="i18n/i18n.xml" />
-	<import resource="misc/abstractBeans.xml" />
-	<import resource="misc/application.xml" />
 	<import resource="smtp/smtp.xml" />
-	<import resource="init/init.xml" />
 	<import resource="web/controllers.xml" />
 	<import resource="rest.xml" />
 

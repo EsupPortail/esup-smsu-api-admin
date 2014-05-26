@@ -3,64 +3,24 @@ package org.esupportail.smsuapiadmin.business;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.esupportail.commons.beans.AbstractApplicationAwareBean;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
 import org.esupportail.smsuapiadmin.dao.DaoService;
 import org.esupportail.smsuapi.dao.beans.Institution;
 import org.esupportail.smsuapiadmin.dto.DTOConverterService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * AccountManager is the business layer between the web and the database for
  * 'account' objects.
  * 
- * @author MZRL3760
- * 
  */
-@SuppressWarnings("serial")
-public class InstitutionManager extends AbstractApplicationAwareBean {
+public class InstitutionManager {
 
-	/**
-	 * Log4j logger.
-	 */
 	private final Logger logger = new LoggerImpl(getClass());
 
-	/**
-	 * {@link DaoService}.
-	 */
-	private DaoService daoService;
-
-	/**
-	 * {@link DTOConverterService}.
-	 */
-	private DTOConverterService dtoConverterService;
-
-	/**
-	 * constructor.
-	 */
-	public InstitutionManager() {
-		super();
-	}
-
-	/**
-	 * Setter for 'daoService'.
-	 * 
-	 * @param daoService
-	 *            the daoService to set
-	 */
-	public void setDaoService(final DaoService daoService) {
-		this.daoService = daoService;
-	}
-
-	/**
-	 * Setter for 'dtoConverterService'.
-	 * 
-	 * @param dtoConverterService
-	 */
-	public void setDtoConverterService(
-			final DTOConverterService dtoConverterService) {
-		this.dtoConverterService = dtoConverterService;
-	}
+	@Autowired private DaoService daoService;
+	@Autowired private DTOConverterService dtoConverterService;
 
 	/**
 	 * Retrieves all the institutions defined in database.

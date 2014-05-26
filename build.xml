@@ -172,10 +172,9 @@
 	</target>
 	
 	<target name="_dist" description="build ZIP archives" >
-
-		<property file="src/main/resources/properties/version.properties" />
+		<artifact:pom id="mypom" file="pom.xml" />
 		<property name="dist.dir" value="dist"/>
-		<property name="zip.file" value="${dist.dir}/${app.name}-${app.versionMajorNumber}.${app.versionMinorNumber}.${app.versionUpdate}-${app.release}.zip"/>
+		<property name="zip.file" value="${dist.dir}/${mypom.name}-${mypom.version}.zip"/>
 
 		<property name="app.zip-files.exclude" value="" />
 		<property name="app.zip-files.include" value="
@@ -194,7 +193,7 @@
 				    	dir="." 
 				    	excludes="${app.zip-files.exclude}" 
 				    	includes="${app.zip-files.include}"
-				    	prefix="${app.name}-${app.version}"/>
+				    	prefix="${mypom.name}-${mypom.version}"/>
 		</zip>
 	</target>
 

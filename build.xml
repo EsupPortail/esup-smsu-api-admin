@@ -85,7 +85,7 @@
 		<property file="build.properties" />
 		<fail unless="deploy.home" message="Please set property deploy.home in build.properties" />
 
-		<sync todir="${deploy.home}" >
+		<sync todir="${deploy.home}" overwrite="true" >
 			<fileset dir="src/main/webapp" />
 			<fileset dir="${build.dir}" excludes="WEB-INF/classes/org/esupportail/commons/portal/ws/**/*" />
 		</sync>

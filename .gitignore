@@ -3,3 +3,7 @@ target
 TAGS
 tmp
 deploy
+.project
+.classpath
+.settings
+logs

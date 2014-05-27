@@ -66,7 +66,6 @@
                         <scope>provided</scope>
                 </dependency>
 
-
 		<!-- force a recent version of slf4j-simple required by esup-commons otherwise 
 		     it breaks cas-client slf4j-api -->
 		<dependency>
@@ -112,7 +111,6 @@
 		  <version>${spring-version}</version>
 		</dependency>
 
-
 		<!-- below is required by jsr168forwardport.org.springframework.web.portlet (esup-commons2-web) -->
 		<!-- forcing our version -->
 		<dependency>
@@ -147,12 +145,6 @@
 		</dependency>
 
 		<dependency>
-		  <groupId>esup</groupId>
-		  <artifactId>esup-uportal-ws-client</artifactId>
-		  <version>RELEASE</version>
-		</dependency>
-
-		<dependency>
 		  <groupId>org.esupportail</groupId>
 		  <artifactId>esup-commons2-ldap</artifactId>
 		  <version>${esup-commons-version}</version>
@@ -164,9 +156,6 @@
 		  </exclusion>
 		  </exclusions>
 		</dependency>
-
-		<!-- hibernate connection pooling -->
-		<!--dependency groupId="org.hibernate" artifactId="hibernate-c3p0" version="3.3.2.GA" /-->
 
 		<dependency>
 		  <groupId>org.esupportail</groupId>

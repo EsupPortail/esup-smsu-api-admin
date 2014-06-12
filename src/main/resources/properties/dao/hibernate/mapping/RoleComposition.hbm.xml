@@ -5,8 +5,8 @@
 	<class name="RoleComposition" table="role_composition" lazy="false">
 		<meta attribute="sync-DAO">false</meta>
 		<composite-id>
-			<key-many-to-one name="Fct" class="Fonction" column="FCT_ID"/>
 			<key-many-to-one name="Rol" class="Role" column="ROL_ID"/>
+			<key-many-to-one name="Fct" class="Fonction" column="FCT_ID"/>
 		</composite-id>
 	</class>
 </hibernate-mapping>

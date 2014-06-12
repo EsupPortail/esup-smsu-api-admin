@@ -153,7 +153,7 @@ this.windowOpenLogin = function () {
     state.div = windowOpenLoginDivCreate();
     state.div.bind("click", function () {
 	state.listener = windowOpenLoginOnMessage(state); 
-	state.window = $window.open(globals.baseURL + '/rest/login');
+	state.window = $window.open(globals.baseURL + '/rest/login?postMessage');
     });
     return state.deferredLogin.promise;
 };

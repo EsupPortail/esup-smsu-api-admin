@@ -11,6 +11,10 @@
 		/properties/applicationContext.xml.
 	-->
 
+	<bean id="urlGenerator" class="org.esupportail.smsuapiadmin.services.UrlGenerator">
+	  <property name="serviceURL" value="${serviceURL}" />
+        </bean>
+
 	<bean id="StartPage" class="org.esupportail.smsuapiadmin.web.StartPage">
 	  <property name="serviceURL" value="${serviceURL}" />
 	</bean>

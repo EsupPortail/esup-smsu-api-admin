@@ -90,7 +90,7 @@ this.array_remove_elt = function (array, searchElement) {
 };
 
 this.array2set = function (array) {
-    var set = {}
+    var set = {};
     angular.forEach(array, function (e) { set[e] = true; });
     return set;
 };
@@ -131,13 +131,13 @@ function windowOpenLoginOnMessage(state) {
 	windowOpenLoginCleanup(state);
 	$rootScope.$apply(function () { 
 	    state.deferredLogin.resolve(angular.fromJson(m[1]));
-	    angular.forEach(state.deferredQueue, function (deferred) { deferred.resolve() });
+	    angular.forEach(state.deferredQueue, function (deferred) { deferred.resolve(); });
 	});
     };
     $window.addEventListener("message", onmessage);  
     return onmessage;
 }
-var windowOpenLoginState = {}
+var windowOpenLoginState = {};
 function windowOpenLoginCleanup(state) {
     try {
 	if (state.div) state.div.remove();
@@ -172,7 +172,7 @@ this.loginMayRedirect = function () {
 	var then = $window.location.hash && $window.location.hash.replace(/^#/, '');
 	$window.location.href = globals.baseURL + '/rest/login?then=' + encodeURIComponent(then);
     }
-}
+};
 
 function tryRelog() {
 

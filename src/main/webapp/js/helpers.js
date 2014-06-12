@@ -50,7 +50,7 @@ this.array_map = function (array, f) {
 this.array_concat_map = function (array, f) {
     var r = [];
     angular.forEach(array, function (e) {
-	r.concat(f(e)); 
+	r = r.concat(f(e)); 
     });
     return r;
 };

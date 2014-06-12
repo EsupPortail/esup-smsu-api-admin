@@ -1,15 +1,15 @@
 {
   "name": "esup-smsu-api-admin",
-  "version": "1.1.4",
+  "version": "2.0.0-SNAPSHOT",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-cli": "~0.1.9",
-    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-concat": "~0.4.0",
     "grunt-jquery-builder": "~0.1.1",
-    "grunt-angular-templates": "~0.4.1",
-    "grunt-contrib-connect": "~0.5.0",
-    "grunt-contrib-watch": "~0.5.3",
-    "grunt-bower-task": "~0.3.2"
+    "grunt-angular-templates": "~0.5.5",
+    "grunt-contrib-connect": "~0.7.1",
+    "grunt-contrib-watch": "0.6.x",
+    "grunt-bower-task": "~0.3.4"
   },
   "dependencies": {
     "grunt-open": "~0.2.2"

@@ -6,8 +6,8 @@ module.exports = function(grunt) {
 
       ngtemplates:  {
 	  myApp:        {
-	      src:      'webapp/partials/**.html',
-	      dest:     'webapp/partials/all.js',
+	      src:      'src/main/webapp/partials/**.html',
+	      dest:     'src/main/webapp/partials/all.js',
 	      options:      {
 		  bootstrap:  function(module, script) {
 		      script = script.replace(/templateCache.put\('webapp\/(.*?)'/g, "templateCache.put(document.esupSmsuApiAdmin.baseURL + '/$1'");
@@ -19,7 +19,7 @@ module.exports = function(grunt) {
       },
       jquery: {
 	  dist: {
-	      output: "webapp/js",
+	      output: "src/main/webapp/js",
 	      options: {
 		  prefix: "jquery-",
 		  //minify: false
@@ -36,12 +36,12 @@ module.exports = function(grunt) {
       concat:   {
 	  options: { separator: ";\n\n;\n" },
 	  myApp:    {
-	      src:  [ 'webapp/js/jquery*.js', 
+	      src:  [ 'src/main/webapp/js/jquery*.js', 
 		      'bower_components/angular/angular.min.js',
 		      'bower_components/angular-i18n/angular-locale_fr-fr.js',
 		      'bower_components/ng-grid/ng-grid-*.min.js',
-		      'webapp/js/app.js', '<%= ngtemplates.myApp.dest %>' ],
-	      dest: 'webapp/js/all.js'
+		      'src/main/webapp/js/app.js', '<%= ngtemplates.myApp.dest %>' ],
+	      dest: 'src/main/webapp/js/all.js'
 	  }
       },
 
@@ -60,7 +60,7 @@ module.exports = function(grunt) {
       },
       open : {
 	  dev : {
-	      path: 'http://127.0.0.1:8000/webapp/test/StartPage.html',
+	      path: 'http://127.0.0.1:8000/src/main/webapp/test/StartPage.html',
 	      app: 'x-www-browser',
 	  }
       }

@@ -5,6 +5,7 @@ var app = angular.module('myApp');
 
 app.controller('MainCtrl', function($scope, h, $route, $parse, routes) {
 
+    $scope.getTemplateUrl = h.getTemplateUrl;
     $scope.allowLogout = false;//!globals.isWebWidget;
 
     $scope.$watch('loggedUser', function () {

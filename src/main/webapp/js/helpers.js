@@ -329,6 +329,10 @@ this.findCurrentTab = function ($scope, templateUrl) {
     $scope.currentTab = tab;
 };
 
+this.getTemplateUrl = function (basename) {
+    return globals.baseURL + '/partials/' + basename;
+};
+
 this.getRolesInScope = function ($scope) {
     return h.callRest('roles').then(function(roles) {
 	$scope.roles = h.array2hash(roles, 'role');

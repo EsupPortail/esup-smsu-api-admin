@@ -5,8 +5,7 @@ var app = angular.module('myApp');
 
 app.controller('MainCtrl', function($scope, h, $route, $parse, routes) {
 
-    $scope.isPortlet = true;
-    //if ($scope.isPortlet) h.cleanupUportalCss();
+    $scope.allowLogout = false;//!globals.isWebWidget;
 
     $scope.$watch('loggedUser', function () {
 	$scope.mainVisibleTabs = $.grep(routes.routes, function(e) { 

@@ -10,7 +10,7 @@ function computeRoutes(baseURL) {
      { route: '/consolidatedSummary', mainText: "Relevé consolidé", show: 'loggedUser.can.FCTN_API_EDITION_RAPPORT', controller: 'ConsolidatedSummaryCtrl' },
      { route: '/detailedSummary', mainText: "Relevé détaillé", show: 'loggedUser.can.FCTN_API_EDITION_RAPPORT', controller: 'DetailedSummaryCtrl' },
      { route: '/users', mainText: "Gestion des utilisateurs", show: 'loggedUser.can.FCTN_MANAGE_USERS', controller: 'UsersCtrl' },
-     { route: '/logout', mainText: "Déconnexion", show: '!isPortlet', controller: 'EmptyCtrl' },
+     { route: '/logout', mainText: "Déconnexion", show: 'allowLogout', controller: 'EmptyCtrl' },
      { route: '/about', mainText: "A propos de", title: "A propos de SMSU-U", controller: 'EmptyCtrl'},
      { route: '/users/:id', parent: '/users', controller: 'UsersDetailCtrl', templateUrl: templatesBaseURL + '/users-detail.html'},
      { route: '/applications/:id', parent: '/applications', controller: 'ApplicationsDetailCtrl', templateUrl: templatesBaseURL + '/applications-detail.html'},

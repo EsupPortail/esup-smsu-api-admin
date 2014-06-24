@@ -1,6 +1,6 @@
 'use strict';
 
-var appUrl = 'StartPage.html';
+var appUrl = 'index.html';
 
 function navigateTo(route) {
     browser().navigateTo(appUrl + (route ? '#'+route : ''));

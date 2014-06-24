@@ -54,7 +54,7 @@ myAppTest.run(function($http, $httpBackend, h) {
 	users: [{"id":"1","login":"admin","role":"ROLE_SUPER_ADMIN"},
 		{"id":"2","login":"report","role":"ROLE_REPORT"},
 		{"id":"5","login":"manage","role":"ROLE_MANAGE"}],
-	applications: [{"id":2,"name":"app","password":null,"institution":"inst1","accountName":"acc1","quota":20000,"consumedSms":19000,"deletable":true},
+	applications: [{"id":2,"name":"app","password":"xxx","institution":"inst1","accountName":"acc1","quota":20000,"consumedSms":19000,"deletable":true},
 		       {"id":4,"name":"app2","password":"xxx","institution":"inst1","accountName":"acc2","quota":40000,"deletable":false},
 		       {"id":5,"name":"app3","password":"xxx","institution":"inst2","accountName":"acc3","quota":2,"deletable":true}],
 	accounts: [{"id":1,"name":"acc1","quota":200,"consumedSms":167},

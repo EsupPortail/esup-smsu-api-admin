@@ -6,7 +6,7 @@ function navigateTo(route) {
     browser().navigateTo(appUrl + (route ? '#'+route : ''));
 }
 function title() {
-    return element('.breadcrumb li.active').text();
+    return element('.breadcrumb li.active:visible').text();
 }
 function content() {
     return element('.content').text();
@@ -152,7 +152,7 @@ describe('Existing application view', function() {
 	expect(input('app.institution').val()).toBe("inst1");
 	//expect(input('app.accountName').val()).toBe("0");
 	expect(input('app.quota').val()).toBe("20000");
-	expect(element('form input[name="password"]').count()).toBe(0);
+	expect(element('form input[name="password"]').count()).toBe(1);
 
 	input('app.name').enter('app0');
 	element("form button").click();

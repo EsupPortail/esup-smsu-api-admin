@@ -1,28 +1,33 @@
 package org.esupportail.smsuapiadmin.web;
  
 import java.io.IOException;
-import java.util.regex.Pattern;
+import java.util.Map;
+import java.util.TreeMap;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.esupportail.smsu.services.UrlGenerator;
+import org.esupportail.smsu.web.ServerSideDirectives;
+import org.esupportail.smsu.web.ServletContextWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class StartPage implements org.springframework.web.HttpRequestHandler {
 
     @Autowired private UrlGenerator urlGenerator;
+    @Autowired private ServerSideDirectives serverSideDirectives;
 
     public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
-	ServletContext context = request.getSession().getServletContext();
+	ServletContextWrapper context = new ServletContextWrapper(request.getSession().getServletContext());
 	boolean isWebWidget = request.getServletPath().startsWith("/WebWidget");
 	boolean genTestStaticJsonPage = request.getServletPath().equals("/GenTestStaticJsonPage");
 	String baseURL = genTestStaticJsonPage ? ".." : urlGenerator.baseURL(request);
+	Map<String, String> env = createEnv(baseURL, isWebWidget, genTestStaticJsonPage);
+
 	String template = getHtmlTemplate(context, "/WEB-INF/WebWidget-template.html");
-	String page = instantiateWebWidgetHtml(template, baseURL, isWebWidget, genTestStaticJsonPage);
+	String page = instantiateTemplate(context, env, template);
 	if (!isWebWidget) 
 	    page = getStartPageHtml(context, page);	
 	String type = "text/html; charset=UTF-8";
@@ -35,29 +40,31 @@ public class StartPage implements org.springframework.web.HttpRequestHandler {
         response.getWriter().print(page);
     }
 
-    private String getStartPageHtml(ServletContext context, String webWidget) throws IOException {
-	String s = getHtmlTemplate(context, "/WEB-INF/StartPage-template.html");
-	return instantiateTemplate(s, "webWidget", webWidget);
+	public String instantiateTemplate(ServletContextWrapper context, Map<String, String> env, String template) {
+		return serverSideDirectives.instantiate(template, env, context);
+	}
+
+    private String getStartPageHtml(ServletContextWrapper context, String webWidget) throws IOException {
+    	String s = getHtmlTemplate(context, "/WEB-INF/StartPage-template.html");
+    	return serverSideDirectives.instantiate_vars(s, singletonMap("webWidget", webWidget));
     }
 
-    public String instantiateWebWidgetHtml(String template, String baseURL, boolean isWebWidget) {
-    	return instantiateWebWidgetHtml(template, baseURL, isWebWidget, false);
-    }
+	public Map<String, String> createEnv(String baseURL, boolean isWebWidget, boolean genTestStaticJsonPage) {
+		Map<String, String> env = new TreeMap<String, String>();
+    	env.put("baseURL", baseURL);
+    	env.put("loginURL", genTestStaticJsonPage ? "test/login.jsonp" : "rest/login");
+    	env.put("isWebWidget", ""+isWebWidget);
+    	env.put("useTestStaticJson", ""+genTestStaticJsonPage);
+		return env;
+	}
 
-    public String instantiateWebWidgetHtml(String template, String baseURL, boolean isWebWidget, boolean genTestStaticJsonPage) {
-	String s = template;
-	s = instantiateTemplate(s, "baseURL", baseURL);
-	s = instantiateTemplate(s, "loginURL", genTestStaticJsonPage ? "test/login.jsonp" : "rest/login");
-    s = instantiateTemplate(s, "isWebWidget", ""+isWebWidget);
-    s = instantiateTemplate(s, "useTestStaticJson", ""+genTestStaticJsonPage);
-	return s;
-    }
+	private <A, B> Map<A, B> singletonMap(A key, B value) {
+		Map<A, B> r = new TreeMap<A, B>();
+		r.put(key, value);
+		return r;
+	}
 
-    static public String instantiateTemplate(String template, String var, String value) {
-	return template.replaceAll(Pattern.quote("{{serverSide." + var + "}}"), value);
-    }
-
-    static public String getHtmlTemplate(ServletContext context, String path) throws IOException {
+    static public String getHtmlTemplate(ServletContextWrapper context, String path) throws IOException {
 	return IOUtils.toString(context.getResourceAsStream(path), "UTF-8");
     }
 }

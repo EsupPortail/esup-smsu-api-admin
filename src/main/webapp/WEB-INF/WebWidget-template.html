@@ -1,35 +1,35 @@
 
 <script>
   document.esupSmsuApiAdmin = { 
-     baseURL: '{{baseURL}}', 
-     isWebWidget: {{isWebWidget}},
-     useTestStaticJson: {{useTestStaticJson}} };
+     baseURL: '{{serverSide.baseURL}}', 
+     isWebWidget: {{serverSide.isWebWidget}},
+     useTestStaticJson: {{serverSide.useTestStaticJson}} };
 </script>
 
-<link href="{{baseURL}}/css/bootstrap-scoped.css" rel="stylesheet">
+<link href="{{serverSide.baseURL}}/css/bootstrap-scoped.css" rel="stylesheet">
 
 <!--link href="//angular-ui.github.com/ng-grid/css/ng-grid.css" rel="stylesheet" type="text/css" /-->
-<link href="{{baseURL}}/libs/ng-grid/2.0.11/ng-grid.min.css" rel="stylesheet" type="text/css" />
-<link href="{{baseURL}}/css/app.css" rel="stylesheet" type="text/css" />
+<link href="{{serverSide.baseURL}}/libs/ng-grid/2.0.11/ng-grid.min.css" rel="stylesheet" type="text/css" />
+<link href="{{serverSide.baseURL}}/css/app.css" rel="stylesheet" type="text/css" />
 
 <!--script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script-->
-<script src="{{baseURL}}/libs/jquery/1.7.2/jquery.min.js"></script>
-<script src="{{baseURL}}/libs/angularjs/1.2.14/angular.min.js"></script>
-<script src="{{baseURL}}/libs/angularjs/1.2.14/angular-route.min.js"></script>
-<script src="{{baseURL}}/libs/angularjs/1.2.14/i18n/angular-locale_fr-fr.js"></script>
-<script src="{{baseURL}}/libs/angular-translate/2.1.0/angular-translate.min.js"></script>
-<script src="{{baseURL}}/libs/ng-grid/2.0.11/ng-grid.min.js"></script>
+<script src="{{serverSide.baseURL}}/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="{{serverSide.baseURL}}/libs/angularjs/1.2.14/angular.min.js"></script>
+<script src="{{serverSide.baseURL}}/libs/angularjs/1.2.14/angular-route.min.js"></script>
+<script src="{{serverSide.baseURL}}/libs/angularjs/1.2.14/i18n/angular-locale_fr-fr.js"></script>
+<script src="{{serverSide.baseURL}}/libs/angular-translate/2.1.0/angular-translate.min.js"></script>
+<script src="{{serverSide.baseURL}}/libs/ng-grid/2.0.11/ng-grid.min.js"></script>
 
-<script src="{{baseURL}}/js/app.js"></script>
-<script src="{{baseURL}}/js/helpers.js"></script>
-<script src="{{baseURL}}/js/services.js"></script>
-<script src="{{baseURL}}/js/controllers.js"></script>
-<script src="{{baseURL}}/js/directives.js"></script>
-<script src="{{baseURL}}/js/config.js"></script>
+<script src="{{serverSide.baseURL}}/js/app.js"></script>
+<script src="{{serverSide.baseURL}}/js/helpers.js"></script>
+<script src="{{serverSide.baseURL}}/js/services.js"></script>
+<script src="{{serverSide.baseURL}}/js/controllers.js"></script>
+<script src="{{serverSide.baseURL}}/js/directives.js"></script>
+<script src="{{serverSide.baseURL}}/js/config.js"></script>
 
 
 <div class="myAppDiv bootstrap-smsuapiadmin">
   <div ng-app="myApp" ng-show="loggedUser" ng-controller="MainCtrl">
-    <div ng-include="'{{baseURL}}/partials/main.html'"></div>
+    <div ng-include="'{{serverSide.baseURL}}/partials/main.html'"></div>
   </div>
 </div>

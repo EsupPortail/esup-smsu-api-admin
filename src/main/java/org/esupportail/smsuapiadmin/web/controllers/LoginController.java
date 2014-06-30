@@ -34,6 +34,7 @@ public class LoginController {
 	}
 
 	UIUser user = userManager.getUserByLogin(request.getRemoteUser());
+	user.sessionId = request.getSession().getId();
 	String jsUser = new ObjectMapper().writeValueAsString(user);
 	String content, type;
 	if (request.getParameter("postMessage") != null) {

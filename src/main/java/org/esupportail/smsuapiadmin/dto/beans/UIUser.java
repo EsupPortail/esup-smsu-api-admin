@@ -40,6 +40,8 @@ public class UIUser implements Serializable {
 	 */
 	private Boolean isUpdateable;
 	
+	public String sessionId;
+
 	/**
 	 * Default constructor.
 	 */

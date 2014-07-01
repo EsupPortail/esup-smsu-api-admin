@@ -17,16 +17,24 @@
 <script server-side-prefix="baseURL" src="libs/angular-translate/2.1.0/angular-translate.min.js"></script>
 <script server-side-prefix="baseURL" src="libs/ng-grid/2.0.11/ng-grid.min.js"></script>
 
-<script server-side-cache-buster server-side-prefix="baseURL" src="js/app.js"></script>
-<script server-side-cache-buster server-side-prefix="baseURL" src="js/helpers.js"></script>
-<script server-side-cache-buster server-side-prefix="baseURL" src="js/services.js"></script>
-<script server-side-cache-buster server-side-prefix="baseURL" src="js/controllers.js"></script>
-<script server-side-cache-buster server-side-prefix="baseURL" src="js/directives.js"></script>
-<script server-side-cache-buster server-side-prefix="baseURL" src="js/config.js"></script>
+<script server-side-cache-buster server-side-prefix="baseURL" server-side-concat="libs/myApp.js" src="js/app.js"></script>
+<script server-side-cache-buster server-side-prefix="baseURL" server-side-concat="libs/myApp.js" src="js/helpers.js"></script>
+<script server-side-cache-buster server-side-prefix="baseURL" server-side-concat="libs/myApp.js" src="js/services.js"></script>
+<script server-side-cache-buster server-side-prefix="baseURL" server-side-concat="libs/myApp.js" src="js/controllers.js"></script>
+<script server-side-cache-buster server-side-prefix="baseURL" server-side-concat="libs/myApp.js" src="js/directives.js"></script>
+<script server-side-cache-buster server-side-prefix="baseURL" server-side-concat="libs/myApp.js" src="js/config.js"></script>
 
 
 <div class="myAppDiv bootstrap-smsuapiadmin">
   <div ng-app="myApp" ng-show="loggedUser" ng-controller="MainCtrl">
+
+    <!-- most used templates -->
+    <script server-side-cache-buster server-side-prefix="baseURL" 
+	    server-side-angular-templates="partials/main.html partials/breadcrumb-inc.html 
+	                                   partials/welcome.html partials/welcome-inc.html partials/about.html
+	                                   partials/consolidatedSummary.html partials/detailedSummary.html"
+	    src="libs/myApp-templates.js"></script>
+
     <div ng-include="'{{serverSide.baseURL}}/partials/main.html'"></div>
   </div>
 </div>

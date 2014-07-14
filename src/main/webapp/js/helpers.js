@@ -24,7 +24,9 @@ this.mutexAction = function(scope, semaphoreName, action) {
 }
 
 this.jsonpLogin = function () {
+    console.log("jsonpLogin start");
     return $http.jsonp(globals.baseURL + '/rest/login?callback=JSON_CALLBACK').then(function (resp) {
+	console.log("jsonpLogin ok");
 	return resp.data;
     });
 };
@@ -199,7 +201,7 @@ function xhrRequest(args, flags) {
 	    return onErrorCsrf(resp, err);
 	else {
 	    alert(err.error);
-	    return $q.reject(resp);
+	    return $q.reject(err);
 	}
     };
     var onError = function(resp) {
@@ -236,7 +238,6 @@ this.callRest_headers = function () {
     if ($rootScope.impersonatedUser) {
 	r["X-Impersonate-User"] = $rootScope.impersonatedUser;
     }
-    console.log(r);
     return r;
 };
 

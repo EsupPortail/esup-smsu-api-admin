@@ -1,4 +1,4 @@
-package org.esupportail.smsuapiadmin.services;
+package org.esupportail.smsu.services;
 
 import java.io.IOException;
 

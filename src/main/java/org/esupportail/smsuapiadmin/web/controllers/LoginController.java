@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.esupportail.smsuapiadmin.business.UserManager;
 import org.esupportail.smsuapiadmin.dto.beans.UIUser;
-import org.esupportail.smsuapiadmin.services.UrlGenerator;
+import org.esupportail.smsu.services.UrlGenerator;
 
 @Path("/login")
 public class LoginController {

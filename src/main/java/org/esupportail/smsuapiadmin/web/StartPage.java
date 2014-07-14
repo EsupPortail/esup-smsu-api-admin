@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.esupportail.smsuapiadmin.services.UrlGenerator;
+import org.esupportail.smsu.services.UrlGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class StartPage implements org.springframework.web.HttpRequestHandler {

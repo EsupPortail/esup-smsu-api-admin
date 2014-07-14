@@ -3,7 +3,7 @@
 
 var app = angular.module('myApp');
 
-app.controller('MainCtrl', function($scope, h, $route, $parse, routes) {
+app.controller('MainCtrl', function($scope, h, $route, $parse, routes, login, loginSuccess) {
 
     $scope.getTemplateUrl = h.getTemplateUrl;
     $scope.allowLogout = false;//!globals.isWebWidget;
@@ -14,7 +14,7 @@ app.controller('MainCtrl', function($scope, h, $route, $parse, routes) {
 	});
     });
 
-    h.jsonpLogin().then(null, h.loginMayRedirect).then(h.setLoggedUser);
+    login.jsonp().then(null, login.mayRedirect).then(loginSuccess.set);
 
     $scope.$on('$locationChangeSuccess', function(){
 	h.findCurrentTab($scope, $route.current.templateUrl);

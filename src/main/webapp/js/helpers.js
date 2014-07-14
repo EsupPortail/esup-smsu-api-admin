@@ -9,6 +9,20 @@ var h = this;
 
 angular.extend(this, basicHelpers);
 
+// "action" function must either:
+// - return false if action is aborted (eg: form errors)
+// - return a promise
+this.mutexAction = function(scope, semaphoreName, action) {
+    if (scope[semaphoreName]) {
+        // not queuing action, forget it!
+        return;
+    }
+    scope[semaphoreName] = true;
+    action()['finally'](function () {
+        scope[semaphoreName] = false;
+    });
+}
+
 this.jsonpLogin = function () {
     return $http.jsonp(globals.baseURL + '/rest/login?callback=JSON_CALLBACK').then(function (resp) {
 	return resp.data;

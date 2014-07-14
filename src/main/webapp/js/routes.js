@@ -31,14 +31,4 @@ app.provider('routes', function () {
     };
 });
 
-app.provider('globals', function () {
-    if (!document.esupSmsuApiAdmin) alert("missing configuration document.esupSmsuApiAdmin");
-    var globals = document.esupSmsuApiAdmin;
-    this.baseURL = globals.baseURL;
-
-    this.$get = function () { 
-	return this;
-    };
-});
-
 }());

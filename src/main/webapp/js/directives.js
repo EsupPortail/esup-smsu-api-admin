@@ -63,4 +63,15 @@ app.directive('myValidator', function () {
    };
 });
 
+app.directive('myInclude', function (globals) {
+  return {
+    restrict: 'A',
+    replace: true,
+    template: function(element, attrs) {
+	var absoluteURL = globals.baseURL + '/partials/' + attrs.myInclude;
+	return '<div ng-include="\'' + absoluteURL + '\'"></div>';
+    }
+  };
+});
+
 })();

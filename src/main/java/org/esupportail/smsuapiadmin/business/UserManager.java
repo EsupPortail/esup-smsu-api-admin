@@ -64,6 +64,10 @@ public class UserManager {
 		UserBoSmsu user = daoService.getUserByLogin(login);
 		if (user != null) {
 			result = dtoConverterService.convertToUI(user);
+		} else {
+			// do not return null user, otherwise null is returned which angularjs will take as a failure
+			result = new UIUser();
+			result.setLogin(login);
 		}
 
 		return result;

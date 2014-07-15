@@ -19,7 +19,7 @@ import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
 import org.esupportail.smsuapiadmin.business.UserManager;
 
-public final class RoleWrapperFilter implements Filter {
+public final class AuthAndRoleAndMiscFilter implements Filter {
 	
     @Autowired private UserManager userManager;
 

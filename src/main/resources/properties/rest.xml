@@ -14,7 +14,7 @@
    <!-- for spring annotation @Autowired -->
    <context:annotation-config />
 
-   <bean id="RoleWrapperFilter" class="org.esupportail.smsuapiadmin.web.RoleWrapperFilter" />
+   <bean id="AuthAndRoleAndMiscFilter" class="org.esupportail.smsuapiadmin.web.AuthAndRoleAndMiscFilter" />
 
    <bean id="loginController"		    class="org.esupportail.smsuapiadmin.web.controllers.LoginController" />
    <bean id="rolesController"               class="org.esupportail.smsuapiadmin.web.controllers.RolesController" />	

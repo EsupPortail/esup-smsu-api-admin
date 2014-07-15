@@ -8,7 +8,6 @@ import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
 import org.esupportail.smsuapiadmin.dao.DaoService;
 import org.esupportail.smsuapiadmin.dao.beans.UserBoSmsu;
-import org.esupportail.smsuapiadmin.domain.beans.EnumeratedFunction;
 import org.esupportail.smsuapiadmin.dto.DTOConverterService;
 import org.esupportail.smsuapiadmin.dto.beans.UIUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -175,10 +174,10 @@ public class UserManager {
 		return user != null;
 	}
 
-	public Set<EnumeratedFunction> getUserFunctions(String login) {
+	public Set<String> getUserRights(String login) {
 		UserBoSmsu user = daoService.getUserByLogin(login);
-		if (user == null) return new java.util.TreeSet<EnumeratedFunction>();
-		return dtoConverterService.convertToEnum(user.getRole().getFonctions());
+		if (user == null) return new java.util.TreeSet<String>();
+		return dtoConverterService.convert(user.getRole().getFonctions());
 	}
 
 }

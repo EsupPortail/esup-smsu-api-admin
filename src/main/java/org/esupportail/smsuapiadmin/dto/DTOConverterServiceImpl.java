@@ -182,6 +182,14 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 		}
 		return r;
 	}
+	
+	public Set<String> convert(final Set<Fonction> fcts) {
+		Set<String> r = new java.util.TreeSet<String>();
+		for (Fonction fct : fcts) {
+			r.add(fct.getName());
+		}
+		return r;
+	}
 
 	/**
 	 * Setter for 'daoService'.

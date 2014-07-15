@@ -88,6 +88,8 @@ public interface DTOConverterService {
 
 	Set<EnumeratedFunction> convertToEnum(Set<Fonction> fcts);
 
+	Set<String> convert(Set<Fonction> fcts);
+
 	/**
 	 * Makes an UIRole from a Role.
 	 * 

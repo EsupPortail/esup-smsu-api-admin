@@ -18,12 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.esupportail.commons.services.logging.Logger;
 import org.esupportail.commons.services.logging.LoggerImpl;
 import org.esupportail.smsuapiadmin.business.UserManager;
-import org.esupportail.smsuapiadmin.domain.beans.EnumeratedFunction;
 
 public final class RoleWrapperFilter implements Filter {
 	
-    @Autowired
-    private UserManager userManager;
+    @Autowired private UserManager userManager;
 
     private final Logger logger = new LoggerImpl(getClass());
 
@@ -41,13 +39,12 @@ public final class RoleWrapperFilter implements Filter {
 	    return;
 	}
 
-        Set<EnumeratedFunction> roles = userManager.getUserFunctions(user);
+        Set<String> rights = userManager.getUserRights(user);
         if (request.getHeader("X-Impersonate-User") != null) {
         	user = request.getHeader("X-Impersonate-User");
-        	roles = userManager.getUserFunctions(user);
+        	rights = userManager.getUserRights(user);
         }
-	filterChain.doFilter(new MyHttpServletRequestWrapper(request, user, roles),
-			     response);
+		filterChain.doFilter(new MyHttpServletRequestWrapper(request, user, rights), response);
     }
 
     private void unauthorized(HttpServletResponse response) throws IOException {
@@ -57,10 +54,10 @@ public final class RoleWrapperFilter implements Filter {
 
     final class MyHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
-        private final java.util.Set<EnumeratedFunction> roles;
+        private final Set<String> roles;
         private String user;
 
-        MyHttpServletRequestWrapper(final HttpServletRequest request, String user, final Set<EnumeratedFunction> roles) {
+        MyHttpServletRequestWrapper(final HttpServletRequest request, String user, Set<String> roles) {
             super(request);
             this.user = user;
             this.roles = roles;
@@ -71,14 +68,12 @@ public final class RoleWrapperFilter implements Filter {
         }
         
         public boolean isUserInRole(final String role) {
-	    for (EnumeratedFunction r : roles) {
-		if (r.toString().equals(role)) {
+	    if (roles.contains(role)) {
 		    logger.debug("user has role " + role);
 		    return true;
-		}
             }
 	    logger.warn("user " + user + " has not role " + role);
-	    for (EnumeratedFunction r : roles) logger.warn("it has role " + r);
+	    for (String r : roles) logger.warn("it has role " + r);
 	    return false;
         }
     }

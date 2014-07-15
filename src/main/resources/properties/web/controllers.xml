@@ -23,6 +23,9 @@
 	<!-- for StartPagePortlet -->
 	<bean id="applicationContextHolder" class="org.esupportail.commons.context.ApplicationContextHolder" />
 
-	<bean id="StartPage" class="org.esupportail.smsuapiadmin.web.StartPage" />
+	<bean id="StartPage" class="org.esupportail.smsuapiadmin.web.StartPage">
+	  <property name="jsonpDisabled" value="#{'${authentication}' == 'shibboleth'}" />
+	</bean>
+
 
 </beans>

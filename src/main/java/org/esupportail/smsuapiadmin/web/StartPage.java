@@ -18,6 +18,8 @@ public class StartPage implements org.springframework.web.HttpRequestHandler {
 
     @Autowired private UrlGenerator urlGenerator;
     @Autowired private ServerSideDirectives serverSideDirectives;
+    
+    private boolean jsonpDisabled = false;
 
     public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
 	ServletContextWrapper context = new ServletContextWrapper(request.getSession().getServletContext());
@@ -54,6 +56,7 @@ public class StartPage implements org.springframework.web.HttpRequestHandler {
     	env.put("baseURL", baseURL);
     	env.put("loginURL", genTestStaticJsonPage ? "test/login.jsonp" : "rest/login");
     	env.put("isWebWidget", ""+isWebWidget);
+    	env.put("jsonpDisabled", ""+jsonpDisabled);
     	env.put("useTestStaticJson", ""+genTestStaticJsonPage);
 		return env;
 	}
@@ -67,4 +70,8 @@ public class StartPage implements org.springframework.web.HttpRequestHandler {
     static public String getHtmlTemplate(ServletContextWrapper context, String path) throws IOException {
 	return IOUtils.toString(context.getResourceAsStream(path), "UTF-8");
     }
+
+	public void setJsonpDisabled(boolean jsonpDisabled) {
+		this.jsonpDisabled = jsonpDisabled;
+	}
 }

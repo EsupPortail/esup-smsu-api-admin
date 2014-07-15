@@ -3,7 +3,7 @@
 
 var app = angular.module('myApp');
 
-app.controller('MainCtrl', function($scope, h, $route, $parse, routes, login, loginSuccess) {
+app.controller('MainCtrl', function($scope, h, $route, $parse, routes, restWsHelpers) {
 
     $scope.allowLogout = false;//!globals.isWebWidget;
 
@@ -13,7 +13,7 @@ app.controller('MainCtrl', function($scope, h, $route, $parse, routes, login, lo
 	});
     });
 
-    login.jsonp().then(null, login.mayRedirect).then(loginSuccess.set);
+    restWsHelpers.initialLogin();
 
     $scope.$on('$locationChangeSuccess', function(){
 	routes.findCurrentTab($scope, $route.current.templateUrl);

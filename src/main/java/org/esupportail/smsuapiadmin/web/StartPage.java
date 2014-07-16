@@ -54,7 +54,6 @@ public class StartPage implements org.springframework.web.HttpRequestHandler {
 	public Map<String, String> createEnv(String baseURL, boolean isWebWidget, boolean genTestStaticJsonPage) {
 		Map<String, String> env = new TreeMap<String, String>();
     	env.put("baseURL", baseURL);
-    	env.put("loginURL", genTestStaticJsonPage ? "test/login.jsonp" : "rest/login");
     	env.put("isWebWidget", ""+isWebWidget);
     	env.put("jsonpDisabled", ""+jsonpDisabled);
     	env.put("useTestStaticJson", ""+genTestStaticJsonPage);

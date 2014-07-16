@@ -26,7 +26,7 @@ public class StartPage implements org.springframework.web.HttpRequestHandler {
 	boolean isWebWidget = request.getServletPath().startsWith("/WebWidget");
 	boolean genTestStaticJsonPage = request.getServletPath().equals("/GenTestStaticJsonPage");
 	String baseURL = genTestStaticJsonPage ? ".." : urlGenerator.baseURL(request);
-	Map<String, Object> env = createEnv(baseURL, isWebWidget, genTestStaticJsonPage);
+	Map<String, Object> env = createEnv(baseURL, isWebWidget, AuthAndRoleAndMiscFilter.getIdpId(request), genTestStaticJsonPage);
 
 	String template = getHtmlTemplate(context, "/WEB-INF/WebWidget-template.html");
 	String page = instantiateTemplate(context, env, template);
@@ -51,12 +51,15 @@ public class StartPage implements org.springframework.web.HttpRequestHandler {
     	return serverSideDirectives.instantiate_vars(s, singletonMap("webWidget", (Object) webWidget));
     }
 
-	public Map<String, Object> createEnv(String baseURL, boolean isWebWidget, boolean genTestStaticJsonPage) throws IOException {
+	public Map<String, Object> createEnv(String baseURL, boolean isWebWidget, String idpId, boolean genTestStaticJsonPage) throws IOException {
 		Map<String, Object> env = new TreeMap<String, Object>();
+
     	env.put("baseURL", baseURL);
     	env.put("isWebWidget", isWebWidget);
     	env.put("jsonpDisabled", jsonpDisabled);
     	env.put("useTestStaticJson", genTestStaticJsonPage);
+    	if (idpId != null) env.put("idpId", idpId);
+    	
     	env.put("globals", new ObjectMapper().writeValueAsString(env));
 		return env;
 	}

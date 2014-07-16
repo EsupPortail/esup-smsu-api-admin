@@ -32,7 +32,8 @@ public class StartPagePortlet extends GenericPortlet {
 		StartPage startPage = (StartPage) applicationContext.getBean("StartPage");
 
     	String s = StartPage.getHtmlTemplate(context, "/WEB-INF/WebWidget-template.html");
-		return startPage.instantiateTemplate(context, startPage.createEnv(baseURL, true, false), s);
+    	String idpId = null; // would need getting it from "user-attribute"s or from a channel param?
+		return startPage.instantiateTemplate(context, startPage.createEnv(baseURL, true, idpId, false), s);
     }
 
 }

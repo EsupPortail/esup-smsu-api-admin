@@ -19,10 +19,17 @@ this.jsonp = function () {
     });
 };
 
+function mayAddIdpId(url) {
+    if ($rootScope.idpId) url += "&idpId=" + encodeURIComponent($rootScope.idpId);
+    return url;
+}
+
 function windowOpenDivCreate(isRelog) {
     var elt = angular.element('<div>', {'class': 'windowOpenLoginDiv alert alert-warning'});
     var msg = globals.jsonpDisabled && !isRelog ? 
-	"Authentification en cours. Pour forcer l'authentification, veuillez cliquer ci-dessous" : 
+	($rootScope.idpId ? 
+	 "Authentification en cours. Pour forcer l'authentification, veuillez cliquer ci-dessous" : 
+	 "Veuillez cliquer ici pour vous authentifier") :
 	'Votre session a expiré. Veuillez vous identifier à nouveau.';
     elt.html(msg + ' <span class="glyphicon glyphicon-log-in"></span>');
     angular.element('.myAppDiv').prepend(elt);
@@ -60,6 +67,9 @@ function windowOpenCleanup(state) {
 }
 this.windowOpen = function (isRelog) {
     windowOpenCleanup(login.windowOpenState);
+
+    var postMessageURL = mayAddIdpId(globals.baseURL + '/rest/login?postMessage');
+
     var state = {};
     login.windowOpenState = state;
 
@@ -68,12 +78,12 @@ this.windowOpen = function (isRelog) {
     state.div = windowOpenDivCreate(isRelog);
     state.listener = windowOpenOnMessage(state); 
     state.div.bind("click", function () {
-	state.window = $window.open(globals.baseURL + '/rest/login?postMessage');
+	state.window = $window.open(postMessageURL);
     });
 
-    if (globals.jsonpDisabled) {
+    if (globals.jsonpDisabled && $rootScope.idpId) {
 	// alternative to jsonp:
-	state.iframe = hiddenIframeCreate(globals.baseURL + '/rest/login?postMessage');
+	state.iframe = hiddenIframeCreate(postMessageURL);
     }
 
     return state.deferredLogin.promise;
@@ -87,7 +97,8 @@ this.mayRedirect = function () {
     } else {
 	console.log("jsonpLogin failed, trying redirect");
 	var then = $window.location.hash && $window.location.hash.replace(/^#/, '');
-	$window.location.href = globals.baseURL + '/rest/login?then=' + encodeURIComponent(then);
+	var dest = globals.baseURL + '/rest/login?then=' + encodeURIComponent(then);
+	$window.location.href = mayAddIdpId(dest);
 	// the redirect may take time, in the meantime, do not think login was succesful
 	return $q.reject("jsonpLogin failed, trying redirect");
     }

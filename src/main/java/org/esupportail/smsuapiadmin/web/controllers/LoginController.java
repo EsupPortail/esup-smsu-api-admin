@@ -12,10 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.esupportail.smsuapiadmin.business.UserManager;
 import org.esupportail.smsuapiadmin.dto.beans.UIUser;
+import org.esupportail.smsuapiadmin.web.AuthAndRoleAndMiscFilter;
 import org.esupportail.smsu.services.UrlGenerator;
 
 @Path("/login")
@@ -26,20 +28,22 @@ public class LoginController {
     
     @GET
     public Response get(@Context HttpServletRequest request) throws IOException {
-    	boolean ourCookiesRejected = ourCookiesRejected(request);
+    	boolean ourCookiesRejected = !hasCookie(request, "JSESSIONID");
 
-	String sessionId = ourCookiesRejected ? request.getSession().getId() : null;
-    
+    HttpSession session = request.getSession();
+	String sessionId = ourCookiesRejected ? session.getId() : null;
+	String idpId = AuthAndRoleAndMiscFilter.getIdpId(request);
 	String then = request.getParameter("then");
 	if (then != null) {
 		//then = URLDecoder.decode(then, "UTF-8");
-		String url = urlGenerator.goTo(request, then, sessionId);
+		String url = urlGenerator.goTo(request, then, sessionId, idpId);
 		return Response.temporaryRedirect(URI.create(url)).build();		
 	}
 
 	UIUser user = userManager.getUserByLogin(request.getRemoteUser());
+	user.idpId = idpId;
 	if (ourCookiesRejected) {
-		user.sessionId = request.getSession().getId();
+		user.sessionId = session.getId();
 	}
 	String jsUser = new ObjectMapper().writeValueAsString(user);
 	String content, type;
@@ -58,16 +62,13 @@ public class LoginController {
 
 	// call this function on successful login
     // if we managed to get here and there is no cookie, it means they have been rejected
-    private boolean ourCookiesRejected(HttpServletRequest request) {
+    public static boolean hasCookie(HttpServletRequest request, String name) {
     	for (Cookie cookie : request.getCookies()) {
-    		if (cookie.getName().equals("JSESSIONID"))
+    		if (cookie.getName().equals(name))
     			// cool, our previous Set-Cookie was accepted
-    			return false;
-    		if (cookie.getName().startsWith("_shibsession_"))
-    			// Shibboleth SP Set-Cookie was accepted
-    			return false;
+    			return true;
     	}
-    	return true;
-     }
+    	return false;
+    }
 
 }

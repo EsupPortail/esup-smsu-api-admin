@@ -8,18 +8,31 @@ app.service('restWsHelpers', function ($http, $rootScope, globals, $q, $timeout,
 // loginSuccess need restWsHelpers but it would create a circular deps, resolve it by hand:
 loginSuccess.restWsHelpers = this;
 
-getSessionIdOnStartup();
+getUrlStartupParams();
 
-function getSessionIdOnStartup() {
-    var sessionId = $location.search().sessionId;
-    if (sessionId) {
-	// save it then clean up URL
-	$rootScope.sessionId = sessionId;
-	$location.search('sessionId', null);
+function getUrlStartupParams() {
+    // used for "redirect login" if no cookies:
+    //   /#/foo -> /rest/login?then=/foo -> /#/then?idpId=xxx&sessionId=zzz
+    getUrlStartupParam('sessionId');
+    // used for first URL, you can have either:
+    // -  /?idpId=xxx : when you want the either to bookmark the idp choice
+    // - /#/?idpId=xxx : when you want the idpId to be hidden from URL
+    // also used "redirect login" if no cookies
+    getUrlStartupParam('idpId');
+}
+function getUrlStartupParam(name) {
+    var val = $location.search()[name];
+    if (val) {
+	// clean up URL
+	$location.search(name, null);
+	$rootScope[name] = val;
+	if (name === 'idpId') console.log("got idpId from startup url");
     }
 }
 
 function initialLogin() {
+    if (globals.idpId) $rootScope.idpId = globals.idpId;
+
     if (globals.jsonpDisabled) {
 	// try a simple XHR login, especially needed in case we arrive here after a redirect
 	simple('login', {}, { noErrorHandling: true }).then(null, login.mayRedirect).then(loginSuccess.set);

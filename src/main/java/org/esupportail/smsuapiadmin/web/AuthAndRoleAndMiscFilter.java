@@ -34,8 +34,9 @@ public final class AuthAndRoleAndMiscFilter implements Filter {
     private boolean shibUseHeaders = false;
     private String shibbolethSessionInitiatorUrl;
 
-    private String sessionAttributeName = "MY_REMOTE_USER";
-    private String rightAllowingImpersonate = "FCTN_MANAGE_USERS";
+    private static String sessionAttributeName = "MY_REMOTE_USER";
+    private static String sessionAttributeIdp = "MY_idpId";
+    private static String rightAllowingImpersonate = "FCTN_MANAGE_USERS";
 
     private final Logger logger = new LoggerImpl(getClass());
 
@@ -88,13 +89,24 @@ public final class AuthAndRoleAndMiscFilter implements Filter {
 		// we rely on shibboleth SP to do the authentication
 		// use either use normal stuff (AJP) or HTTP header (if really needed...)
 		String user = request.getRemoteUser();
+		String idpId = (String) request.getAttribute("Shib-Identity-Provider");
 		if (user == null) {
 			user = request.getHeader("REMOTE_USER");
+			idpId = request.getHeader("Shib-Identity-Provider");
 			if (StringUtils.isBlank(user)) user = null; // why is this needed? is shibboleth SP with lazy sessions doing this? 
+			if (StringUtils.isBlank(idpId)) idpId = null; // why is this needed? is shibboleth SP with lazy sessions doing this? 
 			if (user != null && !shibUseHeaders)
 				throw new RuntimeException("Received HTTP header REMOTE_USER. You must be using \"ShibUserHeaders On\" in apache configuration. In that case set shibboleth.shibUserHeaders=true");
 		}
-		if (user != null) session.setAttribute(sessionAttributeName, user);
+		if (user != null) {
+			session.setAttribute(sessionAttributeName, user);
+			// make idpId available to:
+			// - current request (LoginController.java)
+			// - next request (StartPage.java) for "redirect login"
+			// - future request (StartPage.java) for "open in new window" 
+			if (idpId != null) session.setAttribute(sessionAttributeIdp, idpId);
+		}
+		
 		return user;
 	}
     
@@ -135,6 +147,16 @@ public final class AuthAndRoleAndMiscFilter implements Filter {
 				request.getPathInfo().equals("/login") &&
 				(request.getParameter("postMessage") != null ||
 				 request.getParameter("then") != null);
+	}
+
+    public static String getIdpId(HttpServletRequest request) {
+		String idpId;
+		idpId = request.getParameter("idpId");
+		if (idpId == null) {
+			HttpSession session = request.getSession();
+			idpId = (String) session.getAttribute(sessionAttributeIdp);
+		}
+		return idpId;
 	}
 
     final class MyHttpServletRequestWrapper extends HttpServletRequestWrapper {

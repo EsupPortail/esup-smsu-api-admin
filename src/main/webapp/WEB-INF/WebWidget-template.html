@@ -1,10 +1,6 @@
 
 <script>
-  document.esupSmsuApiAdmin = { 
-     baseURL: '{{serverSide.baseURL}}', 
-     isWebWidget: {{serverSide.isWebWidget}},
-     jsonpDisabled: {{serverSide.jsonpDisabled}},
-     useTestStaticJson: {{serverSide.useTestStaticJson}} };
+  document.esupSmsuApiAdmin = {{serverSide.globals}};
 </script>
 
 <link server-side-prefix="baseURL" server-side-cache-buster href="css/bootstrap-scoped.css" rel="stylesheet">

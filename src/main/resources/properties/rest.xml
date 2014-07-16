@@ -17,6 +17,7 @@
    <bean id="AuthAndRoleAndMiscFilter" class="org.esupportail.smsuapiadmin.web.AuthAndRoleAndMiscFilter">
       <property name="authentication" value="${authentication}" />
       <property name="shibUseHeaders" value="${shibboleth.shibUseHeaders}" />
+      <property name="shibbolethSessionInitiatorUrl" value="${shibboleth.sessionInitiator.url}" />
    </bean>
 
    <bean id="loginController"		    class="org.esupportail.smsuapiadmin.web.controllers.LoginController" />

@@ -25,11 +25,14 @@ this.set = function (loggedUser) {
 
 function computeUserCapabilities(user, roles) {
     var role = roles[user.role];
-    if (!role) console.log("user " + user.login + " has unknown role " + user.role);
     var can = {};
-    angular.forEach(role.fonctions || [], function (c) {
-	can[c] = true;
-    });
+    if (!role) {
+	console.log("user " + user.login + " has unknown role " + user.role);
+    } else {
+	angular.forEach(role.fonctions || [], function (c) {
+	    can[c] = true;
+	});
+    }
     return can;
 }
 

@@ -41,6 +41,10 @@ function initialLogin() {
     }
 }
 
+function simpleLogin() {
+    simple('login').then(loginSuccess.set);
+}
+
 function tryRelog() {
 
     function relogSuccess(loggedUser) {
@@ -49,7 +53,7 @@ function tryRelog() {
 	if ($rootScope.impersonatedUser) {
 	    // relog does not use XHR, so X-Impersonate-User was not passed
 	    // update loggedUser by using XHR
-	    simple('login').then(loginSuccess.set);
+	    simpleLogin();
 	} else {
 	    loginSuccess.set(loggedUser);
 	}

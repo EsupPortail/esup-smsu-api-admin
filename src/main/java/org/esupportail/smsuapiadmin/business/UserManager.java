@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.esupportail.commons.services.logging.Logger;
-import org.esupportail.commons.services.logging.LoggerImpl;
+import org.apache.log4j.Logger;
 import org.esupportail.smsuapiadmin.dao.DaoService;
 import org.esupportail.smsuapiadmin.dao.beans.UserBoSmsu;
 import org.esupportail.smsuapiadmin.dto.DTOConverterService;
@@ -19,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class UserManager {
 
-	private final Logger logger = new LoggerImpl(getClass());
+	private final Logger logger = Logger.getLogger(getClass());
 
 	@Autowired private DaoService daoService;
 	@Autowired private DTOConverterService dtoConverterService;

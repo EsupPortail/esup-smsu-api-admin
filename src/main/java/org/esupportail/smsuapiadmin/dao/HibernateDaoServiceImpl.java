@@ -10,8 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
-import org.esupportail.commons.services.logging.Logger;
-import org.esupportail.commons.services.logging.LoggerImpl;
+import org.apache.log4j.Logger;
 import org.esupportail.smsuapi.dao.beans.Account;
 import org.esupportail.smsuapi.dao.beans.Application;
 import org.esupportail.smsuapi.dao.beans.Institution;
@@ -39,7 +38,7 @@ InitializingBean {
 	/**
 	 * Log4j logger.
 	 */
-	private final Logger logger = new LoggerImpl(getClass());
+	private final Logger logger = Logger.getLogger(getClass());
 
 	/**
 	 * The serialization id.

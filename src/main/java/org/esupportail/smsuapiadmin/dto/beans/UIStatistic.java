@@ -3,8 +3,7 @@ package org.esupportail.smsuapiadmin.dto.beans;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.esupportail.commons.services.logging.Logger;
-import org.esupportail.commons.services.logging.LoggerImpl;
+import org.apache.log4j.Logger;
 
 /**
  * UIMonth is the representation on the web side of the Statistic persistent.
@@ -17,7 +16,7 @@ public class UIStatistic {
 	/**
 	 * Log4j logger.
 	 */
-	private final Logger logger = new LoggerImpl(getClass());
+	private final Logger logger = Logger.getLogger(getClass());
 
 	/**
 	 * month.

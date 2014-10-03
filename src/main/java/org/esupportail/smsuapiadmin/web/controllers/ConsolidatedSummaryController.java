@@ -10,8 +10,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.esupportail.commons.services.logging.Logger;
-import org.esupportail.commons.services.logging.LoggerImpl;
+import org.apache.log4j.Logger;
 import org.esupportail.smsuapiadmin.business.StatisticManager;
 import org.esupportail.smsuapiadmin.dto.beans.UIStatistic;
 
@@ -27,7 +26,7 @@ public class ConsolidatedSummaryController {
 	private StatisticManager statisticManager;
 
         @SuppressWarnings("unused")
-	private final Logger logger = new LoggerImpl(getClass());
+	private final Logger logger = Logger.getLogger(getClass());
 
 	@GET
 	public List<UIStatistic> search() {

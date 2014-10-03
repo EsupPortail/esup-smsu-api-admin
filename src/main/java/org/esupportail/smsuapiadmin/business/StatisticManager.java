@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.esupportail.commons.services.i18n.I18nService;
-import org.esupportail.commons.services.logging.Logger;
-import org.esupportail.commons.services.logging.LoggerImpl;
+import org.apache.log4j.Logger;
 import org.esupportail.smsuapiadmin.dao.DaoService;
 import org.esupportail.smsuapi.dao.beans.Account;
 import org.esupportail.smsuapi.dao.beans.Application;
@@ -30,7 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class StatisticManager {
 
-	private final Logger logger = new LoggerImpl(getClass());
+	private final Logger logger = Logger.getLogger(getClass());
 
 	@Autowired private DaoService daoService;
 	@Autowired private DTOConverterService dtoConverterService;

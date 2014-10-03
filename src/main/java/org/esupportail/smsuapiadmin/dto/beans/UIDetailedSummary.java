@@ -5,8 +5,7 @@ import java.util.Date;
 import java.util.Map;
 
 import org.esupportail.commons.services.i18n.I18nService;
-import org.esupportail.commons.services.logging.Logger;
-import org.esupportail.commons.services.logging.LoggerImpl;
+import org.apache.log4j.Logger;
 import org.esupportail.smsuapi.domain.beans.sms.SmsStatus;
 
 
@@ -21,7 +20,7 @@ public class UIDetailedSummary implements Comparable<UIDetailedSummary> {
 	/**
 	 * Log4j logger.
 	 */
-	private final Logger logger = new LoggerImpl(getClass());
+	private final Logger logger = Logger.getLogger(getClass());
 
 	private I18nService i18nService;
 

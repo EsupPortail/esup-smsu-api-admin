@@ -19,8 +19,7 @@ import java.net.URL;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.apache.commons.lang.StringUtils;
-import org.esupportail.commons.services.logging.Logger;
-import org.esupportail.commons.services.logging.LoggerImpl;
+import org.apache.log4j.Logger;
 import org.esupportail.smsu.services.UrlGenerator;
 import org.esupportail.smsuapiadmin.business.UserManager;
 import org.jasig.cas.client.util.CommonUtils;
@@ -38,7 +37,7 @@ public final class AuthAndRoleAndMiscFilter implements Filter {
     private static String sessionAttributeIdp = "MY_idpId";
     private static String rightAllowingImpersonate = "FCTN_MANAGE_USERS";
 
-    private final Logger logger = new LoggerImpl(getClass());
+    private final Logger logger = Logger.getLogger(getClass());
 
     public void destroy() {}
     public void init(FilterConfig config) {}

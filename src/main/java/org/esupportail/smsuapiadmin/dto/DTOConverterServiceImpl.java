@@ -3,8 +3,7 @@ package org.esupportail.smsuapiadmin.dto;
 import java.util.List;
 import java.util.Set;
 
-import org.esupportail.commons.services.logging.Logger;
-import org.esupportail.commons.services.logging.LoggerImpl;
+import org.apache.log4j.Logger;
 import org.esupportail.smsuapiadmin.dao.DaoService;
 import org.esupportail.smsuapi.dao.beans.Account;
 import org.esupportail.smsuapi.dao.beans.Application;
@@ -37,7 +36,7 @@ public class DTOConverterServiceImpl implements DTOConverterService {
 	/**
 	 * Log4j logger.
 	 */
-	private final Logger logger = new LoggerImpl(getClass());
+	private final Logger logger = Logger.getLogger(getClass());
 
 	/**
 	 * {@link DaoService}.

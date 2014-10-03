@@ -3,8 +3,7 @@ package org.esupportail.smsuapiadmin.business;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.esupportail.commons.services.logging.Logger;
-import org.esupportail.commons.services.logging.LoggerImpl;
+import org.apache.log4j.Logger;
 import org.esupportail.smsuapiadmin.dao.DaoService;
 import org.esupportail.smsuapi.dao.beans.Account;
 import org.esupportail.smsuapiadmin.dto.DTOConverterService;
@@ -18,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class AccountManager {
 
-	private final Logger logger = new LoggerImpl(getClass());
+	private final Logger logger = Logger.getLogger(getClass());
 
 	@Autowired private DaoService daoService;
 	@Autowired private DTOConverterService dtoConverterService;

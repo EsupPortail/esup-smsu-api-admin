@@ -14,8 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.esupportail.commons.services.logging.Logger;
-import org.esupportail.commons.services.logging.LoggerImpl;
+import org.apache.log4j.Logger;
 import org.esupportail.smsuapiadmin.business.StatisticManager;
 import org.esupportail.smsuapiadmin.dto.beans.UIDetailedCriteria;
 import org.esupportail.smsuapiadmin.dto.beans.UIDetailedSummary;
@@ -28,7 +27,7 @@ public class DetailedSummaryController {
 	@Autowired
 	private StatisticManager statisticManager;
 
-	private final Logger logger = new LoggerImpl(getClass());
+	private final Logger logger = Logger.getLogger(getClass());
 
 	@GET
 	@Produces("application/json")

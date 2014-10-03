@@ -16,8 +16,7 @@ import javax.ws.rs.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.apache.commons.lang.StringUtils;
-import org.esupportail.commons.services.logging.Logger;
-import org.esupportail.commons.services.logging.LoggerImpl;
+import org.apache.log4j.Logger;
 import org.esupportail.smsuapiadmin.business.ApplicationManager;
 import org.esupportail.smsuapiadmin.business.NotFoundException;
 import org.esupportail.smsuapiadmin.dto.beans.UIApplication;
@@ -31,7 +30,7 @@ public class ApplicationsController {
 	private ApplicationManager applicationManager;
 
         @SuppressWarnings("unused")
-	private final Logger logger = new LoggerImpl(getClass());
+	private final Logger logger = Logger.getLogger(getClass());
 
 	@GET
 	@Produces("application/json")

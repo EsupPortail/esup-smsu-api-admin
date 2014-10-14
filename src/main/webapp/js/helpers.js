@@ -13,24 +13,21 @@ angular.extend(this, basicHelpers);
 this.callRest = restWsHelpers.simple;
 this.callRestModify = restWsHelpers.action;
 
+function willCallRest($function) {
+    return function () {
+	return h.callRest($function);
+    };
+}
 
 this.getInstAppAccount = function (e) {
     return { institution: e.institution, app: e.appName, account: e.accountName };
 };
 
-this.getUsers = function () {
-    return h.callRest('users').then(function(users) {
-	return h.array2hash(users, 'id');
-    });
-};
-
-this.getApplications = function () {
-    return h.callRest('applications');
-};
-
-this.getAccounts = function () {
-    return h.callRest('accounts');
-};
+this.accounts = willCallRest('accounts');
+this.applications = willCallRest('applications');
+this.users = willCallRest('users');
+this.summary_consolidated = willCallRest('summary/consolidated');
+this.summary_detailed_criteria = willCallRest('summary/detailed/criteria');
 
 function findName(base, existingHash) {
     var name = base;
@@ -46,7 +43,7 @@ this.createEmptyAccount = function (accountNameSuggestion, accounts) {
     console.log("found free account name " + name);
 
     return h.callRestModify('post', 'accounts', { name: name, quota: 0 }).then(function () {
-	return h.getAccounts();
+	return h.accounts();
     }).then(function (accounts) {
 	return h.array2hash(accounts, 'name')[name];
     });

@@ -34,13 +34,11 @@ app.controller('MainCtrl', function($scope, h, $route, $parse, routes, restWsHel
 
 app.controller('EmptyCtrl', function($scope) {});
 
-app.controller('UsersCtrl', function($scope, h) {
-    h.getUsers().then(function (users) {
-	$scope.users = users;
-    });
+app.controller('UsersCtrl', function($scope, h_users) {
+    $scope.users = h_users;
 });
 
-app.controller('UsersDetailCtrl', function($scope, h, $routeParams, $location) {
+app.controller('UsersDetailCtrl', function($scope, h, $routeParams, $location, h_users) {
     var id = $routeParams.id;
 
     var updateCurrentTabTitle = function () {
@@ -70,24 +68,24 @@ app.controller('UsersDetailCtrl', function($scope, h, $routeParams, $location) {
 	modify('delete');
     };
 
-    h.getUsers().then(function (users) {
-	$scope.login2user = h.array2hash(h.objectValues(users), 'login');
-	if (id === "new") {
-	    $scope.user = { isNew: true };
-	} else if (id in users) {
-	    $scope.user = users[id];
+    $scope.login2user = h.array2hash(h_users, 'login');
+    if (id === "new") {
+	$scope.user = { isNew: true };
+    } else {
+	var id2user = h.array2hash(h_users, 'id');
+
+	if (id in id2user) {
+	    $scope.user = id2user[id];
 	} else {
 	    alert("invalid user " + id);
 	}
-    });	
+    }
 });
 
-app.controller('ApplicationsDetailCtrl', function($scope, h, $routeParams, $location) {
+app.controller('ApplicationsDetailCtrl', function($scope, h, $routeParams, $location, h_accounts, h_applications) {
     var id = $routeParams.id;
 
-    h.getAccounts().then(function (list) {
-	$scope.accounts = list;
-    });	
+    $scope.accounts = h_accounts;
 
     var updateCurrentTabTitle = function () {
 	$scope.currentTab.text = $scope.app && $scope.app.name || (id === 'new' ? 'Création' : 'Modification');
@@ -125,13 +123,12 @@ app.controller('ApplicationsDetailCtrl', function($scope, h, $routeParams, $loca
 	modify('delete');
     };
 
-    h.getApplications().then(function (applications) {
-	$scope.name2app = h.array2hash(applications, 'name');
+    $scope.name2app = h.array2hash(h_applications, 'name');
 
 	if (id === "new") {
 	    $scope.app = { isNew: true, accountName: null, quota: 0 };
 	} else {
-	    var id2app = h.array2hash(applications, 'id');
+	    var id2app = h.array2hash(h_applications, 'id');
 
 	    if (id in id2app) {
 		$scope.app = id2app[id];
@@ -139,10 +136,9 @@ app.controller('ApplicationsDetailCtrl', function($scope, h, $routeParams, $loca
 		alert("invalid application " + id);
 	    }
 	}
-    });	
 });
 
-app.controller('AccountsDetailCtrl', function($scope, h, $routeParams, $location) {
+app.controller('AccountsDetailCtrl', function($scope, h, $routeParams, $location, h_accounts) {
     var id = $routeParams.id;
     $scope.isNew = $routeParams.isNew;
 
@@ -172,26 +168,20 @@ app.controller('AccountsDetailCtrl', function($scope, h, $routeParams, $location
 	modify('put');	
     };
 
-    h.getAccounts().then(function (accounts) {
-	$scope.name2account = h.array2hash(accounts, 'name');
-	var id2account = h.array2hash(accounts, 'id');
+    $scope.name2account = h.array2hash(h_accounts, 'name');
+    var id2account = h.array2hash(h_accounts, 'id');
 
 	if (id in id2account) {
-	    $scope.accounts = accounts;
+	    $scope.accounts = h_accounts;
 	    $scope.account = id2account[id];
 	    $scope.appDisabled = $scope.account.quota == 0;
 	} else {
 	    alert("invalid account " + id);
 	}
-    });	
 });
 
-app.controller('AccountsCtrl', function($scope, h) {
-    h.getAccounts().then(function(list) {
-	$scope.accounts = list;
-	// tell ng-grid:
-        if (!$scope.$$phase) $scope.$apply();
-    });	
+app.controller('AccountsCtrl', function($scope, h, h_accounts) {
+    $scope.accounts = h_accounts;
     $scope.warnConsumedRatio = 0.9;
     $scope.consumedRatio = function (account) {
 	return account.consumedSms / account.quota;
@@ -210,12 +200,8 @@ app.controller('AccountsCtrl', function($scope, h) {
 
 });
 
-app.controller('ApplicationsCtrl', function($scope, h) {
-    h.getApplications().then(function(list) {
-	$scope.applications = list;
-	// tell ng-grid:
-        if (!$scope.$$phase) $scope.$apply();
-    });	
+app.controller('ApplicationsCtrl', function($scope, h, h_applications) {
+    $scope.applications = h_applications;
     $scope.warnConsumedRatio = 0.9;
     $scope.consumedRatio = function (account) {
 	return account.consumedSms / account.quota;
@@ -234,10 +220,10 @@ app.controller('ApplicationsCtrl', function($scope, h) {
 
 });
 
-app.controller('ConsolidatedSummaryCtrl', function($scope, h) {
-    var computeTree = function (flatList) {
+app.controller('ConsolidatedSummaryCtrl', function($scope, h, h_summary_consolidated) {
+    var computeTree = function () {
 	var tree = {};
-	angular.forEach(flatList, function (e) {
+	angular.forEach(h_summary_consolidated, function (e) {
 	    var key1 = e.institution;
 	    var key2 = e.app + "+" + e.account;
 	    if (!tree[key1]) 
@@ -252,15 +238,13 @@ app.controller('ConsolidatedSummaryCtrl', function($scope, h) {
 	return tree;
     };
 
-    h.callRest('summary/consolidated').then(function(flatList) {
-	angular.forEach(flatList, function (e) {
+    angular.forEach(h_summary_consolidated, function (e) {
 	    $.extend(e, h.getInstAppAccount(e));
 	    e.nbReceived = e.nbSendedSMS - e.nbSMSInError;
 	    e.failureRate = Math.round(e.nbSMSInError / e.nbSendedSMS * 100) + "%";
-	});
-	$scope.flatList = flatList;
-	$scope.appAccountsTree = computeTree(flatList);
     });
+    $scope.flatList = h_summary_consolidated;
+    $scope.appAccountsTree = computeTree();
 
     $scope.setAppAccount = function(e) {
 	$scope.appAccount = e;
@@ -277,7 +261,7 @@ app.controller('ConsolidatedSummaryCtrl', function($scope, h) {
     };
 });
 
-app.controller('DetailedSummaryCtrl', function($scope, h, $location, $route) {
+app.controller('DetailedSummaryCtrl', function($scope, h, $location, $route, h_summary_detailed_criteria) {
     $scope.initialNbResults = 50;
     $scope.nbResults = $scope.initialNbResults;
     $scope.accountFilter = $location.search();
@@ -288,12 +272,10 @@ app.controller('DetailedSummaryCtrl', function($scope, h, $location, $route) {
 	$route.reload();
     };
 
-    h.callRest('summary/detailed/criteria').then(function(flatList) {
-	flatList = h.array_map(flatList, function (e) {
+	var flatList = h.array_map(h_summary_detailed_criteria, function (e) {
 	    return h.getInstAppAccount(e);
 	});
 	$scope.appAccountsTree = h.array2hashMulti(flatList, 'institution');
-    });
 
     $scope.inProgress = false;
 

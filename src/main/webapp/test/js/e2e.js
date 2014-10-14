@@ -29,12 +29,12 @@ describe('Welcome view', function() {
 
     it('should have a working navbar', function() {
 	expect(title()).toBe('Accueil');
-	expect(content()).toContain('Bienvenue dans');
+	expect(content()).toMatch('Bienvenue dans');
 
 	expect(repeater('.sidenav li').count()).toBe(7);
 	
 	var btn7 = element('.sidenav li:nth-child(7) a');
-	expect(btn7.text()).toContain('A propos de');
+	expect(btn7.text()).toMatch('A propos de');
 	btn7.click();
 	expect(url()).toBe('/about');
     });
@@ -46,7 +46,7 @@ describe('About view', function() {
     });
     it('should contain valid content', function () {
 	expect(title()).toBe('A propos de');	  
-	expect(content()).toContain('SMS-U est un service numérique');
+	expect(content()).toMatch('SMS-U est un service numérique');
     });
 });
 
@@ -56,7 +56,7 @@ describe('Users view', function() {
     });
     it('should display users + button', function () {
 	expect(title()).toBe('Gestion des utilisateurs');	  
-	expect(element("a[href='#/users/new']").text()).toContain('Ajouter un utilisateur');
+	expect(element("a[href='#/users/new']").text()).toMatch('Ajouter un utilisateur');
 	expect(element("table a.ng-binding:first").text()).toBe('admin');
 	expect(element("table a.ng-binding:first").attr('href')).toBe('#/users/1');
 	expect(element("table tr.ng-scope:first td:nth-child(2)").text()).toBe('ROLE_SUPER_ADMIN');
@@ -69,7 +69,7 @@ describe('Existing user view', function() {
     });
     it('should display test user and be editable', function () {
 	expect(title()).toBe('admin');	  
-	expect(element("a[ng-click='delete()']:visible").text()).toContain("Supprimer l'utilisateur");
+	expect(element("a[ng-click='delete()']:visible").text()).toMatch("Supprimer l'utilisateur");
 	expect(input('user.login').val()).toBe("admin");
 	expect(input('user.role').val()).toBe("ROLE_SUPER_ADMIN");
 
@@ -135,7 +135,7 @@ describe('Applications view', function() {
     });
     it('should display apps + button', function () {
 	expect(title()).toBe('Applications clientes');	  
-	expect(element("a[href='#/applications/new']").text()).toContain('Ajouter une application');
+	expect(element("a[href='#/applications/new']").text()).toMatch('Ajouter une application');
 	expect(element(".ngRow:first .ngCellText:first").text()).toBe('app');
 	expect(element(".ngRow:first .ngCellText:first a").attr('href')).toBe('#/applications/2');
     });
@@ -147,7 +147,7 @@ describe('Existing application view', function() {
     });
     it('should display test application and be editable', function () {
 	expect(title()).toBe('app');	  
-	expect(element("a[ng-click='delete()']:visible").text()).toContain("Supprimer l'application");
+	expect(element("a[ng-click='delete()']:visible").text()).toMatch("Supprimer l'application");
 	expect(input('app.name').val()).toBe("app");
 	expect(input('app.institution').val()).toBe("inst1");
 	//expect(input('app.accountName').val()).toBe("0");

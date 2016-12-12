@@ -5,7 +5,7 @@
   <artifactId>esup-smsu-api-admin</artifactId>
   <packaging>war</packaging>
   <name>esup-smsu-api-admin</name>
-  <version>2.0.0-RC2</version>
+  <version>3.0.0</version>
 
   <build>
     <!--finalName>${project.name}</finalName-->
@@ -240,7 +240,7 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 		<dependency>
 		  <groupId>org.esup-portail</groupId>
 		  <artifactId>esup-smsu-api</artifactId>
-		  <version>2.0.0</version>
+		  <version>3.0.0</version>
 		</dependency>
 
 		<dependency>

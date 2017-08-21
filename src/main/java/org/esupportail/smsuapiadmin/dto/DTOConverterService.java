@@ -178,15 +178,11 @@ public class DTOConverterService {
 		final Application result = new Application();
 
 		if (!isAddMode) {
-			// l'id
 			result.setId(Integer.valueOf(uiApp.getId()));
 		}
 
-		// le nom
 		result.setName(uiApp.getName());
-
 		result.setPassword(uiApp.getPassword());
-
 		result.setQuota(uiApp.getQuota());
 
 		// le compte d'imputation

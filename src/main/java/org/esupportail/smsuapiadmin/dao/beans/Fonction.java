@@ -116,19 +116,6 @@ public class Fonction  implements Serializable {
 	}
 
 	/**
-	 * Add a role to the set associated to the function.
-	 * @param role a role value
-	 */
-	public void addToRoles(final Role role) {
-		if (null == getRoles()) {
-			setRoles(new java.util.TreeSet<Role>());
-		}
-		getRoles().add(role);
-	}
-
-
-
-	/**
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

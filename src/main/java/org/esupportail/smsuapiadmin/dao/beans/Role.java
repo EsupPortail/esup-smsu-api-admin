@@ -122,17 +122,6 @@ public class Role  implements Serializable {
 	}
 
 	/**
-	 * Add a function to the set associated to the role.
-	 * @param fonction a function value
-	 */
-	public void addToFonctions(final Fonction fonction) {
-		if (null == getFonctions()) {
-			setFonctions(new java.util.TreeSet<Fonction>());
-		}
-		getFonctions().add(fonction);
-	}
-
-	/**
 	 * Return the value associated with the column: Users.
 	 */
 	public java.util.Set<UserBoSmsu> getUsers() {
@@ -146,18 +135,6 @@ public class Role  implements Serializable {
 	public void setUsers(final java.util.Set<UserBoSmsu> users) {
 		this.users = users;
 	}
-
-	/**
-	 * Add a value to the set associated to the role.
-	 * @param userBoSmsu a user value
-	 */
-	public void addToUsers(final UserBoSmsu userBoSmsu) {
-		if (null == getUsers()) {
-			setUsers(new java.util.TreeSet<UserBoSmsu>());
-		}
-		getUsers().add(userBoSmsu);
-	}
-
 
 	/**
 	 * @see java.lang.Object#equals(java.lang.Object)

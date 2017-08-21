@@ -6,7 +6,6 @@
 
 	<bean id="dtoConverterService"
 		class="org.esupportail.smsuapiadmin.dto.DTOConverterService">
-		<property name="daoService" ref="daoService" />
 	</bean>
 
 </beans>

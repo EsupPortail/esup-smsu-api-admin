@@ -158,7 +158,7 @@ public class DTOConverterService {
 	}
 	
 	public Set<EnumeratedFunction> convertToEnum(final Set<Fonction> fcts) {
-		Set<EnumeratedFunction> r = new java.util.TreeSet<EnumeratedFunction>();
+		Set<EnumeratedFunction> r = new java.util.TreeSet<>();
 		for (Fonction fct : fcts) {
 			r.add(convertToEnum(fct));
 		}
@@ -166,7 +166,7 @@ public class DTOConverterService {
 	}
 	
 	public Set<String> convert(final Set<Fonction> fcts) {
-		Set<String> r = new java.util.TreeSet<String>();
+		Set<String> r = new java.util.TreeSet<>();
 		for (Fonction fct : fcts) {
 			r.add(fct.getName());
 		}

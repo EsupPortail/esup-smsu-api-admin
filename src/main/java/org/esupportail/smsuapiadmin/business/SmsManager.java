@@ -43,7 +43,7 @@ public class SmsManager {
 	public List<UISms> getAllUISms() {
 			logger.debug("Retrieves the sms from the database");
 		
-		List<UISms> allUISms = new ArrayList<UISms>();
+		List<UISms> allUISms = new ArrayList<>();
 		List<Sms> allSms = daoService.getSms();
 
 		for (Sms sms : allSms) {

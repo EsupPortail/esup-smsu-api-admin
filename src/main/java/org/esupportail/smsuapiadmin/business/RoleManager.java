@@ -42,7 +42,7 @@ public class RoleManager {
 	public List<UIRole> getAllUIRoles() {
 			logger.debug("Retrieves the roles from the database");
 		
-		List<UIRole> allUIRoles = new ArrayList<UIRole>();
+		List<UIRole> allUIRoles = new ArrayList<>();
 		List<Role> allRoles = daoService.getRoles();
 		
 		logger.debug("Nombre de roles de la liste provenant du dao : "

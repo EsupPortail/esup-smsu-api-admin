@@ -32,7 +32,7 @@ public class User implements Serializable {
 	/**
 	 * fonctions list.
 	 */
-	private List<EnumeratedFunction> fonctions = new ArrayList<EnumeratedFunction>();
+	private List<EnumeratedFunction> fonctions = new ArrayList<>();
 
 	/**
 	 * True for administrators.

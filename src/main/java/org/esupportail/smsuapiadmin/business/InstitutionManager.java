@@ -41,7 +41,7 @@ public class InstitutionManager {
 	public List<String> getAllUIInstitutions() {
 			logger.debug("Retrieves the institutions from the database");
 		
-		List<String> allUiInstitutions = new ArrayList<String>();
+		List<String> allUiInstitutions = new ArrayList<>();
 		List<Institution> allInstitutions = daoService.getInstitutions();
 
 		for (Institution inst : allInstitutions) {

@@ -40,7 +40,7 @@ public class AccountManager {
 	 */
 	public List<UIAccount> getAllUIAccounts() {
 			logger.debug("Retrieves the accounts from the database");
-		List<UIAccount> allUiAccounts = new ArrayList<UIAccount>();
+		List<UIAccount> allUiAccounts = new ArrayList<>();
 		List<Account> allAccounts = daoService.getAccounts();
 
 		for (Account acc : allAccounts) {

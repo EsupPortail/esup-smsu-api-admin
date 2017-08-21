@@ -52,7 +52,7 @@ public class StartPage implements org.springframework.web.HttpRequestHandler {
     }
 
 	public Map<String, Object> createEnv(String baseURL, boolean isWebWidget, String idpId, boolean genTestStaticJsonPage) throws IOException {
-		Map<String, Object> env = new TreeMap<String, Object>();
+		Map<String, Object> env = new TreeMap<>();
 
     	env.put("baseURL", baseURL);
     	env.put("isWebWidget", isWebWidget);
@@ -65,7 +65,7 @@ public class StartPage implements org.springframework.web.HttpRequestHandler {
 	}
 
 	private <A, B> Map<A, B> singletonMap(A key, B value) {
-		Map<A, B> r = new TreeMap<A, B>();
+		Map<A, B> r = new TreeMap<>();
 		r.put(key, value);
 		return r;
 	}

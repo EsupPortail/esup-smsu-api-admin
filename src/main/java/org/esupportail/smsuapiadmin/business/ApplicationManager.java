@@ -40,7 +40,7 @@ public class ApplicationManager {
 	public List<UIApplication> getAllUIApplications() {
 			logger.debug("Retrieves the applications from the database");
 		
-		List<UIApplication> allUiApps = new ArrayList<UIApplication>();
+		List<UIApplication> allUiApps = new ArrayList<>();
 		List<Application> allApps = daoService.getApplications();
 
 		for (Application app : allApps) {

@@ -55,7 +55,7 @@ public class StatisticManager {
 	public List<UIStatistic> getAllUIStatistics() {
 			logger.debug("Retrieves the statistics from the database");
 		
-		final List<UIStatistic> allUIStatistics = new ArrayList<UIStatistic>();
+		final List<UIStatistic> allUIStatistics = new ArrayList<>();
 		final List<Statistic> allStatistics = daoService.getStatistics();
 
 		for (final Statistic stat : allStatistics) {
@@ -72,7 +72,7 @@ public class StatisticManager {
 	 */
 	public List<UIStatistic> getStatisticsSorted() {
 
-		final List<UIStatistic> result = new ArrayList<UIStatistic>();
+		final List<UIStatistic> result = new ArrayList<>();
 		final List<Statistic> stats = daoService.getStatisticsSorted();
 
 		for (final Statistic stat : stats) {
@@ -89,7 +89,7 @@ public class StatisticManager {
 	 * @return
 	 */
 	public List<UIDetailedCriteria> getDetailedStatisticsCriteria() {
-		final List<UIDetailedCriteria> result = new ArrayList<UIDetailedCriteria>();
+		final List<UIDetailedCriteria> result = new ArrayList<>();
 		for (Map<String,?> map : daoService.getSmsAccountsAndApplications()) {			
 			final Application app = (Application) map.get(Sms.PROP_APP);
 			final Account acc = (Account) map.get(Sms.PROP_ACC);
@@ -134,7 +134,7 @@ public class StatisticManager {
 			final Institution inst, final Account acc, final Application app,
 			final Date startDate, final Date endDate, int maxResults) {
 
-		final List<UIDetailedSummary> result = new ArrayList<UIDetailedSummary>();
+		final List<UIDetailedSummary> result = new ArrayList<>();
 
 		// rappel : les releves detailles sont groupes par SMS_INITIAL_ID
 		// les statistiques concernent ce groupe d'envoi.
@@ -197,7 +197,7 @@ public class StatisticManager {
 		Date minDate = null;
 
 		// le decompte
-		final Map<SmsStatus, Integer> stats = new EnumMap<SmsStatus, Integer>(SmsStatus.class);
+		final Map<SmsStatus, Integer> stats = new EnumMap<>(SmsStatus.class);
 		for (SmsStatus status : SmsStatus.values()) stats.put(status, new Integer(0));
 
 		for (final Sms sms : smsList) {

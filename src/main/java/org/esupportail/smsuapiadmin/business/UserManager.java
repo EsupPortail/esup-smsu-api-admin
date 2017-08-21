@@ -60,7 +60,7 @@ public class UserManager {
 	public List<UIUser> getUsers() {
 			logger.debug("Retrieves the accounts from the database");
 		
-		List<UIUser> allUIUsers = new ArrayList<UIUser>();
+		List<UIUser> allUIUsers = new ArrayList<>();
 		List<UserBoSmsu> allUsers = daoService.getUsers();
 
 		for (UserBoSmsu user : allUsers) {
@@ -78,7 +78,7 @@ public class UserManager {
 	public List<UIUser> getUsers(final UIUser currentUser) {
 			logger.debug("Retrieves the accounts from the database");
 		
-		List<UIUser> allUIUsers = new ArrayList<UIUser>();
+		List<UIUser> allUIUsers = new ArrayList<>();
 
 		for (UserBoSmsu user : daoService.getUsers()) {
 			boolean isDeletable = true;

@@ -13,7 +13,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 import org.esupportail.smsuapiadmin.business.UserManager;
@@ -24,7 +24,7 @@ import org.esupportail.smsuapiadmin.dto.beans.UIUser;
 @RolesAllowed("FCTN_MANAGE_USERS")
 public class UsersController {
 	
-	@Autowired
+	@Inject
 	private UserManager userManager;
 
         @SuppressWarnings("unused")

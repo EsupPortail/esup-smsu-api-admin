@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import org.esupportail.smsuapiadmin.dao.DaoService;
 import org.esupportail.smsuapi.dao.beans.Institution;
 import org.esupportail.smsuapiadmin.dto.DTOConverterService;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 
 /**
  * AccountManager is the business layer between the web and the database for
@@ -18,8 +18,8 @@ public class InstitutionManager {
 
 	private final Logger logger = Logger.getLogger(getClass());
 
-	@Autowired private DaoService daoService;
-	@Autowired private DTOConverterService dtoConverterService;
+	@Inject private DaoService daoService;
+	@Inject private DTOConverterService dtoConverterService;
 
 	/**
 	 * Retrieves all the institutions defined in database.

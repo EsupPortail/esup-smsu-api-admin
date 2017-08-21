@@ -9,7 +9,7 @@ import org.esupportail.smsuapiadmin.dao.DaoService;
 import org.esupportail.smsuapiadmin.dao.beans.UserBoSmsu;
 import org.esupportail.smsuapiadmin.dto.DTOConverterService;
 import org.esupportail.smsuapiadmin.dto.beans.UIUser;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 
 /**
  * UserManager is the business layer between the web and the database for 'user'
@@ -20,8 +20,8 @@ public class UserManager {
 
 	private final Logger logger = Logger.getLogger(getClass());
 
-	@Autowired private DaoService daoService;
-	@Autowired private DTOConverterService dtoConverterService;
+	@Inject private DaoService daoService;
+	@Inject private DTOConverterService dtoConverterService;
 
 	/**
 	 * Returns the user with the specified id.

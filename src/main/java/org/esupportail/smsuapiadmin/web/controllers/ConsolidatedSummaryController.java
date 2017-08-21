@@ -8,7 +8,7 @@ import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 import org.esupportail.smsuapiadmin.business.StatisticManager;
@@ -22,7 +22,7 @@ import org.esupportail.smsuapiadmin.dto.beans.UIStatistic;
 @RolesAllowed("FCTN_API_EDITION_RAPPORT")
 public class ConsolidatedSummaryController {
 	
-	@Autowired
+	@Inject
 	private StatisticManager statisticManager;
 
         @SuppressWarnings("unused")

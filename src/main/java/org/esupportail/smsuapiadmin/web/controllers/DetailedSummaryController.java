@@ -13,7 +13,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import org.esupportail.smsuapiadmin.business.StatisticManager;
 import org.esupportail.smsuapiadmin.dto.beans.UIDetailedCriteria;
@@ -24,7 +24,7 @@ import org.esupportail.smsuapiadmin.dto.beans.UIDetailedSummary;
 @RolesAllowed("FCTN_API_EDITION_RAPPORT")
 public class DetailedSummaryController {
 		
-	@Autowired
+	@Inject
 	private StatisticManager statisticManager;
 
 	private final Logger logger = Logger.getLogger(getClass());

@@ -12,12 +12,12 @@ import org.apache.commons.io.IOUtils;
 import org.esupportail.smsu.services.UrlGenerator;
 import org.esupportail.smsu.web.ServerSideDirectives;
 import org.esupportail.smsu.web.ServletContextWrapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 
 public class StartPage implements org.springframework.web.HttpRequestHandler {
 
-    @Autowired private UrlGenerator urlGenerator;
-    @Autowired private ServerSideDirectives serverSideDirectives;
+    @Inject private UrlGenerator urlGenerator;
+    @Inject private ServerSideDirectives serverSideDirectives;
     
     private boolean jsonpDisabled = false;
 

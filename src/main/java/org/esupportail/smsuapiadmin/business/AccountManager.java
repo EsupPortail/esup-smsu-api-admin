@@ -8,7 +8,7 @@ import org.esupportail.smsuapiadmin.dao.DaoService;
 import org.esupportail.smsuapi.dao.beans.Account;
 import org.esupportail.smsuapiadmin.dto.DTOConverterService;
 import org.esupportail.smsuapiadmin.dto.beans.UIAccount;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 
 /**
  * AccountManager is the business layer between the web and the database for
@@ -19,8 +19,8 @@ public class AccountManager {
 
 	private final Logger logger = Logger.getLogger(getClass());
 
-	@Autowired private DaoService daoService;
-	@Autowired private DTOConverterService dtoConverterService;
+	@Inject private DaoService daoService;
+	@Inject private DTOConverterService dtoConverterService;
 
 	/**
 	 * Retrieves all the accounts defined in database.

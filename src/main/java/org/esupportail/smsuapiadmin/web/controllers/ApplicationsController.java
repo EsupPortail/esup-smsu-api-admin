@@ -13,7 +13,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -26,7 +26,7 @@ import org.esupportail.smsuapiadmin.dto.beans.UIApplication;
 @RolesAllowed("FCTN_API_CONFIG_APPLIS")
 public class ApplicationsController {
 	
-	@Autowired
+	@Inject
 	private ApplicationManager applicationManager;
 
         @SuppressWarnings("unused")

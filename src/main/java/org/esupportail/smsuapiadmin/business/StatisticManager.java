@@ -20,7 +20,7 @@ import org.esupportail.smsuapiadmin.dto.DTOConverterService;
 import org.esupportail.smsuapiadmin.dto.beans.UIDetailedCriteria;
 import org.esupportail.smsuapiadmin.dto.beans.UIDetailedSummary;
 import org.esupportail.smsuapiadmin.dto.beans.UIStatistic;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 
 /**
  * StatisticManager is the business layer between the web and the database for
@@ -31,9 +31,9 @@ public class StatisticManager {
 
 	private final Logger logger = Logger.getLogger(getClass());
 
-	@Autowired private DaoService daoService;
-	@Autowired private DTOConverterService dtoConverterService;
-	@Autowired private I18nService i18nService;
+	@Inject private DaoService daoService;
+	@Inject private DTOConverterService dtoConverterService;
+	@Inject private I18nService i18nService;
 
 	/**
 	 * Retrieves all the accounts defined in database.

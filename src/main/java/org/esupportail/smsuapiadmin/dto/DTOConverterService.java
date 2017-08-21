@@ -23,7 +23,7 @@ import org.esupportail.smsuapiadmin.dto.beans.UISms;
 import org.esupportail.smsuapiadmin.dto.beans.UIStatistic;
 import org.esupportail.smsuapiadmin.dto.beans.UIUser;
 import org.esupportail.smsuapiadmin.business.NotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 
 public class DTOConverterService {
 
@@ -35,7 +35,7 @@ public class DTOConverterService {
 	/**
 	 * {@link DaoService}.
 	 */
-	@Autowired private DaoService daoService;
+	@Inject private DaoService daoService;
 	
 	public UIAccount convertToUI(final Account acc) {
 		UIAccount result = new UIAccount();

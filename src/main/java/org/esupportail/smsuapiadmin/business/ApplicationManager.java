@@ -8,7 +8,7 @@ import org.esupportail.smsuapiadmin.dao.DaoService;
 import org.esupportail.smsuapi.dao.beans.Application;
 import org.esupportail.smsuapiadmin.dto.DTOConverterService;
 import org.esupportail.smsuapiadmin.dto.beans.UIApplication;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 
 /**
  * ApplicationManager is the business layer between the web and the database for
@@ -19,8 +19,8 @@ public class ApplicationManager {
 
 	private final Logger logger = Logger.getLogger(getClass());
 
-	@Autowired private DaoService daoService;
-	@Autowired private DTOConverterService dtoConverterService;
+	@Inject private DaoService daoService;
+	@Inject private DTOConverterService dtoConverterService;
 
 	/**
 	 * Retrieves all the applications defined in database.

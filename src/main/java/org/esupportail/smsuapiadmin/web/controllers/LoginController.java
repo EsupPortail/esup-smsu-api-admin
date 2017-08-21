@@ -8,7 +8,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -23,8 +23,8 @@ import org.esupportail.smsu.services.UrlGenerator;
 @Path("/login")
 public class LoginController {
 	
-    @Autowired private UserManager userManager;
-    @Autowired private UrlGenerator urlGenerator;
+    @Inject private UserManager userManager;
+    @Inject private UrlGenerator urlGenerator;
     
     @GET
     public Response get(@Context HttpServletRequest request) throws IOException {

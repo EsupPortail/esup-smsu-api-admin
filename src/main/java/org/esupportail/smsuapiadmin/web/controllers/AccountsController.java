@@ -12,7 +12,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.inject.Inject;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -30,7 +30,7 @@ import org.esupportail.smsuapiadmin.dto.beans.UIAccount;
 @RolesAllowed("FCTN_GESTION_CPT_IMPUT")
 public class AccountsController {
 	
-	@Autowired
+	@Inject
 	private AccountManager accountManager;
 
         @SuppressWarnings("unused")

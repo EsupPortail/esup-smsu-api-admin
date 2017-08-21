@@ -11,7 +11,7 @@
 		http://www.springframework.org/schema/context
 		http://www.springframework.org/schema/context/spring-context-2.5.xsd">
 
-   <!-- for spring annotation @Autowired -->
+   <!-- for spring annotation @Inject -->
    <context:annotation-config />
 
    <bean id="AuthAndRoleAndMiscFilter" class="org.esupportail.smsuapiadmin.web.AuthAndRoleAndMiscFilter">

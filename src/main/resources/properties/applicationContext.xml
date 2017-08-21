@@ -34,7 +34,6 @@
 	<import resource="cache/cache.xml" />
 	<import resource="dao/dao.xml" />
 	<import resource="dto/dto.xml" />
-	<import resource="i18n/i18n.xml" />
 	<import resource="smtp/smtp.xml" />
 	<import resource="web/controllers.xml" />
 	<import resource="rest.xml" />

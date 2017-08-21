@@ -7,7 +7,6 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import org.esupportail.commons.services.i18n.I18nService;
 import org.apache.log4j.Logger;
 import org.esupportail.smsuapiadmin.dao.DaoService;
 import org.esupportail.smsuapi.dao.beans.Account;
@@ -33,7 +32,6 @@ public class StatisticManager {
 
 	@Inject private DaoService daoService;
 	@Inject private DTOConverterService dtoConverterService;
-	@Inject private I18nService i18nService;
 
 	/**
 	 * Retrieves all the accounts defined in database.
@@ -181,7 +179,7 @@ public class StatisticManager {
 	private UIDetailedSummary computeDetailedSummary(final List<Sms> smsList) {
 		assert !smsList.isEmpty();
 		final Sms firstSms = smsList.get(0);
-		final UIDetailedSummary summary = new UIDetailedSummary(i18nService);
+		final UIDetailedSummary summary = new UIDetailedSummary();
 
 		// on recupere les objets institution application et account qui sont identiques pour tous les sms d'un meme groupe
 		summary.setInstitution(firstSms.getApp().getIns().getLabel());

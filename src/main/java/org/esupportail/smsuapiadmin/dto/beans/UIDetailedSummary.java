@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
-import org.esupportail.commons.services.i18n.I18nService;
 import org.apache.log4j.Logger;
 import org.esupportail.smsuapi.domain.beans.sms.SmsStatus;
 
@@ -21,8 +20,6 @@ public class UIDetailedSummary implements Comparable<UIDetailedSummary> {
 	 * Log4j logger.
 	 */
 	private final Logger logger = Logger.getLogger(getClass());
-
-	private I18nService i18nService;
 
 	/**
 	 * institution.
@@ -48,13 +45,6 @@ public class UIDetailedSummary implements Comparable<UIDetailedSummary> {
 	 * statistics.
 	 */
 	private Map<SmsStatus, Integer> statistics;
-
-	/**
-	 * Default constructor.
-	 */
-	public UIDetailedSummary(I18nService i18nService) {
-		this.i18nService = i18nService;
-	}
 
 	/**
 	 * Getter for 'institution'.
@@ -165,7 +155,7 @@ public class UIDetailedSummary implements Comparable<UIDetailedSummary> {
 			int nb = statistics.get(state);
 			total += nb;
 			if (nb > 0 && state != SmsStatus.ERROR) {
-				detail += (detail.equals("") ? "" : ", ") + nb + " " + i18nService.getString("SMS.STATUS." + state + ".NAME");
+				detail += (detail.equals("") ? "" : ", ") + nb + " " + ("SMS.STATUS." + state + ".NAME");
 			}
 		}
 		return "" + total + (detail.equals("") ? "" : " (dont " + detail + ")");

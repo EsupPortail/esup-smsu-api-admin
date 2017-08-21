@@ -1,14 +1,19 @@
 package org.esupportail.smsuapiadmin.dto;
 
+import java.util.List;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+import org.esupportail.smsuapiadmin.dao.DaoService;
 import org.esupportail.smsuapi.dao.beans.Account;
 import org.esupportail.smsuapi.dao.beans.Application;
 import org.esupportail.smsuapiadmin.dao.beans.Fonction;
 import org.esupportail.smsuapi.dao.beans.Institution;
 import org.esupportail.smsuapiadmin.dao.beans.Role;
 import org.esupportail.smsuapi.dao.beans.Sms;
+import org.esupportail.smsuapi.domain.beans.sms.SmsStatus;
 import org.esupportail.smsuapi.dao.beans.Statistic;
+import org.esupportail.smsuapi.dao.beans.StatisticPK;
 import org.esupportail.smsuapiadmin.dao.beans.UserBoSmsu;
 import org.esupportail.smsuapiadmin.domain.beans.EnumeratedFunction;
 import org.esupportail.smsuapiadmin.domain.beans.EnumeratedRole;
@@ -18,108 +23,254 @@ import org.esupportail.smsuapiadmin.dto.beans.UIRole;
 import org.esupportail.smsuapiadmin.dto.beans.UISms;
 import org.esupportail.smsuapiadmin.dto.beans.UIStatistic;
 import org.esupportail.smsuapiadmin.dto.beans.UIUser;
+import org.esupportail.smsuapiadmin.business.NotFoundException;
 
-/**
- * Interface 'DTOConverterService' purposes services to convert business objects
- * to UI objects and inversely.
- * 
- * @author MZRL3760
- * 
- */
-public interface DTOConverterService {
+public class DTOConverterService {
 
 	/**
-	 * Makes an UIAccount from an Account.
-	 * 
-	 * @param acc
-	 * @return
+	 * Log4j logger.
 	 */
-	UIAccount convertToUI(Account acc);
+	private final Logger logger = Logger.getLogger(getClass());
 
 	/**
-	 * Makes an UIApplication from an Application.
+	 * {@link DaoService}.
+	 */
+	private DaoService daoService;
+	
+	public UIAccount convertToUI(final Account acc) {
+		UIAccount result = new UIAccount();
+
+		result.setId(acc.getId());
+		result.setName(acc.getLabel());
+		result.setQuota(acc.getQuota());
+		result.setConsumedSms(acc.getConsumedSms());
+
+		return result;
+	}
+
+	
+    public Account convertFromUI(final UIAccount acc, boolean isAddMode) {
+		Account result = new Account();
+
+		if (!isAddMode) {
+			result.setId(Integer.valueOf(acc.getId()));
+		}
+		result.setLabel(acc.getName());
+		result.setQuota(acc.getQuota());
+
+		if (isAddMode) result.setConsumedSms(new Long(0));
+
+		return result;
+	}
+
+	
+	public UIApplication convertToUI(final Application app) {
+		UIApplication result = new UIApplication();
+
+		result.setId(app.getId());
+		result.setName(app.getName());
+		result.setPassword(app.getPassword());
+
+		result.setAccountName(app.getAcc().getLabel());
+		String uiInst = convertToUI(app.getIns());
+		result.setInstitution(uiInst);
+		result.setQuota(app.getQuota());
+		result.setConsumedSms(app.getConsumedSms());
+		boolean deletable = isDeletable(app);
+		result.setDeletable(deletable);
+
+		return result;
+	}
+
+	
+	public String convertToUI(final Institution inst) {
+		return inst.getLabel();
+	}
+
+	/**
+	 * Returns true the application is not referenced by other objects in
+	 * database. False otherwise.
 	 * 
 	 * @param app
 	 * @return
 	 */
-	UIApplication convertToUI(Application app);
+	private boolean isDeletable(final Application app) {
+		boolean result = false;
+
+		List<Sms> listSMS = daoService.getSMSByApplication(app);
+
+		// aucun sms ne reference cette application
+		if ((listSMS == null) || (listSMS.size() == 0)) {
+			List<Statistic> listStatistic = daoService
+					.getStatisticByApplication(app);
+			// aucun sms ne reference cette application
+			if ((listStatistic == null) || (listStatistic.size() == 0)) {
+				result = true;
+			}
+		}
+
+		return result;
+	}
+
+	
+	public UIStatistic convertToUI(final Statistic stat) {
+		UIStatistic result = new UIStatistic();
+
+		StatisticPK id = stat.getId();
+		result.setMonth(id.getMonth());
+
+		result.setAccountName(id.getAcc().getLabel());
+		result.setAppName(id.getApp().getName());
+		result.setInstitution(id.getApp().getIns().getLabel());
+
+		result.setNbSendedSMS(stat.getNbSms());
+		result.setNbSMSInError(stat.getNbSmsInError());
+
+		return result;
+	}
+
+	
+	public UIUser convertToUI(final UserBoSmsu user) {
+		UIUser result = new UIUser();
+
+		result.setId(user.getId() + "");
+		result.setLogin(user.getLogin());
+		result.setRole(convertToEnum(user.getRole()));
+
+		return result;
+	}
+
+	
+	public UIRole convertToUI(final Role role) {
+		UIRole result = new UIRole();
+
+		result.setId(role.getId() + "");	
+		result.setRole(EnumeratedRole.valueOf(role.getName()));
+		result.setFonctions(convertToEnum(role.getFonctions()));
+
+		return result;
+	}
+	
+	public EnumeratedRole convertToEnum(final Role role) {
+		return EnumeratedRole.valueOf(role.getName());
+	}
+
+	
+	public EnumeratedFunction convertToEnum(final Fonction fct) {
+		return EnumeratedFunction.valueOf(fct.getName());
+	}
+	
+	public Set<EnumeratedFunction> convertToEnum(final Set<Fonction> fcts) {
+		Set<EnumeratedFunction> r = new java.util.TreeSet<EnumeratedFunction>();
+		for (Fonction fct : fcts) {
+			r.add(convertToEnum(fct));
+		}
+		return r;
+	}
+	
+	public Set<String> convert(final Set<Fonction> fcts) {
+		Set<String> r = new java.util.TreeSet<String>();
+		for (Fonction fct : fcts) {
+			r.add(fct.getName());
+		}
+		return r;
+	}
 
 	/**
-	 * Makes an UIAccount from an Account.
+	 * Setter for 'daoService'.
 	 * 
-	 * @param acc
-	 * @return
+	 * @param daoService
 	 */
-	UIStatistic convertToUI(Statistic stat);
+	public void setDaoService(final DaoService daoService) {
+		this.daoService = daoService;
+	}
 
-	/**
-	 * Makes an Application from an UIApplication.
-	 * 
-	 * @param uiApp
-	 * @return
-	 */
-	Application convertFromUI(UIApplication uiApp, boolean isAddMode);
+	
+    public Application convertFromUI(final UIApplication uiApp, boolean isAddMode) {
+		final Application result = new Application();
 
-	Account convertFromUI(UIAccount acc, boolean isAddMode);
+		if (!isAddMode) {
+			// l'id
+			result.setId(Integer.valueOf(uiApp.getId()));
+		}
 
-	/**
-	 * Makes a string from an Institution.
-	 * 
-	 * @param inst
-	 * @return
-	 */
-	String convertToUI(Institution inst);
+		// le nom
+		result.setName(uiApp.getName());
 
-	/**
-	 * Makes an UIUser from a UserBoSmsu.
-	 * 
-	 * @param user
-	 * @return
-	 */
-	UIUser convertToUI(UserBoSmsu user);
+		result.setPassword(uiApp.getPassword());
 
-	/**
-	 * Makes an UIFonction from a Fonction.
-	 * 
-	 * @param user
-	 * @return
-	 */
-	EnumeratedFunction convertToEnum(Fonction fct);
+		result.setQuota(uiApp.getQuota());
 
-	Set<EnumeratedFunction> convertToEnum(Set<Fonction> fcts);
+		// le compte d'imputation
+		Account account = daoService.getAccountByName(uiApp.getAccountName());
+		if (account == null) throw new NotFoundException("invalid account " + uiApp.getAccountName());
+		result.setAcc(account);
 
-	Set<String> convert(Set<Fonction> fcts);
+		// l'etablissement
+		Institution institution = daoService.getInstitutionByName(uiApp
+				.getInstitution());
+		if (institution == null) {
+			institution = new Institution();
+			institution.setLabel(uiApp.getInstitution());
+			daoService.addInstitution(institution);
+		}
+		result.setIns(institution);
 
-	/**
-	 * Makes an UIRole from a Role.
-	 * 
-	 * @param role
-	 * @return
-	 */
-	UIRole convertToUI(Role role);
+		// le nombre de sms consomme est nul;
+		result.setConsumedSms(new Long(0));
 
-	/**
-	 * Makes an EnumeratedRole from a Role.
-	 * 
-	 * @param role
-	 * @return
-	 */
-	EnumeratedRole convertToEnum(Role role);
+		return result;
+	}
 
-	/**
-	 * Makes an UISms from a Sms.
-	 * 
-	 * @param user
-	 * @return
-	 */
-	UISms convertToUI(Sms sms);
+	
+	public UISms convertToUI(final Sms sms) {
+		UISms result = new UISms();
+		// id
+		result.setId(sms.getId() + "");
+		// account
+		Account acc = sms.getAcc();
+		UIAccount uiAcc = convertToUI(acc);
+		result.setAccount(uiAcc);
+		// application
+		Application app = sms.getApp();
+		UIApplication uiApp = convertToUI(app);
+		result.setApplication(uiApp);
+		// date
+		result.setDate(sms.getDate());
+		// initialId
+		result.setInitialId(sms.getInitialId() + "");
+		// senderId
+		result.setSenderId(sms.getSenderId() + "");
+		// state
+		SmsStatus smsStatus = sms.getStateAsEnum();
+		result.setState(smsStatus);
+		// phone
+		result.setPhone(sms.getPhone());
 
-	/**
-	 * Makes a UserBoSmsu from a UIUser.
-	 * 
-	 * @param uiUser
-	 * @return
-	 */
-	UserBoSmsu convertFromUI(UIUser uiUser, boolean isAddMode);
+		return result;
+	}
+
+	
+	public UserBoSmsu convertFromUI(final UIUser uiUser, boolean isAddMode) {
+		final UserBoSmsu result = new UserBoSmsu();
+
+		if (!isAddMode) {
+			// l'id
+			result.setId(Integer.valueOf(uiUser.getId()));
+		}
+
+		// le nom
+		result.setLogin(uiUser.getLogin());
+
+		// le role
+		EnumeratedRole roleName = uiUser.getRole();
+		Role role = daoService.getRoleByName(roleName.toString());
+		if (role == null) {
+			logger.error("Aucun role d'identifiant " + roleName + " n'existe en base.");
+		}
+		result.setRole(role);
+
+		return result;
+	}
 
 }

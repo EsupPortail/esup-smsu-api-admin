@@ -49,6 +49,10 @@ public class UIUser implements Serializable {
 	public UIUser() {
 	}
 
+	public UIUser(String login) {
+        this.login = login;
+	}
+
 	/**
 	 * Getter for 'name'.
 	 * 

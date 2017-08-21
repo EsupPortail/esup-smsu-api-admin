@@ -42,19 +42,14 @@ public class UserManager {
 	 * @return
 	 */
 	public UIUser getUserByLogin(final String login) {
-		UIUser result = null;
-
 		logger.info("Recherche du user : login=" + login);
 		UserBoSmsu user = daoService.getUserByLogin(login);
 		if (user != null) {
-			result = dtoConverterService.convertToUI(user);
+			return dtoConverterService.convertToUI(user);
 		} else {
 			// do not return null user, otherwise null is returned which angularjs will take as a failure
-			result = new UIUser();
-			result.setLogin(login);
+			return new UIUser(login);
 		}
-
-		return result;
 	}
 
 	/**

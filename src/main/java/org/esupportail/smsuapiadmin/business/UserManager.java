@@ -77,9 +77,8 @@ public class UserManager {
 	 * @return
 	 */
 	public List<UIUser> getUsers() {
-		if (logger.isDebugEnabled()) {
 			logger.debug("Retrieves the accounts from the database");
-		}
+		
 		List<UIUser> allUIUsers = new ArrayList<UIUser>();
 		List<UserBoSmsu> allUsers = daoService.getUsers();
 
@@ -96,9 +95,8 @@ public class UserManager {
 	 * @return
 	 */
 	public List<UIUser> getUsers(final UIUser currentUser) {
-		if (logger.isDebugEnabled()) {
 			logger.debug("Retrieves the accounts from the database");
-		}
+		
 		List<UIUser> allUIUsers = new ArrayList<UIUser>();
 		List<UserBoSmsu> allUsers = daoService.getUsers();
 

@@ -28,9 +28,8 @@ public class RoleManager {
 	 * @return
 	 */
 	public List<Role> getAllRoles() {
-		if (logger.isDebugEnabled()) {
 			logger.debug("Retrieve the roles from the database");
-		}
+		
 		List<Role> allRoles = daoService.getRoles();
 		return allRoles;
 	}
@@ -41,9 +40,8 @@ public class RoleManager {
 	 * @return
 	 */
 	public List<UIRole> getAllUIRoles() {
-		if (logger.isDebugEnabled()) {
 			logger.debug("Retrieves the roles from the database");
-		}
+		
 		List<UIRole> allUIRoles = new ArrayList<UIRole>();
 		List<Role> allRoles = daoService.getRoles();
 		

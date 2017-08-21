@@ -29,9 +29,8 @@ public class SmsManager {
 	 * @return
 	 */
 	public List<Sms> getAllSms() {
-		if (logger.isDebugEnabled()) {
 			logger.debug("Retrieve the sms from the database");
-		}
+		
 		List<Sms> allSms = daoService.getSms();
 		return allSms;
 	}
@@ -42,9 +41,8 @@ public class SmsManager {
 	 * @return
 	 */
 	public List<UISms> getAllUISms() {
-		if (logger.isDebugEnabled()) {
 			logger.debug("Retrieves the sms from the database");
-		}
+		
 		List<UISms> allUISms = new ArrayList<UISms>();
 		List<Sms> allSms = daoService.getSms();
 

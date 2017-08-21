@@ -27,9 +27,8 @@ public class InstitutionManager {
 	 * @return
 	 */
 	public List<Institution> getAllInstitutions() {
-		if (logger.isDebugEnabled()) {
 			logger.debug("Retrieve the institutions from the database");
-		}
+		
 		List<Institution> allInstitutions = daoService.getInstitutions();
 		return allInstitutions;
 	}
@@ -40,9 +39,8 @@ public class InstitutionManager {
 	 * @return
 	 */
 	public List<String> getAllUIInstitutions() {
-		if (logger.isDebugEnabled()) {
 			logger.debug("Retrieves the institutions from the database");
-		}
+		
 		List<String> allUiInstitutions = new ArrayList<String>();
 		List<Institution> allInstitutions = daoService.getInstitutions();
 

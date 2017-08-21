@@ -28,9 +28,7 @@ public class AccountManager {
 	 * @return
 	 */
 	public List<Account> getAllAccounts() {
-		if (logger.isDebugEnabled()) {
 			logger.debug("Retrieve the accounts from the database");
-		}
 		List<Account> allAccounts = daoService.getAccounts();
 		return allAccounts;
 	}
@@ -41,9 +39,7 @@ public class AccountManager {
 	 * @return
 	 */
 	public List<UIAccount> getAllUIAccounts() {
-		if (logger.isDebugEnabled()) {
 			logger.debug("Retrieves the accounts from the database");
-		}
 		List<UIAccount> allUiAccounts = new ArrayList<UIAccount>();
 		List<Account> allAccounts = daoService.getAccounts();
 

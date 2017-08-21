@@ -41,9 +41,8 @@ public class StatisticManager {
 	 * @return
 	 */
 	public List<Statistic> getAllStatistics() {
-		if (logger.isDebugEnabled()) {
 			logger.debug("Retrieve the statistics from the database");
-		}
+		
 		final List<Statistic> allStatistics = daoService.getStatistics();
 		return allStatistics;
 	}
@@ -54,9 +53,8 @@ public class StatisticManager {
 	 * @return
 	 */
 	public List<UIStatistic> getAllUIStatistics() {
-		if (logger.isDebugEnabled()) {
 			logger.debug("Retrieves the statistics from the database");
-		}
+		
 		final List<UIStatistic> allUIStatistics = new ArrayList<UIStatistic>();
 		final List<Statistic> allStatistics = daoService.getStatistics();
 

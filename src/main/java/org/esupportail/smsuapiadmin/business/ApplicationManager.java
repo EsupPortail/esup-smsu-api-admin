@@ -28,9 +28,7 @@ public class ApplicationManager {
 	 * @return
 	 */
 	public List<Application> getAllApplications() {
-		if (logger.isDebugEnabled()) {
 			logger.debug("Retrieve the applications from the database");
-		}
 		List<Application> allApps = daoService.getApplications();
 		return allApps;
 	}
@@ -41,9 +39,8 @@ public class ApplicationManager {
 	 * @return
 	 */
 	public List<UIApplication> getAllUIApplications() {
-		if (logger.isDebugEnabled()) {
 			logger.debug("Retrieves the applications from the database");
-		}
+		
 		List<UIApplication> allUiApps = new ArrayList<UIApplication>();
 		List<Application> allApps = daoService.getApplications();
 

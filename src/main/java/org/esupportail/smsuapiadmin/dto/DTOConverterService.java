@@ -204,14 +204,7 @@ public class DTOConverterService {
 		result.setAcc(account);
 
 		// l'etablissement
-		Institution institution = daoService.getInstitutionByName(uiApp
-				.getInstitution());
-		if (institution == null) {
-			institution = new Institution();
-			institution.setLabel(uiApp.getInstitution());
-			daoService.addInstitution(institution);
-		}
-		result.setIns(institution);
+		result.setIns(getOrCreateInstitution(uiApp.getInstitution()));
 
 		// le nombre de sms consomme est nul;
 		result.setConsumedSms(new Long(0));
@@ -219,6 +212,16 @@ public class DTOConverterService {
 		return result;
 	}
 
+    private Institution getOrCreateInstitution(String institutionName) {
+    
+		Institution institution = daoService.getInstitutionByName(institutionName);
+		if (institution == null) {
+			institution = new Institution();
+			institution.setLabel(institutionName);
+			daoService.addInstitution(institution);
+		}
+        return institution;
+    }
 	
 	public UISms convertToUI(final Sms sms) {
 		UISms result = new UISms();

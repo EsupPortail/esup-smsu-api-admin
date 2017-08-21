@@ -30,13 +30,9 @@ public class UserManager {
 	 * @return
 	 */
 	public UIUser getUserById(final Integer id) {
-		UIUser result = null;
-
 		logger.info("Recherche du user : id=" + id);
 		UserBoSmsu user = daoService.getUserById(id);
-		result = dtoConverterService.convertToUI(user);
-
-		return result;
+		return dtoConverterService.convertToUI(user);
 	}
 
 	/**
@@ -118,8 +114,7 @@ public class UserManager {
 
 		UserBoSmsu user = dtoConverterService.convertFromUI(uiUser, false);
 
-		String idStr = uiUser.getId();
-		Integer id = Integer.valueOf(idStr);
+		Integer id = Integer.valueOf(uiUser.getId());
 
 		UserBoSmsu userPersistent = daoService.getUserById(id);
 		userPersistent.setLogin(uiUser.getLogin());

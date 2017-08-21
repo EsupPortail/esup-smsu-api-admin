@@ -11,7 +11,6 @@ import org.esupportail.smsuapiadmin.dao.beans.Fonction;
 import org.esupportail.smsuapi.dao.beans.Institution;
 import org.esupportail.smsuapiadmin.dao.beans.Role;
 import org.esupportail.smsuapi.dao.beans.Sms;
-import org.esupportail.smsuapi.domain.beans.sms.SmsStatus;
 import org.esupportail.smsuapi.dao.beans.Statistic;
 import org.esupportail.smsuapi.dao.beans.StatisticPK;
 import org.esupportail.smsuapiadmin.dao.beans.UserBoSmsu;
@@ -72,12 +71,10 @@ public class DTOConverterService {
 		result.setPassword(app.getPassword());
 
 		result.setAccountName(app.getAcc().getLabel());
-		String uiInst = convertToUI(app.getIns());
-		result.setInstitution(uiInst);
+		result.setInstitution(convertToUI(app.getIns()));
 		result.setQuota(app.getQuota());
 		result.setConsumedSms(app.getConsumedSms());
-		boolean deletable = isDeletable(app);
-		result.setDeletable(deletable);
+		result.setDeletable(isDeletable(app));
 
 		return result;
 	}
@@ -225,26 +222,13 @@ public class DTOConverterService {
 	
 	public UISms convertToUI(final Sms sms) {
 		UISms result = new UISms();
-		// id
 		result.setId(sms.getId() + "");
-		// account
-		Account acc = sms.getAcc();
-		UIAccount uiAcc = convertToUI(acc);
-		result.setAccount(uiAcc);
-		// application
-		Application app = sms.getApp();
-		UIApplication uiApp = convertToUI(app);
-		result.setApplication(uiApp);
-		// date
+		result.setAccount(convertToUI(sms.getAcc()));
+		result.setApplication(convertToUI(sms.getApp()));
 		result.setDate(sms.getDate());
-		// initialId
 		result.setInitialId(sms.getInitialId() + "");
-		// senderId
 		result.setSenderId(sms.getSenderId() + "");
-		// state
-		SmsStatus smsStatus = sms.getStateAsEnum();
-		result.setState(smsStatus);
-		// phone
+		result.setState(sms.getStateAsEnum());
 		result.setPhone(sms.getPhone());
 
 		return result;

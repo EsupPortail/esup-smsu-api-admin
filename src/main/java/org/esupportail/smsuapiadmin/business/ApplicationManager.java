@@ -29,8 +29,7 @@ public class ApplicationManager {
 	 */
 	public List<Application> getAllApplications() {
 			logger.debug("Retrieve the applications from the database");
-		List<Application> allApps = daoService.getApplications();
-		return allApps;
+		return daoService.getApplications();
 	}
 
 	/**

@@ -6,7 +6,6 @@
 
 	<bean id="applicationManager" class="org.esupportail.smsuapiadmin.business.ApplicationManager" />
 	<bean id="accountManager" class="org.esupportail.smsuapiadmin.business.AccountManager" />
-	<bean id="institutionManager" class="org.esupportail.smsuapiadmin.business.InstitutionManager" />
 	<bean id="statisticManager" class="org.esupportail.smsuapiadmin.business.StatisticManager" />	
 	<bean id="userManager" class="org.esupportail.smsuapiadmin.business.UserManager" />
 	<bean id="roleManager" class="org.esupportail.smsuapiadmin.business.RoleManager" />

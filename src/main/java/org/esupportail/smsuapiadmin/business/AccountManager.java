@@ -23,17 +23,6 @@ public class AccountManager {
 	@Inject private DTOConverterService dtoConverterService;
 
 	/**
-	 * Retrieves all the accounts defined in database.
-	 * 
-	 * @return
-	 */
-	public List<Account> getAllAccounts() {
-			logger.debug("Retrieve the accounts from the database");
-		List<Account> allAccounts = daoService.getAccounts();
-		return allAccounts;
-	}
-
-	/**
 	 * Returns all applications as UIObject.
 	 * 
 	 * @return

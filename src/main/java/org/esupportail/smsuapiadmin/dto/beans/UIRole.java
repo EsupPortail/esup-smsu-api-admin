@@ -69,19 +69,6 @@ public class UIRole {
 	}
 
 	/**
-	 * Returns true if the role contains the function.
-	 * 
-	 * @param fct
-	 * @return
-	 */
-	public boolean isAuthorizedForFonction(final EnumeratedFunction fct) {
-		for (EnumeratedFunction uiFct : fonctions) {
-			if (fct == uiFct) return true;
-		}
-		return false;
-	}
-
-	/**
 	 * Setter for 'role'.
 	 * 
 	 * @param role

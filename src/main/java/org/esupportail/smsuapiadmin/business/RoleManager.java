@@ -23,18 +23,6 @@ public class RoleManager {
 	@Inject private DTOConverterService dtoConverterService;
 
 	/**
-	 * Retrieves all the institutions defined in database.
-	 * 
-	 * @return
-	 */
-	public List<Role> getAllRoles() {
-			logger.debug("Retrieve the roles from the database");
-		
-		List<Role> allRoles = daoService.getRoles();
-		return allRoles;
-	}
-
-	/**
 	 * Returns all institutions as UIObject.
 	 * 
 	 * @return

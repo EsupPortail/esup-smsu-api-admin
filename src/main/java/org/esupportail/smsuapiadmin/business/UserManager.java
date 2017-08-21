@@ -24,18 +24,6 @@ public class UserManager {
 	@Inject private DTOConverterService dtoConverterService;
 
 	/**
-	 * Returns the user with the specified id.
-	 * 
-	 * @param id
-	 * @return
-	 */
-	public UIUser getUserById(final Integer id) {
-		logger.info("Recherche du user : id=" + id);
-		UserBoSmsu user = daoService.getUserById(id);
-		return dtoConverterService.convertToUI(user);
-	}
-
-	/**
 	 * Returns the user with the specified login.
 	 * 
 	 * @param login
@@ -65,36 +53,6 @@ public class UserManager {
 
 		for (UserBoSmsu user : allUsers) {
 			UIUser ui = dtoConverterService.convertToUI(user);
-			allUIUsers.add(ui);
-		}
-		return allUIUsers;
-	}
-
-	/**
-	 * Returns a list containing all users.
-	 * 
-	 * @return
-	 */
-	public List<UIUser> getUsers(final UIUser currentUser) {
-			logger.debug("Retrieves the accounts from the database");
-		
-		List<UIUser> allUIUsers = new ArrayList<>();
-
-		for (UserBoSmsu user : daoService.getUsers()) {
-			boolean isDeletable = true;
-			boolean isUpdateable = true;
-		
-			UIUser ui = dtoConverterService.convertToUI(user);
-			
-			if (currentUser != null) {
-				if (ui.getLogin().trim().equals(currentUser.getLogin().trim())) {
-				isDeletable = isUpdateable = false;
-				}
-			}
-			
-			ui.setIsDeletable(isDeletable);
-			ui.setIsUpdateable(isUpdateable);
-		
 			allUIUsers.add(ui);
 		}
 		return allUIUsers;

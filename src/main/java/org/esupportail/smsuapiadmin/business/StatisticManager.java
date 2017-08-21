@@ -34,36 +34,6 @@ public class StatisticManager {
 	@Inject private DTOConverterService dtoConverterService;
 
 	/**
-	 * Retrieves all the accounts defined in database.
-	 * 
-	 * @return
-	 */
-	public List<Statistic> getAllStatistics() {
-			logger.debug("Retrieve the statistics from the database");
-		
-		final List<Statistic> allStatistics = daoService.getStatistics();
-		return allStatistics;
-	}
-
-	/**
-	 * Returns all statistics.
-	 * 
-	 * @return
-	 */
-	public List<UIStatistic> getAllUIStatistics() {
-			logger.debug("Retrieves the statistics from the database");
-		
-		final List<UIStatistic> allUIStatistics = new ArrayList<>();
-		final List<Statistic> allStatistics = daoService.getStatistics();
-
-		for (final Statistic stat : allStatistics) {
-			final UIStatistic ui = dtoConverterService.convertToUI(stat);
-			allUIStatistics.add(ui);
-		}
-		return allUIStatistics;
-	}
-
-	/**
 	 * Returns all statistics sorted
 	 * 
 	 * @return

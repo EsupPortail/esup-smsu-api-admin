@@ -23,16 +23,6 @@ public class ApplicationManager {
 	@Inject private DTOConverterService dtoConverterService;
 
 	/**
-	 * Retrieves all the applications defined in database.
-	 * 
-	 * @return
-	 */
-	public List<Application> getAllApplications() {
-			logger.debug("Retrieve the applications from the database");
-		return daoService.getApplications();
-	}
-
-	/**
 	 * Retrieves all the applications defined in database as UIObject.
 	 * 
 	 * @return

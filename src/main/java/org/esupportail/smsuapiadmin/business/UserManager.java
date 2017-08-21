@@ -24,16 +24,6 @@ public class UserManager {
 	@Autowired private DTOConverterService dtoConverterService;
 
 	/**
-	 * isDeletable.
-	 */
-	private Boolean isDeletable;
-	
-	/**
-	 * isUpdateable.
-	 */
-	private Boolean isUpdateable;
-	
-	/**
 	 * Returns the user with the specified id.
 	 * 
 	 * @param id
@@ -98,18 +88,16 @@ public class UserManager {
 			logger.debug("Retrieves the accounts from the database");
 		
 		List<UIUser> allUIUsers = new ArrayList<UIUser>();
-		List<UserBoSmsu> allUsers = daoService.getUsers();
 
-		for (UserBoSmsu user : allUsers) {
-			isDeletable = true;
-			isUpdateable = true;
+		for (UserBoSmsu user : daoService.getUsers()) {
+			boolean isDeletable = true;
+			boolean isUpdateable = true;
 		
 			UIUser ui = dtoConverterService.convertToUI(user);
 			
 			if (currentUser != null) {
 				if (ui.getLogin().trim().equals(currentUser.getLogin().trim())) {
-				isDeletable = false;
-				isUpdateable = false;
+				isDeletable = isUpdateable = false;
 				}
 			}
 			

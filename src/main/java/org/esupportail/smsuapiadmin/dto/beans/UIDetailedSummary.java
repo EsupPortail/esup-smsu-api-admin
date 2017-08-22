@@ -1,10 +1,8 @@
 package org.esupportail.smsuapiadmin.dto.beans;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.esupportail.smsuapi.domain.beans.sms.SmsStatus;
 
 
@@ -16,123 +14,15 @@ import org.esupportail.smsuapi.domain.beans.sms.SmsStatus;
  */
 public class UIDetailedSummary implements Comparable<UIDetailedSummary> {
 
-	/**
-	 * Log4j logger.
-	 */
-	private final Logger logger = Logger.getLogger(getClass());
-
-	/**
-	 * institution.
-	 */
-	private String institution;
-
+	public String institution;
 	/**
 	 * application.
 	 */
-	private String appName;
+	public String appName;
+	public String accountName;
+	public Date date;
 
-	/**
-	 * account.
-	 */
-	private String accountName;
-
-	/**
-	 * date.
-	 */
-	private Date date;
-
-	/**
-	 * statistics.
-	 */
 	private Map<SmsStatus, Integer> statistics;
-
-	/**
-	 * Getter for 'institution'.
-	 * 
-	 * @return
-	 */
-	public String getInstitution() {
-		return institution;
-	}
-
-	/**
-	 * Setter for 'institution'.
-	 * 
-	 * @param institution
-	 */
-	public void setInstitution(final String institution) {
-		this.institution = institution;
-	}
-
-	/**
-	 * Getter for 'appName'.
-	 * 
-	 * @return
-	 */
-	public String getAppName() {
-		return appName;
-	}
-
-	/**
-	 * Setter for 'appName'.
-	 * 
-	 * @param appName
-	 */
-	public void setAppName(final String appName) {
-		this.appName = appName;
-	}
-
-	/**
-	 * Getter for 'accountName'.
-	 * 
-	 * @return
-	 */
-	public String getAccountName() {
-		return accountName;
-	}
-
-	/**
-	 * Setter for 'accountName'.
-	 * 
-	 * @param accountName
-	 */
-	public void setAccountName(final String accountName) {
-		this.accountName = accountName;
-	}
-
-	/**
-	 * Getter for 'date'.
-	 * 
-	 * @return
-	 */
-	public Date getDate() {
-		return date;
-	}
-
-	/**
-	 * Returns the month corresponding to format pattern.
-	 * 
-	 * @return
-	 */
-	public String formattedDate() {
-		String pattern = "dd MMM yyyy HH:mm";
-		try {
-			SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-			return sdf.format(date);
-		} catch (IllegalArgumentException e) {
-			logger.warn("Impossible de formater la date", e);
-			return "N/A";
-		}
-	}
-
-	/**
-	 * Setter for 'date'.
-	 * 
-	 * @param date
-	 */
-	public void setDate(final Date date) {
-		this.date = date;
-	}
 
 	/**
 	 * Setter for 'statistics'.
@@ -175,6 +65,6 @@ public class UIDetailedSummary implements Comparable<UIDetailedSummary> {
 
 	@Override
 	public int compareTo(UIDetailedSummary arg0) {
-		return date.compareTo(arg0.getDate());
+		return date.compareTo(arg0.date);
 	}
 }

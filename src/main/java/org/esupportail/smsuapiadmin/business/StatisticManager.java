@@ -152,9 +152,9 @@ public class StatisticManager {
 		final UIDetailedSummary summary = new UIDetailedSummary();
 
 		// on recupere les objets institution application et account qui sont identiques pour tous les sms d'un meme groupe
-		summary.setInstitution(firstSms.getApp().getIns().getLabel());
-		summary.setAppName(firstSms.getApp().getName());
-		summary.setAccountName(firstSms.getAcc().getLabel());
+		summary.institution = firstSms.getApp().getIns().getLabel();
+		summary.appName = firstSms.getApp().getName();
+		summary.accountName = firstSms.getAcc().getLabel();
 
 		computeMinDateAndStats(smsList, summary);
 
@@ -176,7 +176,7 @@ public class StatisticManager {
 			final SmsStatus status = sms.getStateAsEnum();
 			stats.put(status, stats.get(status) + 1);
 		}
-		summary.setDate(minDate);
+		summary.date = minDate;
 		summary.setStatistics(stats);
 	}
 

@@ -212,14 +212,14 @@ public class DTOConverterService {
 	
 	public UISms convertToUI(final Sms sms) {
 		UISms result = new UISms();
-		result.setId(sms.getId() + "");
-		result.setAccount(convertToUI(sms.getAcc()));
-		result.setApplication(convertToUI(sms.getApp()));
-		result.setDate(sms.getDate());
-		result.setInitialId(sms.getInitialId() + "");
-		result.setSenderId(sms.getSenderId() + "");
-		result.setState(sms.getStateAsEnum());
-		result.setPhone(sms.getPhone());
+		result.id = sms.getId() + "";
+		result.account = convertToUI(sms.getAcc());
+		result.application = convertToUI(sms.getApp());
+		result.date = sms.getDate();
+		result.initialId = sms.getInitialId() + "";
+		result.senderId = sms.getSenderId() + "";
+		result.state = sms.getStateAsEnum();
+		result.phone = sms.getPhone();
 
 		return result;
 	}

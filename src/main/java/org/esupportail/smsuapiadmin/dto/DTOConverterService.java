@@ -67,15 +67,15 @@ public class DTOConverterService {
 	public UIApplication convertToUI(final Application app) {
 		UIApplication result = new UIApplication();
 
-		result.setId(app.getId());
-		result.setName(app.getName());
-		result.setPassword(app.getPassword());
+		result.id = app.getId();
+		result.name = app.getName();
+		result.password = app.getPassword();
 
-		result.setAccountName(app.getAcc().getLabel());
-		result.setInstitution(convertToUI(app.getIns()));
-		result.setQuota(app.getQuota());
-		result.setConsumedSms(app.getConsumedSms());
-		result.setDeletable(isDeletable(app));
+		result.accountName = app.getAcc().getLabel();
+		result.institution = convertToUI(app.getIns());
+		result.quota = app.getQuota();
+		result.consumedSms = app.getConsumedSms();
+		result.deletable = isDeletable(app);
 
 		return result;
 	}
@@ -178,20 +178,20 @@ public class DTOConverterService {
 		final Application result = new Application();
 
 		if (!isAddMode) {
-			result.setId(Integer.valueOf(uiApp.getId()));
+			result.setId(Integer.valueOf(uiApp.id));
 		}
 
-		result.setName(uiApp.getName());
-		result.setPassword(uiApp.getPassword());
-		result.setQuota(uiApp.getQuota());
+		result.setName(uiApp.name);
+		result.setPassword(uiApp.password);
+		result.setQuota(uiApp.quota);
 
 		// le compte d'imputation
-		Account account = daoService.getAccountByName(uiApp.getAccountName());
-		if (account == null) throw new NotFoundException("invalid account " + uiApp.getAccountName());
+		Account account = daoService.getAccountByName(uiApp.accountName);
+		if (account == null) throw new NotFoundException("invalid account " + uiApp.accountName);
 		result.setAcc(account);
 
 		// l'etablissement
-		result.setIns(getOrCreateInstitution(uiApp.getInstitution()));
+		result.setIns(getOrCreateInstitution(uiApp.institution));
 
 		// le nombre de sms consomme est nul;
 		result.setConsumedSms(new Long(0));

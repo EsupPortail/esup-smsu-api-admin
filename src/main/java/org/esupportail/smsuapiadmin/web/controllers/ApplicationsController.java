@@ -56,7 +56,7 @@ public class ApplicationsController {
 	@PUT
 	@Path("/{id:\\d+}")
 	public void modify(@PathParam("id") int id, UIApplication application) {
-		application.setId(id);
+		application.id = id;
 		checkMandatoryUIParameters(application);
 		applicationManager.updateApplication(application);
 	}
@@ -73,17 +73,13 @@ public class ApplicationsController {
 	 * @return true if all mandatory parameters are filled 
 	 */
 	private void checkMandatoryUIParameters(UIApplication application) {
-		String name = application.getName();
-		String institution = application.getInstitution();
-		Long quota = application.getQuota();
-
-		if (StringUtils.isBlank(name))
+		if (StringUtils.isBlank(application.name))
 			throw new InvalidParameterException("APPLICATION.ERROR.INVALIDNAME");
-		if (StringUtils.isBlank(institution))
+		if (StringUtils.isBlank(application.institution))
 			throw new InvalidParameterException("APPLICATION.ERROR.INVALIDINSTITUTION");
-		if (quota == null || quota < 0)
+		if (application.quota == null || application.quota < 0)
 			throw new InvalidParameterException("APPLICATION.ERROR.INVALIDQUOTA");
-		if (StringUtils.isBlank(application.getPassword())) {
+		if (StringUtils.isBlank(application.password)) {
 			throw new InvalidParameterException("APPLICATION.ERROR.EMPTYPASSWORD");
 		}
 	}

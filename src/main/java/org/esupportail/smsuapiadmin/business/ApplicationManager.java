@@ -72,7 +72,7 @@ public class ApplicationManager {
 	 * @param uiApp
 	 */
 	public void addApplication(final UIApplication uiApp) {
-		logger.info("creating application " + uiApp.getName());
+		logger.info("creating application " + uiApp.name);
 		Application app = dtoConverterService.convertFromUI(uiApp, true);
 		daoService.addApplication(app);
 	}

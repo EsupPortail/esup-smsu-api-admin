@@ -10,7 +10,7 @@ import org.esupportail.smsuapi.domain.beans.sms.SmsStatus;
  * @author MZRL3760
  * 
  */
-public class UISms extends UIObject {
+public class UISms {
 
 	/**
 	 * identifier (database) of the account.

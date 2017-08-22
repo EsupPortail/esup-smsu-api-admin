@@ -83,9 +83,6 @@ public class UIRole {
 	 */
 	public EnumeratedRole getRole() {
 		return role;
-	}
-	
-	public String getI18nKey() {
-		return role.getI18nKey();
-	}
+    }
+    
 }

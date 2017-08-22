@@ -44,8 +44,9 @@ public class UsersController {
 	@PUT
 	@Path("/{id:\\d+}")
 	public void modify(@PathParam("id") int id, UIUser user) {
-		user.setId("" + id);
-		validateLogin(user, user.getLogin());
+        user.id = "" + id;
+        user.login = user.login.trim();
+		validateLogin(user, user.login);
 		userManager.updateUser(user);
 	}
 
@@ -60,7 +61,7 @@ public class UsersController {
 	 */
         public void validateLogin(UIUser user, String login) {
 
-		if (!login.equals(user.getLogin())) {
+		if (!login.equals(user.login)) {
 			boolean inUse = userManager.loginAlreadyUsed(login);
 			if (inUse) throw new InvalidParameterException("USER.ERROR.LOGINUSED");
 		}

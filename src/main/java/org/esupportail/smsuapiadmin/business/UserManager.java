@@ -67,10 +67,10 @@ public class UserManager {
 
 		UserBoSmsu user = dtoConverterService.convertFromUI(uiUser, false);
 
-		Integer id = Integer.valueOf(uiUser.getId());
+		Integer id = Integer.valueOf(uiUser.id);
 
 		UserBoSmsu userPersistent = daoService.getUserById(id);
-		userPersistent.setLogin(uiUser.getLogin());
+		userPersistent.setLogin(uiUser.login);
 		userPersistent.setRole(user.getRole());
 
 		daoService.updateUser(userPersistent);

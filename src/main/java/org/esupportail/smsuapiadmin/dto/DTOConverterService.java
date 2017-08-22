@@ -131,9 +131,9 @@ public class DTOConverterService {
 	public UIUser convertToUI(final UserBoSmsu user) {
 		UIUser result = new UIUser();
 
-		result.setId(user.getId() + "");
-		result.setLogin(user.getLogin());
-		result.setRole(convertToEnum(user.getRole()));
+		result.id = user.getId() + "";
+		result.login = user.getLogin();
+		result.role = convertToEnum(user.getRole());
 
 		return result;
 	}
@@ -230,17 +230,16 @@ public class DTOConverterService {
 
 		if (!isAddMode) {
 			// l'id
-			result.setId(Integer.valueOf(uiUser.getId()));
+			result.setId(Integer.valueOf(uiUser.id));
 		}
 
 		// le nom
-		result.setLogin(uiUser.getLogin());
+		result.setLogin(uiUser.login);
 
 		// le role
-		EnumeratedRole roleName = uiUser.getRole();
-		Role role = daoService.getRoleByName(roleName.toString());
+		Role role = daoService.getRoleByName(uiUser.role.toString());
 		if (role == null) {
-			logger.error("Aucun role d'identifiant " + roleName + " n'existe en base.");
+			logger.error("Aucun role d'identifiant " + uiUser.role + " n'existe en base.");
 		}
 		result.setRole(role);
 

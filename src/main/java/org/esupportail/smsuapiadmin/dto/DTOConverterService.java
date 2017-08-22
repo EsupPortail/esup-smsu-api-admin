@@ -142,9 +142,9 @@ public class DTOConverterService {
 	public UIRole convertToUI(final Role role) {
 		UIRole result = new UIRole();
 
-		result.setId(role.getId() + "");	
-		result.setRole(EnumeratedRole.valueOf(role.getName()));
-		result.setFonctions(convertToEnum(role.getFonctions()));
+		result.id = role.getId() + "";	
+		result.role = EnumeratedRole.valueOf(role.getName());
+		result.fonctions = convertToEnum(role.getFonctions());
 
 		return result;
 	}

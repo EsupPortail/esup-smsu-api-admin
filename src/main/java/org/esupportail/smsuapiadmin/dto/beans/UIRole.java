@@ -12,77 +12,11 @@ import org.esupportail.smsuapiadmin.domain.beans.EnumeratedRole;
  * 
  */
 public class UIRole {
-
 	/**
 	 * identifier (database) of the account.
 	 */
-	private String id;
-	/**
-	 * Enumerated role.
-	 */
-	private EnumeratedRole role;
-	/**
-	 * fonctions.
-	 */
-	private Set<EnumeratedFunction> fonctions;
-
-	/**
-	 * Default constructor.
-	 */
-	public UIRole() {
-	}
-
-	/**
-	 * Setter for 'id'.
-	 * 
-	 * @param id
-	 */
-	public void setId(final String id) {
-		this.id = id;
-	}
-
-	/**
-	 * Getter for 'id'.
-	 * 
-	 * @return
-	 */
-	public String getId() {
-		return id;
-	}
-
-	/**
-	 * Setter for 'fonctions'.
-	 * 
-	 * @param fonctions
-	 */
-	public void setFonctions(final Set<EnumeratedFunction> fonctions) {
-		this.fonctions = fonctions;
-	}
-
-	/**
-	 * Getter for 'fonctions'.
-	 * 
-	 * @return
-	 */
-	public Set<EnumeratedFunction> getFonctions() {
-		return fonctions;
-	}
-
-	/**
-	 * Setter for 'role'.
-	 * 
-	 * @param role
-	 */
-	public void setRole(final EnumeratedRole role) {
-		this.role = role;
-	}
-
-	/**
-	 * Getter for 'role'.
-	 * @return
-	 */
-	public EnumeratedRole getRole() {
-		return role;
-    }
+    public String id;
     
+	public EnumeratedRole role;
+	public Set<EnumeratedFunction> fonctions;   
 }

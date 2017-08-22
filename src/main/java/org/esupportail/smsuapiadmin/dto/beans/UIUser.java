@@ -30,16 +30,6 @@ public class UIUser implements Serializable {
 	 */
 	private EnumeratedRole role;
 	
-	/**
-	 * Boolean isDeletable.
-	 */
-	private Boolean isDeletable;
-	
-	/**
-	 * Boolean isUpdateable.
-	 */
-	private Boolean isUpdateable;
-	
 	public String sessionId;
 	public String idpId;
 
@@ -127,22 +117,6 @@ public class UIUser implements Serializable {
 	@Override
 	public int hashCode() {
 		return super.hashCode();
-	}
-	
-	public Boolean getIsDeletable() {
-		return isDeletable;
-	}
-
-	public void setIsDeletable(final Boolean isDeletable) {
-		this.isDeletable = isDeletable;
-	}
-
-	public Boolean getIsUpdateable() {
-		return isUpdateable;
-	}
-
-	public void setIsUpdateable(final Boolean isUpdateable) {
-		this.isUpdateable = isUpdateable;
-	}
+	}	
 
 }

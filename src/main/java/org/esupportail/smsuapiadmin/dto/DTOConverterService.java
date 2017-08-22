@@ -117,12 +117,12 @@ public class DTOConverterService {
 		StatisticPK id = stat.getId();
 		result.setMonth(id.getMonth());
 
-		result.setAccountName(id.getAcc().getLabel());
-		result.setAppName(id.getApp().getName());
-		result.setInstitution(id.getApp().getIns().getLabel());
+		result.accountName = id.getAcc().getLabel();
+		result.appName = id.getApp().getName();
+		result.institution = id.getApp().getIns().getLabel();
 
-		result.setNbSendedSMS(stat.getNbSms());
-		result.setNbSMSInError(stat.getNbSmsInError());
+		result.nbSendedSMS = stat.getNbSms();
+		result.nbSMSInError = stat.getNbSmsInError();
 
 		return result;
 	}

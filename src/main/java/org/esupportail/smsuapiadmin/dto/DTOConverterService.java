@@ -40,10 +40,10 @@ public class DTOConverterService {
 	public UIAccount convertToUI(final Account acc) {
 		UIAccount result = new UIAccount();
 
-		result.setId(acc.getId());
-		result.setName(acc.getLabel());
-		result.setQuota(acc.getQuota());
-		result.setConsumedSms(acc.getConsumedSms());
+		result.id = acc.getId();
+		result.name = acc.getLabel();
+		result.quota = acc.getQuota();
+		result.consumedSms = acc.getConsumedSms();
 
 		return result;
 	}
@@ -53,10 +53,10 @@ public class DTOConverterService {
 		Account result = new Account();
 
 		if (!isAddMode) {
-			result.setId(Integer.valueOf(acc.getId()));
+			result.setId(Integer.valueOf(acc.id));
 		}
-		result.setLabel(acc.getName());
-		result.setQuota(acc.getQuota());
+		result.setLabel(acc.name.trim());
+		result.setQuota(acc.quota);
 
 		if (isAddMode) result.setConsumedSms(new Long(0));
 

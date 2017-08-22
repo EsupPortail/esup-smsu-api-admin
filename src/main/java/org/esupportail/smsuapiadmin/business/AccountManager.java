@@ -64,7 +64,7 @@ public class AccountManager {
 	 * @param uiAccount
 	 */
 	public void addAccount(final UIAccount uiAccount) {
-		logger.info("creating account " + uiAccount.getName());
+		logger.info("creating account " + uiAccount.name);
 		Account account = dtoConverterService.convertFromUI(uiAccount, true);
 		daoService.addAccount(account);
 	}

@@ -51,7 +51,7 @@ public class AccountsController {
 	@PUT
 	@Path("/{id:\\d+}")
 	public void modify(@PathParam("id") int id, UIAccount account) {
-		account.setId(id);
+		account.id = id;
 		checkMandatoryUIParameters(account);
 		accountManager.updateAccount(account);
 	}
@@ -63,8 +63,8 @@ public class AccountsController {
 	 * @return true if all mandatory parameters are filled 
 	 */
 	private void checkMandatoryUIParameters(UIAccount account) {
-		String name = account.getName();
-		Long quota = account.getQuota();
+		String name = account.name;
+		Long quota = account.quota;
 
 		if (StringUtils.isBlank(name))
 			throw new InvalidParameterException("ACCOUNT.ERROR.INVALIDNAME");

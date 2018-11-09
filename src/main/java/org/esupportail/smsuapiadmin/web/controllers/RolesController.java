@@ -5,17 +5,16 @@ package org.esupportail.smsuapiadmin.web.controllers;
 
 import java.util.List;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Produces;
-import javax.ws.rs.Path;
 import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 import org.esupportail.smsuapiadmin.business.RoleManager;
 import org.esupportail.smsuapiadmin.dto.beans.UIRole;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-
-@Path("/roles")
+@RequestMapping(value = "/roles")
 public class RolesController {
 	
 	@Inject
@@ -24,8 +23,8 @@ public class RolesController {
         @SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(getClass());
 
-	@GET
-	@Produces("application/json")
+   	@RequestMapping(method = RequestMethod.GET)
+    @ResponseBody
 	public List<UIRole> getRoles() {
 		return roleManager.getAllUIRoles();
 	}

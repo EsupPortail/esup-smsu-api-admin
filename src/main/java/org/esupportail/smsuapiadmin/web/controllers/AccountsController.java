@@ -6,18 +6,16 @@ package org.esupportail.smsuapiadmin.web.controllers;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Produces;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.inject.Inject;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.esupportail.smsuapiadmin.business.AccountManager;
 import org.esupportail.smsuapiadmin.dto.beans.UIAccount;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * AccountsQuotaController is the controller for all actions on pages about
@@ -26,7 +24,7 @@ import org.esupportail.smsuapiadmin.dto.beans.UIAccount;
  * @author MZRL3760
  * 
  */
-@Path("/accounts")
+@RequestMapping(value = "/accounts")
 @RolesAllowed("FCTN_GESTION_CPT_IMPUT")
 public class AccountsController {
 	
@@ -36,21 +34,20 @@ public class AccountsController {
         @SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(getClass());
 
-	@GET
-	@Produces("application/json")
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseBody
 	public List<UIAccount> getAccounts() {
 		return accountManager.getAllUIAccounts();
 	}
 
-	@POST
+    @RequestMapping(method = RequestMethod.POST)
 	public void create(UIAccount account) {
 		checkMandatoryUIParameters(account);
 		accountManager.addAccount(account);
 	}
 
-	@PUT
-	@Path("/{id:\\d+}")
-	public void modify(@PathParam("id") int id, UIAccount account) {
+    @RequestMapping(method = RequestMethod.PUT, value = "/{id:\\d+}")
+	public void modify(@PathVariable("id") int id, UIAccount account) {
 		account.id = id;
 		checkMandatoryUIParameters(account);
 		accountManager.updateAccount(account);

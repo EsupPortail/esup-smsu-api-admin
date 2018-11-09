@@ -3,9 +3,6 @@ package org.esupportail.smsuapiadmin.web.controllers;
 import java.io.IOException;
 import java.net.URI;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 
 import javax.inject.Inject;
@@ -18,16 +15,18 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.esupportail.smsuapiadmin.business.UserManager;
 import org.esupportail.smsuapiadmin.dto.beans.UIUser;
 import org.esupportail.smsuapiadmin.web.AuthAndRoleAndMiscFilter;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.esupportail.smsu.services.UrlGenerator;
 
-@Path("/login")
+@RequestMapping(value = "/login")
 public class LoginController {
 	
     @Inject private UserManager userManager;
     @Inject private UrlGenerator urlGenerator;
     
-    @GET
-    public Response get(@Context HttpServletRequest request) throws IOException {
+	@RequestMapping(method = RequestMethod.GET)
+    public Response get(HttpServletRequest request) throws IOException {
     	boolean ourCookiesRejected = !hasCookie(request, "JSESSIONID");
 
     HttpSession session = request.getSession();

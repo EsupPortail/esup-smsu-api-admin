@@ -7,20 +7,17 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import org.esupportail.smsuapiadmin.business.StatisticManager;
 import org.esupportail.smsuapiadmin.dto.beans.UIDetailedCriteria;
 import org.esupportail.smsuapiadmin.dto.beans.UIDetailedSummary;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-
-@Path("/summary/detailed")
+@RequestMapping(value = "/summary/detailed")
 @RolesAllowed("FCTN_API_EDITION_RAPPORT")
 public class DetailedSummaryController {
 		
@@ -29,15 +26,15 @@ public class DetailedSummaryController {
 
 	private final Logger logger = Logger.getLogger(getClass());
 
-	@GET
-	@Produces("application/json")
+	@RequestMapping(method = RequestMethod.GET)
+    @ResponseBody
 	public List<UIDetailedSummary> search(
-		@QueryParam("institution") String institution,
-		@QueryParam("account") String accountName,
-		@QueryParam("app") String applicationName,
-		@QueryParam("startDate") Long startDate,
-		@QueryParam("endDate") Long endDate,
-		@QueryParam("maxResults") @DefaultValue("0" /* no limit */) int maxResults
+		@RequestParam(value = "institution") String institution,
+		@RequestParam(value = "account") String accountName,
+		@RequestParam(value = "app") String applicationName,
+		@RequestParam(value = "startDate") Long startDate,
+		@RequestParam(value = "endDate") Long endDate,
+		@RequestParam(value = "maxResults", defaultValue = "0" /* no limit */) int maxResults
 		) throws Exception {
 
 		Date startDate_ = startDate == null ? null : new Date(startDate);
@@ -48,9 +45,8 @@ public class DetailedSummaryController {
 		return statisticManager.searchDetailedSummaries(institution, accountName, applicationName, startDate_, endDate_, maxResults);
 	}
 	 
-	@GET
-	@Produces("application/json")
-	@Path("/criteria")
+	@RequestMapping(method = RequestMethod.GET, value = "/criteria")
+    @ResponseBody
 	public List<UIDetailedCriteria> searchCriteria() {
 		return statisticManager.getDetailedStatisticsCriteria();
 	}

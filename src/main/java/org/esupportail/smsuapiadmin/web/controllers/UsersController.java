@@ -6,21 +6,18 @@ package org.esupportail.smsuapiadmin.web.controllers;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.Produces;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.inject.Inject;
 
 import org.apache.log4j.Logger;
 import org.esupportail.smsuapiadmin.business.UserManager;
 import org.esupportail.smsuapiadmin.dto.beans.UIUser;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 
-@Path("/users")
+@RequestMapping(value = "/users")
 @RolesAllowed("FCTN_MANAGE_USERS")
 public class UsersController {
 	
@@ -30,29 +27,27 @@ public class UsersController {
         @SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(getClass());
 
-	@GET
-	@Produces("application/json")
+    @RequestMapping(method = RequestMethod.GET)
+    @ResponseBody
 	public List<UIUser> getUsers() {
 		return userManager.getUsers();
 	}
 
-	@POST
+    @RequestMapping(method = RequestMethod.POST)
 	public void create(UIUser user) {
 		userManager.addUser(user);
 	}
 
-	@PUT
-	@Path("/{id:\\d+}")
-	public void modify(@PathParam("id") int id, UIUser user) {
+    @RequestMapping(method = RequestMethod.PUT, value = "/{id:\\d+}")
+	public void modify(@PathVariable("id") int id, UIUser user) {
         user.id = "" + id;
         user.login = user.login.trim();
 		validateLogin(user, user.login);
 		userManager.updateUser(user);
 	}
 
-	@DELETE
-	@Path("/{id:\\d+}")
-	public void delete(@PathParam("id") int id) {
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{id:\\d+}")
+	public void delete(@PathVariable("id") int id) {
 		userManager.delete(id);
 	}
 

@@ -35,11 +35,13 @@ public class UsersController {
 	}
 
     @RequestMapping(method = RequestMethod.POST)
+    @ResponseBody
 	public void create(@RequestBody UIUser user) {
 		userManager.addUser(user);
 	}
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{id:\\d+}")
+    @ResponseBody
 	public void modify(@PathVariable("id") int id, @RequestBody UIUser user) {
         user.id = "" + id;
         user.login = user.login.trim();
@@ -48,6 +50,7 @@ public class UsersController {
 	}
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id:\\d+}")
+    @ResponseBody
 	public void delete(@PathVariable("id") int id) {
 		userManager.delete(id);
 	}

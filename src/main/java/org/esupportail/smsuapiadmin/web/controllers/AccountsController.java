@@ -42,12 +42,14 @@ public class AccountsController {
 	}
 
     @RequestMapping(method = RequestMethod.POST)
+    @ResponseBody
 	public void create(@RequestBody UIAccount account) {
 		checkMandatoryUIParameters(account);
 		accountManager.addAccount(account);
 	}
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{id:\\d+}")
+    @ResponseBody
 	public void modify(@PathVariable("id") int id, @RequestBody UIAccount account) {
 		account.id = id;
 		checkMandatoryUIParameters(account);

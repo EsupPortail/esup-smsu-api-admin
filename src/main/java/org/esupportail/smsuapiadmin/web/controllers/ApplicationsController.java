@@ -45,12 +45,14 @@ public class ApplicationsController {
 	}
 
     @RequestMapping(method = RequestMethod.POST)
+    @ResponseBody
 	public void create(@RequestBody UIApplication application) {
 		checkMandatoryUIParameters(application);
 		applicationManager.addApplication(application);
 	}
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{id:\\d+}")
+    @ResponseBody
 	public void modify(@PathVariable("id") int id, @RequestBody UIApplication application) {
 		application.id = id;
 		checkMandatoryUIParameters(application);
@@ -58,6 +60,7 @@ public class ApplicationsController {
 	}
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id:\\d+}")
+    @ResponseBody
 	public void delete(@PathVariable("id") int id) {
 		applicationManager.deleteApplication(id);
 	}

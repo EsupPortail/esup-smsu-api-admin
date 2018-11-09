@@ -250,7 +250,8 @@ InitializingBean {
 		criteria.setProjection(Projections.projectionList()
 				.add( Projections.distinct(Projections.projectionList()
 						.add(Projections.property(Sms.PROP_APP))
-						.add(Projections.property(Sms.PROP_INITIAL_ID)))));
+						.add(Projections.property(Sms.PROP_INITIAL_ID))
+						.add(Projections.property(Sms.PROP_DATE)))));
 
 		criteria.setResultTransformer(Transformers.TO_LIST);
 		return criteria.list();
@@ -303,7 +304,7 @@ InitializingBean {
 
 			criteria.add(Restrictions.lt(Sms.PROP_DATE, endDateSQL));
 		}
-
+		
 		criteria.addOrder(Order.desc(Sms.PROP_DATE));
 		if (maxResults > 0) criteria.setMaxResults(maxResults);
 		

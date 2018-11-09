@@ -3,8 +3,6 @@ package org.esupportail.smsuapiadmin.web.controllers;
 import java.io.IOException;
 import java.net.URI;
 
-import javax.ws.rs.core.Response;
-
 import javax.inject.Inject;
 
 import javax.servlet.http.Cookie;
@@ -15,6 +13,10 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.esupportail.smsuapiadmin.business.UserManager;
 import org.esupportail.smsuapiadmin.dto.beans.UIUser;
 import org.esupportail.smsuapiadmin.web.AuthAndRoleAndMiscFilter;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.esupportail.smsu.services.UrlGenerator;
@@ -26,7 +28,7 @@ public class LoginController {
     @Inject private UrlGenerator urlGenerator;
     
 	@RequestMapping(method = RequestMethod.GET)
-    public Response get(HttpServletRequest request) throws IOException {
+    public ResponseEntity<String> get(HttpServletRequest request) throws IOException {
     	boolean ourCookiesRejected = !hasCookie(request, "JSESSIONID");
 
     HttpSession session = request.getSession();
@@ -36,7 +38,9 @@ public class LoginController {
 	if (then != null) {
 		//then = URLDecoder.decode(then, "UTF-8");
 		String url = urlGenerator.goTo(request, then, sessionId, idpId);
-		return Response.temporaryRedirect(URI.create(url)).build();		
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.setLocation(URI.create(url));
+		return new ResponseEntity<String>("", responseHeaders, HttpStatus.TEMPORARY_REDIRECT);
 	}
 
 	UIUser user = userManager.getUserByLogin(request.getRemoteUser());
@@ -45,18 +49,21 @@ public class LoginController {
 		user.sessionId = session.getId();
 	}
 	String jsUser = new ObjectMapper().writeValueAsString(user);
-	String content, type;
+	String content;
+	MediaType mediaType;
 	if (request.getParameter("postMessage") != null) {
-		type = "text/html";
+		mediaType = MediaType.TEXT_HTML;
 		content = "Login success, please wait...\n<script>\n (window.opener ? (window.opener.postMessage ? window.opener : window.opener.document) : window.parent).postMessage('loggedUser=' + JSON.stringify(" + jsUser + "), '*');\n</script>";
 	} else if (request.getParameter("callback") != null) {
-		type = "application/x-javascript";
+		mediaType = MediaType.parseMediaType("application/x-javascript");
 		content = request.getParameter("callback") + "(" + jsUser + ")";
 	} else {
-		type = "application/json";
+		mediaType = MediaType.APPLICATION_JSON;
 		content = jsUser;
 	}
-        return Response.status(Response.Status.OK).type(type).entity(content).build();
+        HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.setContentType(mediaType);
+        return new ResponseEntity<String>(content, responseHeaders, HttpStatus.OK);
     }
 
 	// call this function on successful login

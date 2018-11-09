@@ -20,12 +20,4 @@
       <property name="shibbolethSessionInitiatorUrl" value="${shibboleth.sessionInitiator.url}" />
    </bean>
 
-   <bean id="loginController"		    class="org.esupportail.smsuapiadmin.web.controllers.LoginController" />
-   <bean id="rolesController"               class="org.esupportail.smsuapiadmin.web.controllers.RolesController" />	
-   <bean id="accountsController"            class="org.esupportail.smsuapiadmin.web.controllers.AccountsController" />
-   <bean id="applicationsController"        class="org.esupportail.smsuapiadmin.web.controllers.ApplicationsController" />
-   <bean id="usersController"               class="org.esupportail.smsuapiadmin.web.controllers.UsersController" />	
-   <bean id="detailedSummaryController"     class="org.esupportail.smsuapiadmin.web.controllers.DetailedSummaryController" />
-   <bean id="consolidatedSummaryController" class="org.esupportail.smsuapiadmin.web.controllers.ConsolidatedSummaryController" />
-
 </beans>

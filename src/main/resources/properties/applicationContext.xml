@@ -35,6 +35,7 @@
 	<import resource="dao/dao.xml" />
 	<import resource="dto/dto.xml" />
 	<import resource="web/controllers.xml" />
+	<import resource="web/controllers-rest.xml" />
 	<import resource="rest.xml" />
 
 </beans>

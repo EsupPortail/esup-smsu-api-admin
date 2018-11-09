@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.esupportail.smsuapiadmin.business.UserManager;
 import org.esupportail.smsuapiadmin.dto.beans.UIUser;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,12 +35,12 @@ public class UsersController {
 	}
 
     @RequestMapping(method = RequestMethod.POST)
-	public void create(UIUser user) {
+	public void create(@RequestBody UIUser user) {
 		userManager.addUser(user);
 	}
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{id:\\d+}")
-	public void modify(@PathVariable("id") int id, UIUser user) {
+	public void modify(@PathVariable("id") int id, @RequestBody UIUser user) {
         user.id = "" + id;
         user.login = user.login.trim();
 		validateLogin(user, user.login);

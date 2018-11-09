@@ -14,6 +14,7 @@ import org.esupportail.smsuapiadmin.business.ApplicationManager;
 import org.esupportail.smsuapiadmin.business.NotFoundException;
 import org.esupportail.smsuapiadmin.dto.beans.UIApplication;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -44,13 +45,13 @@ public class ApplicationsController {
 	}
 
     @RequestMapping(method = RequestMethod.POST)
-	public void create(UIApplication application) {
+	public void create(@RequestBody UIApplication application) {
 		checkMandatoryUIParameters(application);
 		applicationManager.addApplication(application);
 	}
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{id:\\d+}")
-	public void modify(@PathVariable("id") int id, UIApplication application) {
+	public void modify(@PathVariable("id") int id, @RequestBody UIApplication application) {
 		application.id = id;
 		checkMandatoryUIParameters(application);
 		applicationManager.updateApplication(application);

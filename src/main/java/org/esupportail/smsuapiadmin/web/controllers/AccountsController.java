@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import org.esupportail.smsuapiadmin.business.AccountManager;
 import org.esupportail.smsuapiadmin.dto.beans.UIAccount;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -41,13 +42,13 @@ public class AccountsController {
 	}
 
     @RequestMapping(method = RequestMethod.POST)
-	public void create(UIAccount account) {
+	public void create(@RequestBody UIAccount account) {
 		checkMandatoryUIParameters(account);
 		accountManager.addAccount(account);
 	}
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{id:\\d+}")
-	public void modify(@PathVariable("id") int id, UIAccount account) {
+	public void modify(@PathVariable("id") int id, @RequestBody UIAccount account) {
 		account.id = id;
 		checkMandatoryUIParameters(account);
 		accountManager.updateAccount(account);

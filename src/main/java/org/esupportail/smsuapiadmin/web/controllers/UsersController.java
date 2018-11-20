@@ -26,7 +26,7 @@ public class UsersController {
 	@Inject
 	private UserManager userManager;
 
-        @SuppressWarnings("unused")
+    @SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(getClass());
 
     @RequestMapping(method = RequestMethod.GET)
@@ -59,8 +59,7 @@ public class UsersController {
 	/**
 	 * Validates the login field.
 	 */
-        public void validateLogin(UIUser user, String login) {
-
+    private void validateLogin(UIUser user, String login) {
 		if (!login.equals(user.login)) {
 			boolean inUse = userManager.loginAlreadyUsed(login);
 			if (inUse) throw new InvalidParameterException("USER.ERROR.LOGINUSED");

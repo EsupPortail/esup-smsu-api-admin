@@ -81,15 +81,5 @@ public class ApplicationsController {
 		if (StringUtils.isBlank(application.password)) {
 			throw new InvalidParameterException("APPLICATION.ERROR.EMPTYPASSWORD");
 		}
-	}
-
-	static boolean isPositiveInteger(String strValue) {
-		try {
-			// le quota doit etre positif ou nul
-			return Integer.parseInt(strValue) >= 0;
-		} catch (NumberFormatException e) {
-			return false;
-		}
-	}
-	
+	}	
 }

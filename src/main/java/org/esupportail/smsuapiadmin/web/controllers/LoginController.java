@@ -33,36 +33,36 @@ public class LoginController {
     public ResponseEntity<String> get(HttpServletRequest request) throws IOException {
     	boolean ourCookiesRejected = !hasCookie(request, "JSESSIONID");
 
-    HttpSession session = request.getSession();
-	String sessionId = ourCookiesRejected ? session.getId() : null;
-	String idpId = AuthAndRoleAndMiscFilter.getIdpId(request);
-	String then = request.getParameter("then");
-	if (then != null) {
-		//then = URLDecoder.decode(then, "UTF-8");
-		String url = urlGenerator.goTo(request, then, sessionId, idpId);
-		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.setLocation(URI.create(url));
-		return new ResponseEntity<String>("", responseHeaders, HttpStatus.TEMPORARY_REDIRECT);
-	}
-
-	UIUser user = userManager.getUserByLogin(request.getRemoteUser());
-	user.idpId = idpId;
-	if (ourCookiesRejected) {
-		user.sessionId = session.getId();
-	}
-	String jsUser = new ObjectMapper().writeValueAsString(user);
-	String content;
-	MediaType mediaType;
-	if (request.getParameter("postMessage") != null) {
-		mediaType = MediaType.TEXT_HTML;
-		content = "Login success, please wait...\n<script>\n (window.opener ? (window.opener.postMessage ? window.opener : window.opener.document) : window.parent).postMessage('loggedUser=' + JSON.stringify(" + jsUser + "), '*');\n</script>";
-	} else if (request.getParameter("callback") != null) {
-		mediaType = MediaType.parseMediaType("application/x-javascript");
-		content = request.getParameter("callback") + "(" + jsUser + ")";
-	} else {
-		mediaType = MediaType.APPLICATION_JSON;
-		content = jsUser;
-	}
+	    HttpSession session = request.getSession();
+		String sessionId = ourCookiesRejected ? session.getId() : null;
+		String idpId = AuthAndRoleAndMiscFilter.getIdpId(request);
+		String then = request.getParameter("then");
+		if (then != null) {
+			//then = URLDecoder.decode(then, "UTF-8");
+			String url = urlGenerator.goTo(request, then, sessionId, idpId);
+			HttpHeaders responseHeaders = new HttpHeaders();
+			responseHeaders.setLocation(URI.create(url));
+			return new ResponseEntity<String>("", responseHeaders, HttpStatus.TEMPORARY_REDIRECT);
+		}
+	
+		UIUser user = userManager.getUserByLogin(request.getRemoteUser());
+		user.idpId = idpId;
+		if (ourCookiesRejected) {
+			user.sessionId = session.getId();
+		}
+		String jsUser = new ObjectMapper().writeValueAsString(user);
+		String content;
+		MediaType mediaType;
+		if (request.getParameter("postMessage") != null) {
+			mediaType = MediaType.TEXT_HTML;
+			content = "Login success, please wait...\n<script>\n (window.opener ? (window.opener.postMessage ? window.opener : window.opener.document) : window.parent).postMessage('loggedUser=' + JSON.stringify(" + jsUser + "), '*');\n</script>";
+		} else if (request.getParameter("callback") != null) {
+			mediaType = MediaType.parseMediaType("application/x-javascript");
+			content = request.getParameter("callback") + "(" + jsUser + ")";
+		} else {
+			mediaType = MediaType.APPLICATION_JSON;
+			content = jsUser;
+		}
         HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.setContentType(mediaType);
         return new ResponseEntity<String>(content, responseHeaders, HttpStatus.OK);
@@ -70,7 +70,7 @@ public class LoginController {
 
 	// call this function on successful login
     // if we managed to get here and there is no cookie, it means they have been rejected
-    public static boolean hasCookie(HttpServletRequest request, String name) {
+    private boolean hasCookie(HttpServletRequest request, String name) {
     	for (Cookie cookie : request.getCookies()) {
     		if (cookie.getName().equals(name))
     			// cool, our previous Set-Cookie was accepted

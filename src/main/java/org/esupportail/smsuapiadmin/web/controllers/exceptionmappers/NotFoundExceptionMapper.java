@@ -1,16 +1,15 @@
 package org.esupportail.smsuapiadmin.web.controllers.exceptionmappers;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
-
 import org.esupportail.smsuapiadmin.business.NotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
-@Provider
-public class NotFoundExceptionMapper implements
-        ExceptionMapper<NotFoundException> {
-    @Override
-    public Response toResponse(NotFoundException ex) {
-        return Helper.jsonErrorResponse(404, ex.getMessage());
+@ControllerAdvice
+public class NotFoundExceptionMapper {
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<?> toResponse(Exception ex) {
+        return Helper.jsonErrorResponse(HttpStatus.NOT_FOUND, ex.toString());
     }
 }

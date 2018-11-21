@@ -11,13 +11,14 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import org.esupportail.smsuapiadmin.business.UserManager;
 import org.esupportail.smsuapiadmin.dto.beans.UIUser;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
+@Controller
 @RequestMapping(value = "/users")
 @RolesAllowed("FCTN_MANAGE_USERS")
 public class UsersController {

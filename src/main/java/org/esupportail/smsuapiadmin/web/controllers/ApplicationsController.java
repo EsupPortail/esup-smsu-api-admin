@@ -13,13 +13,14 @@ import org.apache.log4j.Logger;
 import org.esupportail.smsuapiadmin.business.ApplicationManager;
 import org.esupportail.smsuapiadmin.business.NotFoundException;
 import org.esupportail.smsuapiadmin.dto.beans.UIApplication;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
+@Controller
 @RequestMapping(value = "/applications")
 @RolesAllowed("FCTN_API_CONFIG_APPLIS")
 public class ApplicationsController {
@@ -27,7 +28,7 @@ public class ApplicationsController {
 	@Inject
 	private ApplicationManager applicationManager;
 
-        @SuppressWarnings("unused")
+    @SuppressWarnings("unused")
 	private final Logger logger = Logger.getLogger(getClass());
 
     @RequestMapping(method = RequestMethod.GET)

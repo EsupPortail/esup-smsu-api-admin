@@ -31,11 +31,11 @@ public class DetailedSummaryController {
 	@RequestMapping(method = RequestMethod.GET)
     @ResponseBody
 	public List<UIDetailedSummary> search(
-		@RequestParam(value = "institution") String institution,
-		@RequestParam(value = "account") String accountName,
-		@RequestParam(value = "app") String applicationName,
-		@RequestParam(value = "startDate") Long startDate,
-		@RequestParam(value = "endDate") Long endDate,
+		@RequestParam(value = "institution", required=false) String institution,
+		@RequestParam(value = "account", required=false) String accountName,
+		@RequestParam(value = "app", required=false) String applicationName,
+		@RequestParam(value = "startDate", required=false) Long startDate,
+		@RequestParam(value = "endDate", required=false) Long endDate,
 		@RequestParam(value = "maxResults", defaultValue = "0" /* no limit */) int maxResults
 		) throws Exception {
 

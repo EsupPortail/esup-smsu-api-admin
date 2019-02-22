@@ -109,7 +109,7 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		
     <esup-commons-version>[0.3.3, 0.3.99]</esup-commons-version>
-    <spring-version>3.2.3.RELEASE</spring-version>
+    <spring-version>4.3.18.RELEASE</spring-version>
   </properties>
 
   <repositories>
@@ -197,6 +197,11 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 		  <groupId>org.springframework</groupId>
 		  <artifactId>spring-webmvc</artifactId>
 		  <version>${spring-version}</version>
+		</dependency>
+		<dependency>
+		  <groupId>com.fasterxml.jackson.core</groupId>
+		  <artifactId>jackson-databind</artifactId>
+		  <version>2.5.1</version>
 		</dependency>
 
 		<!-- aop ? -->

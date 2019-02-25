@@ -8,17 +8,17 @@ import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
+
 import org.apache.log4j.Logger;
 import org.esupportail.smsuapiadmin.business.StatisticManager;
 import org.esupportail.smsuapiadmin.dto.beans.UIDetailedCriteria;
 import org.esupportail.smsuapiadmin.dto.beans.UIDetailedSummary;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping(value = "/summary/detailed")
 @RolesAllowed("FCTN_API_EDITION_RAPPORT")
 public class DetailedSummaryController {
@@ -29,7 +29,6 @@ public class DetailedSummaryController {
 	private final Logger logger = Logger.getLogger(getClass());
 
 	@RequestMapping(method = RequestMethod.GET)
-    @ResponseBody
 	public List<UIDetailedSummary> search(
 		@RequestParam(value = "institution", required=false) String institution,
 		@RequestParam(value = "account", required=false) String accountName,
@@ -48,7 +47,6 @@ public class DetailedSummaryController {
 	}
 	 
 	@RequestMapping(method = RequestMethod.GET, value = "/criteria")
-    @ResponseBody
 	public List<UIDetailedCriteria> searchCriteria() {
 		return statisticManager.getDetailedStatisticsCriteria();
 	}

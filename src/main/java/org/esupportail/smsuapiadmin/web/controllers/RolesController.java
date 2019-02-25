@@ -10,12 +10,11 @@ import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import org.esupportail.smsuapiadmin.business.RoleManager;
 import org.esupportail.smsuapiadmin.dto.beans.UIRole;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping(value = "/roles")
 public class RolesController {
 	
@@ -26,7 +25,6 @@ public class RolesController {
 	private final Logger logger = Logger.getLogger(getClass());
 
    	@RequestMapping(method = RequestMethod.GET)
-    @ResponseBody
 	public List<UIRole> getRoles() {
 		return roleManager.getAllUIRoles();
 	}

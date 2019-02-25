@@ -12,12 +12,11 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.esupportail.smsuapiadmin.business.AccountManager;
 import org.esupportail.smsuapiadmin.dto.beans.UIAccount;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * AccountsQuotaController is the controller for all actions on pages about
@@ -26,7 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author MZRL3760
  * 
  */
-@Controller
+@RestController
 @RequestMapping(value = "/accounts")
 @RolesAllowed("FCTN_GESTION_CPT_IMPUT")
 public class AccountsController {
@@ -38,20 +37,17 @@ public class AccountsController {
 	private final Logger logger = Logger.getLogger(getClass());
 
     @RequestMapping(method = RequestMethod.GET)
-    @ResponseBody
 	public List<UIAccount> getAccounts() {
 		return accountManager.getAllUIAccounts();
 	}
 
     @RequestMapping(method = RequestMethod.POST)
-    @ResponseBody
 	public void create(@RequestBody UIAccount account) {
 		checkMandatoryUIParameters(account);
 		accountManager.addAccount(account);
 	}
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{id:\\d+}")
-    @ResponseBody
 	public void modify(@PathVariable("id") int id, @RequestBody UIAccount account) {
 		account.id = id;
 		checkMandatoryUIParameters(account);

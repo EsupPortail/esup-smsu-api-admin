@@ -250,8 +250,8 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 		<dependency>
 		  <groupId>org.esup-portail</groupId>
-		  <artifactId>esup-smsu-api</artifactId>
-		  <version>3.0.0</version>
+		  <artifactId>esup-smsu-api-lib</artifactId>
+		  <version>4.0.0</version>
 		</dependency>
 
 		<dependency>

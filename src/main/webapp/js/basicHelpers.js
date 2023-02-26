@@ -50,13 +50,6 @@ this.array_concat_map = function (array, f) {
     });
     return r;
 };
-this.simpleFind = function (array, f) {
-    var r;
-    angular.forEach(array, function (e) {
-	if (f(e)) r = e; 
-    });
-    return r;
-};
 this.uniqWith = function (array, f) {
     var o = {};
     angular.forEach(array, function (e) {

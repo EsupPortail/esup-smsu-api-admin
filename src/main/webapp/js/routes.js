@@ -31,11 +31,11 @@ function computeRoutes(baseURL) {
 
 function findCurrentTab($scope, templateUrl) {
     var routes = this.routes;
-    var tab = this.h.simpleFind(routes, function (tab) { return tab.templateUrl === templateUrl; });
+    var tab = routes.find(function (tab) { return tab.templateUrl === templateUrl; });
     if (!tab) return;
     var mainTab;
     if (tab.parent) {
-	mainTab = this.h.simpleFind(routes, function (mainTab) { return mainTab.route === tab.parent; });
+	mainTab = routes.find(function (mainTab) { return mainTab.route === tab.parent; });
     } else {
 	mainTab = tab;
     }

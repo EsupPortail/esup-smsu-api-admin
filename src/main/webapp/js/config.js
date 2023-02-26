@@ -5,9 +5,9 @@ var app = angular.module('myApp');
 
 app.config(function($routeProvider, routesProvider, globalsProvider) {
     routesProvider.routes = routesProvider.computeRoutes(globalsProvider.baseURL);
-    angular.forEach(routesProvider.routes, function (tab) {
+    for (const tab of routesProvider.routes) {
 	if (tab.controller) $routeProvider.when(tab.route, {templateUrl: tab.templateUrl, controller: tab.controller, resolve: tab.resolve});
-    });
+    }
     $routeProvider.otherwise({redirectTo: '/welcome'});
 });
 

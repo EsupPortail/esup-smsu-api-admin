@@ -47,14 +47,14 @@ app.directive('displayRequiredIfNeeded', function ($parse) {
 	   }; 
 });
 
-app.directive('myValidator', function () {
+app.directive('myValidator', function (h) {
   return {
     restrict: 'A',
     require: 'ngModel', // controller to be passed into directive linking function
     link: function (scope, elem, attr, ctrl) {
 	var checkers = scope.$eval(attr.myValidator);
 	ctrl.$parsers.push(function (viewValue) {
-	    angular.forEach(checkers, function (checker, checkName) {
+	    h.simpleEach(checkers, function (checker, checkName) {
 		ctrl.$setValidity(checkName, checker(viewValue));
 	    });
 	    return viewValue;

@@ -23,9 +23,9 @@ function computeRoutes(baseURL) {
      { route: '/users/:id', parent: '/users', controller: 'UsersDetailCtrl', templateUrl: templatesBaseURL + '/users-detail.html', resolve: resolve('users') },
      { route: '/applications/:id', parent: '/applications', controller: 'ApplicationsDetailCtrl', templateUrl: templatesBaseURL + '/applications-detail.html', resolve: resolve('accounts','applications') },
      { route: '/accounts/:id', parent: '/accounts', controller: 'AccountsDetailCtrl', templateUrl: templatesBaseURL + '/accounts-detail.html', resolve: resolve('accounts') }];
-  angular.forEach(l, function (tab) {
+  for(const tab of l) {
     if (!tab.templateUrl) tab.templateUrl = templatesBaseURL + tab.route + '.html';
-  });
+  }
   return l;
 }
 

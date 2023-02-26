@@ -26,9 +26,9 @@ function computeUserCapabilities(user, roles) {
     if (!role) {
 	console.log("user " + user.login + " has unknown role " + user.role);
     } else {
-	angular.forEach(role.fonctions || [], function (c) {
+	for(const c of role.fonctions || []) {
 	    can[c] = true;
-	});
+	}
     }
     return can;
 }

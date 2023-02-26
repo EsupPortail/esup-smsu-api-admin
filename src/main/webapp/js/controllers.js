@@ -223,7 +223,7 @@ app.controller('ApplicationsCtrl', function($scope, h, h_applications) {
 app.controller('ConsolidatedSummaryCtrl', function($scope, h, h_summary_consolidated) {
     var computeTree = function () {
 	var tree = {};
-	angular.forEach(h_summary_consolidated, function (e) {
+	for (const e of h_summary_consolidated) {
 	    var key1 = e.institution;
 	    var key2 = e.app + "+" + e.account;
 	    if (!tree[key1]) 
@@ -232,13 +232,13 @@ app.controller('ConsolidatedSummaryCtrl', function($scope, h, h_summary_consolid
 		tree[key1][key2] = $.extend({ data: [] }, h.objectSlice(e, ['institution', 'app', 'account']));
 	    tree[key1][key2].data.unshift(e);
 	});
-	angular.forEach(tree, function (subtree, key1) {
+	h.simpleEach(tree, function (subtree, key1) {
 	    tree[key1] = $.map(Object.keys(subtree).sort(), function (k) { return subtree[k]; });
 	});
 	return tree;
     };
 
-    angular.forEach(h_summary_consolidated, function (e) {
+    for (const e of h_summary_consolidated) {
 	    $.extend(e, h.getInstAppAccount(e));
 	    e.nbReceived = e.nbSendedSMS - e.nbSMSInError;
 	    e.failureRate = Math.round(e.nbSMSInError / e.nbSendedSMS * 100) + "%";

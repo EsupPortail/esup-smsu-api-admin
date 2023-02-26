@@ -84,10 +84,10 @@ function tryRelog() {
 
 function setHttpHeader(methods, name, val) {
     var headers = $http.defaults.headers;
-    angular.forEach(methods, function (method) {
+    for (const method of methods) {
 	if (!headers[method]) headers[method] = {};
 	headers[method][name] = val;
-    });
+    }
 }
 
 var alerted = {};

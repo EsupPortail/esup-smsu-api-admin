@@ -49,7 +49,7 @@ function windowOpenOnMessage(state) {
 	windowOpenCleanup(state);
 	$rootScope.$apply(function () { 
 	    state.deferredLogin.resolve(angular.fromJson(m[1]));
-	    angular.forEach(state.deferredQueue, function (deferred) { deferred.resolve(); });
+	    for (const deferred of state.deferredQueue) { deferred.resolve(); }
 	});
     };
     $window.addEventListener("message", onmessage);  

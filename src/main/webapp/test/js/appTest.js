@@ -2,13 +2,13 @@
 function isDefined(value){return typeof value != 'undefined';}
 function parseKeyValue(/**string*/keyValue) {
   var obj = {}, key_value, key;
-  angular.forEach((keyValue || "").split('&'), function(keyValue){
+  for (const keyValue of (keyValue || "").split('&')) {
     if (keyValue) {
       key_value = keyValue.split('=');
       key = decodeURIComponent(key_value[0]);
       obj[key] = isDefined(key_value[1]) ? decodeURIComponent(key_value[1]) : true;
     }
-  });
+  }
   return obj;
 }
 
@@ -62,14 +62,14 @@ myAppTest.run(function($http, $httpBackend, h) {
 		   {"id":4,"name":"acc3","quota":19550,"consumedSms":18548}]
     };
 
-    angular.forEach([ 'roles', 'users', 'applications', 'accounts' ], function (kind) {
+    for(const kind of [ 'roles', 'users', 'applications', 'accounts' ]) {
 	var list = data[kind];
 	var regexp = new RegExp("/rest/" + kind);
 	$httpBackend.whenGET(regexp).respond(list);
 	$httpBackend.whenPUT(regexp).respond(modify(list));
 	$httpBackend.whenPOST(regexp).respond(create(list));
 	$httpBackend.whenDELETE(regexp).respond(delete_(list));
-    });
+    }
 
 
     var summary_consolidated_compact = [
@@ -83,16 +83,16 @@ myAppTest.run(function($http, $httpBackend, h) {
     ];
     function summary_consolidated() {
 	var r = [];
-	angular.forEach(summary_consolidated_compact, function (e) {
-	    angular.forEach(e.stats, function (stat) {
+	for (const e of summary_consolidated_compact) {
+	    for (const stat of e.stats) {
 		var e_ = angular.copy(e);
 		delete e_.stats;
 		e_.month = stat[0];
 		e_.nbSendedSMS = stat[1];
 		e_.nbSMSInError = stat[2];
 		r.push(e_);
-	    });
-	});
+	    }
+	}
 	return [200,r];
     }
     $httpBackend.whenGET(/rest.summary.consolidated/).respond(summary_consolidated);

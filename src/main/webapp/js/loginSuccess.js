@@ -1,9 +1,8 @@
-(function () {
-"use strict";
+import * as basicHelpers from './basicHelpers.js'
 
 var app = angular.module('myApp');
 
-app.service('loginSuccess', function ($rootScope, basicHelpers) {
+app.service('loginSuccess', function ($rootScope) {
 
 var loginSuccess = this;
 
@@ -47,5 +46,3 @@ function getRolesInScope($scope) {
 }
 
 });
-
-})();

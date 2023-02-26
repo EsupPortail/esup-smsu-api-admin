@@ -1,9 +1,8 @@
-(function () {
-"use strict";
+import * as basicHelpers from './basicHelpers.js'
 
 var app = angular.module('myApp');
 
-app.service('h', function (basicHelpers, restWsHelpers) {
+app.service('h', function (restWsHelpers) {
 
 var h = this;
 
@@ -69,4 +68,3 @@ this.exportCSV = function (domElt, rows, fileName) {
 
 });
 
-})();

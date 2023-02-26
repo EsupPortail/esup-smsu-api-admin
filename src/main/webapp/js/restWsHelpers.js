@@ -1,9 +1,9 @@
-(function () {
-"use strict";
+import * as basicHelpers from './basicHelpers.js'
+
 
 var app = angular.module('myApp');
 
-app.service('restWsHelpers', function ($http, $rootScope, $timeout, basicHelpers, login, loginSuccess, $location) {
+app.service('restWsHelpers', function ($http, $rootScope, $timeout, login, loginSuccess, $location) {
 
 // loginSuccess need restWsHelpers but it would create a circular deps, resolve it by hand:
 loginSuccess.restWsHelpers = this;
@@ -168,5 +168,3 @@ this.action = action;
 this.initialLogin = initialLogin;
 
 });
-
-})();

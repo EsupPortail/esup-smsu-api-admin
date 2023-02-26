@@ -3,7 +3,7 @@
 
 var app = angular.module('myApp');
 
-app.service('login', function ($http, $window, $rootScope) {
+app.service('login', function ($http, $rootScope) {
 
 var login = this;
 
@@ -52,7 +52,7 @@ function windowOpenOnMessage(state) {
 	    for (const deferred of state.deferredQueue) { deferred.resolve(); }
 	});
     };
-    $window.addEventListener("message", onmessage);  
+    window.addEventListener("message", onmessage);  
     return onmessage;
 }
 this.windowOpenState = {};
@@ -60,7 +60,7 @@ function windowOpenCleanup(state) {
     try {
 	if (state.div) state.div.remove();
 	if (state.iframe) state.iframe.remove();
-	if (state.listener) $window.removeEventListener("message", state.listener);  
+	if (state.listener) window.removeEventListener("message", state.listener);  
 	if (state.window) state.window.close(); 
     } catch (e) {}
     login.windowOpenState = {};
@@ -78,7 +78,7 @@ this.windowOpen = function (isRelog) {
     state.div = windowOpenDivCreate(isRelog);
     state.listener = windowOpenOnMessage(state); 
     state.div.bind("click", function () {
-	state.window = $window.open(postMessageURL);
+	state.window = window.open(postMessageURL);
     });
 
     if (globals.jsonpDisabled && $rootScope.idpId) {
@@ -91,9 +91,9 @@ this.windowOpen = function (isRelog) {
 
 this.mayRedirect = function () {
 	console.log("jsonpLogin failed, trying redirect");
-	var then = $window.location.hash && $window.location.hash.replace(/^#/, '');
+	var then = window.location.hash && window.location.hash.replace(/^#/, '');
 	var dest = globals.baseURL + '/rest/login?then=' + encodeURIComponent(then);
-	$window.location.href = mayAddIdpId(dest);
+	window.location.href = mayAddIdpId(dest);
 	// the redirect may take time, in the meantime, do not think login was succesful
 	return Promise.reject("jsonpLogin failed, trying redirect");
 };

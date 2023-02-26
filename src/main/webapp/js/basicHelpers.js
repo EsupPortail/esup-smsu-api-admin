@@ -50,13 +50,6 @@ this.array_concat_map = function (array, f) {
     });
     return r;
 };
-this.simpleFilter = function (array, f) {
-    var r = [];
-    angular.forEach(array, function (e) {
-	if (f(e)) r.push(e);
-    });
-    return r;
-};
 this.simpleFind = function (array, f) {
     var r;
     angular.forEach(array, function (e) {
@@ -99,11 +92,11 @@ this.set2array = function (set) {
 };
 this.array_difference = function (array1, array2) {
     var set2 = this.array2set(array2);
-    return this.simpleFilter(array1, function (e) { return !(e in set2); });
+    return array1.filter(function (e) { return !(e in set2); });
 };
 this.array_intersection = function (array1, array2) {
     var set2 = this.array2set(array2);
-    return this.simpleFilter(array1, function (e) { return (e in set2); });
+    return array1.filter(function (e) { return (e in set2); });
 };
 
 this.fromJsonOrNull = function(json) {

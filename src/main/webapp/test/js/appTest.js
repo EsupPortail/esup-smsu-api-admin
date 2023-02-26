@@ -41,7 +41,7 @@ myAppTest.run(function($http, $httpBackend, h) {
     function delete_(list) {
 	return function(method, url, data) {
 	    var id = url.match(/(\d+)$/)[0];
-	    var list_ = h.simpleFilter(list, function (o) { return o.id != id; });
+	    var list_ = list.filter(function (o) { return o.id != id; });
 	    angular.copy(list_, list);
 	    return [200];
 	};
@@ -125,7 +125,7 @@ myAppTest.run(function($http, $httpBackend, h) {
     function summary_detailed(method, url, data) {
 	var search = parseKeyValue(url.match(/\?(.*)/)[1].replace('+', ' '));
 
-	var filteredBase = h.simpleFilter(summary_detailed_base, function (e) {
+	var filteredBase = summary_detailed_base.filter(function (e) {
 	    return !('account' in search && search.account !== e.accountName) &&
 		   !('app' in search && search.app !== e.appName) &&
 		   !('institution' in search && search.institution !== e.institution);

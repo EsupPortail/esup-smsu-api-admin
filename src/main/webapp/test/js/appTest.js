@@ -24,7 +24,7 @@ myAppTest.run(function($http, $httpBackend, h) {
 
     function create(list) {
 	return function(method, url, data) {
-	    var o = angular.fromJson(data);
+	    var o = JSON.parse(data);
 	    o.id = 1 + Math.max.apply(null, list.map(function(o) { return o.id; }));
 	    list.push(o);
 	    return [200];
@@ -34,7 +34,7 @@ myAppTest.run(function($http, $httpBackend, h) {
 	return function(method, url, data) {
 	    var id = url.match(/(\d+)$/)[0];
 	    var o = list.find(function (o) { return o.id == id; });
-	    angular.extend(o, angular.fromJson(data));
+	    angular.extend(o, JSON.parse(data));
 	    return [200];
 	};
     }

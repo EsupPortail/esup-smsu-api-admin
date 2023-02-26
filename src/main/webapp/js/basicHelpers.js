@@ -46,7 +46,7 @@ this.uniqWith = function (array, f) {
 
 this.fromJsonOrNull = function(json) {
     try {
-	return angular.fromJson(json);
+	return JSON.parse(json);
     } catch (e) {
 	return null;
     }

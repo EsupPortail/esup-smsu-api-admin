@@ -25,7 +25,7 @@ public class StartPage implements org.springframework.web.HttpRequestHandler {
 	ServletContextWrapper context = new ServletContextWrapper(request.getSession().getServletContext());
 	boolean genTestStaticJsonPage = request.getServletPath().equals("/GenTestStaticJsonPage");
 	String baseURL = genTestStaticJsonPage ? ".." : urlGenerator.baseURL(request);
-	Map<String, Object> env = createEnv(baseURL, AuthAndRoleAndMiscFilter.getIdpId(request), genTestStaticJsonPage);
+	Map<String, Object> env = createEnv(baseURL, AuthAndRoleAndMiscFilter.getIdpId(request));
 
 	String template = getHtmlTemplate(context, "/WEB-INF/StartPage-template.html");
 	String page = instantiateTemplate(context, env, template);
@@ -39,12 +39,11 @@ public class StartPage implements org.springframework.web.HttpRequestHandler {
 		return serverSideDirectives.instantiate(template, env, context);
 	}
 
-	public Map<String, Object> createEnv(String baseURL, String idpId, boolean genTestStaticJsonPage) throws IOException {
+	public Map<String, Object> createEnv(String baseURL, String idpId) throws IOException {
 		Map<String, Object> env = new TreeMap<>();
 
     	env.put("baseURL", baseURL);
     	env.put("jsonpDisabled", jsonpDisabled);
-    	env.put("useTestStaticJson", genTestStaticJsonPage);
     	if (idpId != null) env.put("idpId", idpId);
     	
     	env.put("globals", new ObjectMapper().writeValueAsString(env));

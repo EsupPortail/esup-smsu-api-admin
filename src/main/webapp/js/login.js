@@ -3,7 +3,7 @@
 
 var app = angular.module('myApp');
 
-app.service('login', function ($http, globals, $window, $rootScope) {
+app.service('login', function ($http, $window, $rootScope) {
 
 var login = this;
 

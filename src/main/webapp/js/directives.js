@@ -63,7 +63,7 @@ app.directive('myValidator', function (h) {
    };
 });
 
-app.directive('myInclude', function (globals) {
+app.directive('myInclude', function () {
   return {
     restrict: 'A',
     replace: true,

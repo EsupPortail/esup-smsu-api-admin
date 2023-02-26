@@ -3,7 +3,7 @@
 
 var app = angular.module('myApp');
 
-app.service('restWsHelpers', function ($http, $rootScope, globals, $timeout, basicHelpers, login, loginSuccess, $location) {
+app.service('restWsHelpers', function ($http, $rootScope, $timeout, basicHelpers, login, loginSuccess, $location) {
 
 // loginSuccess need restWsHelpers but it would create a circular deps, resolve it by hand:
 loginSuccess.restWsHelpers = this;

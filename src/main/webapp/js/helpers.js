@@ -49,14 +49,6 @@ this.createEmptyAccount = function (accountNameSuggestion, accounts) {
     });
 };
 
-this.cleanupUportalCss = function () {
-    // get rid of ugly stuff from uportal...
-    $('link[href*="/fss-framework-1.1.2.min.css"]').attr('disabled', 'disabled');
-    $('link[href*="/portlet.css"]').attr('disabled', 'disabled');
-    //$('link[href*="/fss-theme-mist.min.css"]').attr('disabled', 'disabled');
-    $('.fl-theme-mist').toggleClass('fl-theme-mist');
-};
-
 function toCSV(rows, attrs) {
     return rows.map(function (row) {
 	return row.map(function (v) { 

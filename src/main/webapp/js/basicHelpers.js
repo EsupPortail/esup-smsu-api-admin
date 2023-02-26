@@ -7,9 +7,6 @@ app.service('basicHelpers', function () {
 
 var h = this;
 
-this.objectKeys = function (o) {
-    return $.map(o, function (l, k) { return k; });
-};
 this.objectValues = function (o) {
     return $.map(o, function (l, k) { return l; });
 };

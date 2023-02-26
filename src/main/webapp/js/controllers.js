@@ -233,7 +233,7 @@ app.controller('ConsolidatedSummaryCtrl', function($scope, h, h_summary_consolid
 	    tree[key1][key2].data.unshift(e);
 	});
 	angular.forEach(tree, function (subtree, key1) {
-	    tree[key1] = $.map(h.objectKeys(subtree).sort(), function (k) { return subtree[k]; });
+	    tree[key1] = $.map(Object.keys(subtree).sort(), function (k) { return subtree[k]; });
 	});
 	return tree;
     };

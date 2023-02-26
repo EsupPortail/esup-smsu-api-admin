@@ -3,13 +3,13 @@
 
 var app = angular.module('myApp');
 
-app.service('login', function ($http, globals, $window, $rootScope, $q) {
+app.service('login', function ($http, globals, $window, $rootScope) {
 
 var login = this;
 
 this.jsonp = function () {
     if (globals.jsonpDisabled) {
-	return $q.reject("jsonp login disabled");
+	return Promise.reject("jsonp login disabled");
     }
 
     console.log("jsonpLogin start");
@@ -73,7 +73,7 @@ this.windowOpen = function (isRelog) {
     var state = {};
     login.windowOpenState = state;
 
-    state.deferredLogin = $q.defer();
+    state.deferredLogin = h.promise_defer();
     state.deferredQueue = [];
     state.div = windowOpenDivCreate(isRelog);
     state.listener = windowOpenOnMessage(state); 
@@ -95,7 +95,7 @@ this.mayRedirect = function () {
 	var dest = globals.baseURL + '/rest/login?then=' + encodeURIComponent(then);
 	$window.location.href = mayAddIdpId(dest);
 	// the redirect may take time, in the meantime, do not think login was succesful
-	return $q.reject("jsonpLogin failed, trying redirect");
+	return Promise.reject("jsonpLogin failed, trying redirect");
 };
 
 

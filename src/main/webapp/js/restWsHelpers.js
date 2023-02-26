@@ -3,7 +3,7 @@
 
 var app = angular.module('myApp');
 
-app.service('restWsHelpers', function ($http, $rootScope, globals, $q, $timeout, basicHelpers, login, loginSuccess, $location) {
+app.service('restWsHelpers', function ($http, $rootScope, globals, $timeout, basicHelpers, login, loginSuccess, $location) {
 
 // loginSuccess need restWsHelpers but it would create a circular deps, resolve it by hand:
 loginSuccess.restWsHelpers = this;
@@ -58,7 +58,7 @@ function tryRelog() {
     }
     function queueXhrRequest() {
 	console.log('queuing request');
-	var deferred = $q.defer();
+	var deferred = h.promise_defer();
 	login.windowOpenState.deferredQueue.push(deferred);
 	return deferred.promise;
     }
@@ -77,7 +77,7 @@ function tryRelog() {
 	    console.log('relog failed');
 	    console.log(resp);
 	    alert("relog failed");
-	    return $q.reject("needIframe");
+	    return Promise.reject("needIframe");
 	});
     });
 }
@@ -104,7 +104,7 @@ function xhrRequest(args, flags) {
     var onError401 = function (resp) {
 	if (flags.justSuccessfullyLogged) {
 		alert("FATAL : ????");
-		return $q.reject(resp);
+		return Promise.reject(resp);
 	}
 	return tryRelog().then(function () { 
 	    return xhrRequest(args, { justSuccessfullyLogged: true });
@@ -113,7 +113,7 @@ function xhrRequest(args, flags) {
     var onErrorCsrf = function (resp, err) {
 	if (flags.xhrRequestInvalidCsrfState) {
 	    alert("Invalid CRSF prevention token failed twice");
-	    return $q.reject(resp);
+	    return Promise.reject(resp);
 	}
 	setHttpHeader(['post','put','delete'], "X-CSRF-TOKEN", err.token);
 	console.log("retrying with new CSRF token");
@@ -124,17 +124,17 @@ function xhrRequest(args, flags) {
 	    return onErrorCsrf(resp, err);
 	else {
 	    alert(err.error);
-	    return $q.reject(err);
+	    return Promise.reject(err);
 	}
     };
     var onError = function(resp) {
 	var status = resp.status;
 	if (status === 0) {
 	    alert("unknown failure (server seems to be down)");
-	    return $q.reject(resp);
+	    return Promise.reject(resp);
 	} else if (status === 503) {
             alertOnce("Le serveur est en maintenance, veuillez ré-essayer ultérieurement", 2000);
-            return $q.reject(resp);         
+            return Promise.reject(resp);         
 	} else if (status === 401) {
 	    return onError401(resp);
 	} else if (resp.data) {
@@ -144,7 +144,7 @@ function xhrRequest(args, flags) {
 
 	}
 	alert("unknown error " + status);
-	return $q.reject(resp);
+	return Promise.reject(resp);
     };
     if (flags.noErrorHandling) onError = null;
     return $http(args).then(function (resp) {

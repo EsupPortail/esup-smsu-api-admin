@@ -7,6 +7,12 @@ app.service('basicHelpers', function () {
 
 var h = this;
 
+// reify a promise: create a promise and return an object with promise + resolve/reject functions
+this.promise_defer = function() {
+    let deferred = {}
+    deferred.promise = new Promise((resolve, reject) => { deferred.resolve = resolve; deferred.reject = reject });
+    return deferred;
+};
 this.cloneDeep = function (o) {
     return JSON.parse(JSON.stringify(o))
 };

@@ -1,11 +1,11 @@
 (function () {
 "use strict";
 
-function resolve(l) {
+function resolve(...l) {
     var r = {};
-    angular.forEach(arguments, function (name) {
+    for(const name of l) {
 	r["h_" + name] = function (h) { return h[name](); };
-    });
+    }
     return r;
 }
 

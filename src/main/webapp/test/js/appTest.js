@@ -2,9 +2,9 @@
 function isDefined(value){return typeof value != 'undefined';}
 function parseKeyValue(/**string*/keyValue) {
   var obj = {}, key_value, key;
-  for (const keyValue of (keyValue || "").split('&')) {
-    if (keyValue) {
-      key_value = keyValue.split('=');
+  for (const keyValue_ of (keyValue || "").split('&')) {
+    if (keyValue_) {
+      key_value = keyValue_.split('=');
       key = decodeURIComponent(key_value[0]);
       obj[key] = isDefined(key_value[1]) ? decodeURIComponent(key_value[1]) : true;
     }

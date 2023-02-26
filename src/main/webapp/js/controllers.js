@@ -231,7 +231,7 @@ app.controller('ConsolidatedSummaryCtrl', function($scope, h, h_summary_consolid
 	    if (!tree[key1][key2]) 
 		tree[key1][key2] = $.extend({ data: [] }, h.objectSlice(e, ['institution', 'app', 'account']));
 	    tree[key1][key2].data.unshift(e);
-	});
+	}
 	h.simpleEach(tree, function (subtree, key1) {
 	    tree[key1] = $.map(Object.keys(subtree).sort(), function (k) { return subtree[k]; });
 	});
@@ -242,7 +242,7 @@ app.controller('ConsolidatedSummaryCtrl', function($scope, h, h_summary_consolid
 	    $.extend(e, h.getInstAppAccount(e));
 	    e.nbReceived = e.nbSendedSMS - e.nbSMSInError;
 	    e.failureRate = Math.round(e.nbSMSInError / e.nbSendedSMS * 100) + "%";
-    });
+    }
     $scope.flatList = h_summary_consolidated;
     $scope.appAccountsTree = computeTree();
 

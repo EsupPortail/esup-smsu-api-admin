@@ -43,7 +43,7 @@ this.uniqWith = function (array, f) {
     for (const e of array) {
 	var k = f(e);
 	if (!(k in o)) o[k] = e;
-    });
+    }
     return Object.values(o);
 };
 

@@ -25,7 +25,7 @@ myAppTest.run(function($http, $httpBackend, h) {
     function create(list) {
 	return function(method, url, data) {
 	    var o = angular.fromJson(data);
-	    o.id = 1 + Math.max.apply(null, h.array_map(list, function(o) { return o.id; }));
+	    o.id = 1 + Math.max.apply(null, list.map(function(o) { return o.id; }));
 	    list.push(o);
 	    return [200];
 	};
@@ -116,7 +116,7 @@ myAppTest.run(function($http, $httpBackend, h) {
 	{"institution":"Université Rouge","appName":"ent.univ-rouge.fr","accountName":"ent.univ-rouge.fr","date":1380099148000,"nbDelivered":2,"nbInProgress":1,"errors":"0","nbSms":3},
     ];
     function summary_detailed_criteria() {
-	var r = h.array_map(summary_detailed_base, function (e) {
+	var r = summary_detailed_base.map(function (e) {
 	    return h.objectSlice(e, ["institution", "appName", "accountName"]);
 	});
 	r = h.uniqWith(r, angular.toJson);

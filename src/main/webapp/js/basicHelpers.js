@@ -36,13 +36,6 @@ this.array2hashMulti = function (array, field) {
     });
     return h;
 };
-this.array_map = function (array, f) {
-    var r = [];
-    angular.forEach(array, function (e) {
-	r.push(f(e)); 
-    });
-    return r;
-};
 this.array_concat_map = function (array, f) {
     var r = [];
     angular.forEach(array, function (e) {

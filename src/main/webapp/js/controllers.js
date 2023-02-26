@@ -272,7 +272,7 @@ app.controller('DetailedSummaryCtrl', function($scope, h, $location, $route, h_s
 	$route.reload();
     };
 
-	var flatList = h.array_map(h_summary_detailed_criteria, function (e) {
+	var flatList = h_summary_detailed_criteria.map(function (e) {
 	    return h.getInstAppAccount(e);
 	});
 	$scope.appAccountsTree = h.array2hashMulti(flatList, 'institution');

@@ -31,15 +31,13 @@ public class LoginController {
     
 	@RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<String> get(HttpServletRequest request) throws IOException {
-    	boolean ourCookiesRejected = !hasCookie(request, "JSESSIONID");
 
 	    HttpSession session = request.getSession();
-		String sessionId = ourCookiesRejected ? session.getId() : null;
 		String idpId = AuthAndRoleAndMiscFilter.getIdpId(request);
 		String then = request.getParameter("then");
 		if (then != null) {
 			//then = URLDecoder.decode(then, "UTF-8");
-			String url = urlGenerator.goTo(request, then, sessionId, idpId);
+			String url = urlGenerator.goTo(request, then, idpId);
 			HttpHeaders responseHeaders = new HttpHeaders();
 			responseHeaders.setLocation(URI.create(url));
 			return new ResponseEntity<String>("", responseHeaders, HttpStatus.TEMPORARY_REDIRECT);
@@ -47,9 +45,6 @@ public class LoginController {
 	
 		UIUser user = userManager.getUserByLogin(request.getRemoteUser());
 		user.idpId = idpId;
-		if (ourCookiesRejected) {
-			user.sessionId = session.getId();
-		}
 		String jsUser = new ObjectMapper().writeValueAsString(user);
 		String content;
 		MediaType mediaType;

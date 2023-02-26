@@ -90,18 +90,12 @@ this.windowOpen = function (isRelog) {
 };
 
 this.mayRedirect = function () {
-    if (globals.isWebWidget) {
-	// we can't redirect
-	console.log("jsonpLogin failed, trying windowOpenLogin");
-	return login.windowOpen();
-    } else {
 	console.log("jsonpLogin failed, trying redirect");
 	var then = $window.location.hash && $window.location.hash.replace(/^#/, '');
 	var dest = globals.baseURL + '/rest/login?then=' + encodeURIComponent(then);
 	$window.location.href = mayAddIdpId(dest);
 	// the redirect may take time, in the meantime, do not think login was succesful
 	return $q.reject("jsonpLogin failed, trying redirect");
-    }
 };
 
 

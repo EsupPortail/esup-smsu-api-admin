@@ -10,9 +10,6 @@ var loginSuccess = this;
 this.set = function (loggedUser) {
     console.log('user logged in: ' + loggedUser.login + " " + loggedUser.role);
 
-    $rootScope.sessionId = loggedUser.sessionId;
-    delete loggedUser.sessionId;
-
     function setIt() {
 	$rootScope.loggedUser = userWithCapabilities(loggedUser, $rootScope.roles);
     };

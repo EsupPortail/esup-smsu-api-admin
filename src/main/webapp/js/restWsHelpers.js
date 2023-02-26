@@ -11,9 +11,6 @@ loginSuccess.restWsHelpers = this;
 getUrlStartupParams();
 
 function getUrlStartupParams() {
-    // used for "redirect login" if no cookies:
-    //   /#/foo -> /rest/login?then=/foo -> /#/then?idpId=xxx&sessionId=zzz
-    getUrlStartupParam('sessionId');
     // used for first URL, you can have either:
     // -  /?idpId=xxx : when you want the either to bookmark the idp choice
     // - /#/?idpId=xxx : when you want the idpId to be hidden from URL
@@ -106,21 +103,8 @@ function alertOnce(msg, timeout) {
 function xhrRequest(args, flags) {
     var onError401 = function (resp) {
 	if (flags.justSuccessfullyLogged) {
-	    if ($rootScope.sessionId) {
-		if (!flags.sessionId) {
-		    console.log("Race? Our request was done without flag cookiesRejected. Retrying with jsessionid in request");
-		    return xhrRequest(args, flags);
-		} else if (flags.sessionId !== $rootScope.sessionId) {
-		    console.log("SessionId has changed. Retrying with new jsessionid");
-		    return xhrRequest(args, flags);
-		} else {
-		    alert("FATAL : both cookies and URL parameter jsessionid are rejected");
-		    return $q.reject(resp);
-		}
-	    } else {
 		alert("FATAL : ????");
 		return $q.reject(resp);
-	    }
 	}
 	return tryRelog().then(function () { 
 	    return xhrRequest(args, { justSuccessfullyLogged: true });
@@ -163,12 +147,6 @@ function xhrRequest(args, flags) {
 	return $q.reject(resp);
     };
     if (flags.noErrorHandling) onError = null;
-    if ($rootScope.sessionId && !flags.sessionId) {
-	flags.sessionId = $rootScope.sessionId;
-	args = angular.copy(args);
-	if (!args.url_no_sessionId) args.url_no_sessionId = args.url;
-	args.url = (args.url_no_sessionId || args.url) + ";jsessionid=" + $rootScope.sessionId;
-    }
     return $http(args).then(function (resp) {
 	return resp;
     }, onError);

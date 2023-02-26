@@ -23,20 +23,13 @@ public class StartPage implements org.springframework.web.HttpRequestHandler {
 
     public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
 	ServletContextWrapper context = new ServletContextWrapper(request.getSession().getServletContext());
-	boolean isWebWidget = request.getServletPath().startsWith("/WebWidget");
 	boolean genTestStaticJsonPage = request.getServletPath().equals("/GenTestStaticJsonPage");
 	String baseURL = genTestStaticJsonPage ? ".." : urlGenerator.baseURL(request);
-	Map<String, Object> env = createEnv(baseURL, isWebWidget, AuthAndRoleAndMiscFilter.getIdpId(request), genTestStaticJsonPage);
+	Map<String, Object> env = createEnv(baseURL, AuthAndRoleAndMiscFilter.getIdpId(request), genTestStaticJsonPage);
 
-	String template = getHtmlTemplate(context, "/WEB-INF/WebWidget-template.html");
+	String template = getHtmlTemplate(context, "/WEB-INF/StartPage-template.html");
 	String page = instantiateTemplate(context, env, template);
-	if (!isWebWidget) 
-	    page = getStartPageHtml(context, page);	
 	String type = "text/html; charset=UTF-8";
-	if (request.getServletPath().endsWith(".js")) {
-	    type = "application/x-javascript";
-	    page = "document.write(" + new ObjectMapper().writeValueAsString(page) + ");";
-	}
 
 	response.setContentType(type);
         response.getWriter().print(page);
@@ -46,16 +39,10 @@ public class StartPage implements org.springframework.web.HttpRequestHandler {
 		return serverSideDirectives.instantiate(template, env, context);
 	}
 
-    private String getStartPageHtml(ServletContextWrapper context, String webWidget) throws IOException {
-    	String s = getHtmlTemplate(context, "/WEB-INF/StartPage-template.html");
-    	return serverSideDirectives.instantiate_vars(s, singletonMap("webWidget", (Object) webWidget));
-    }
-
-	public Map<String, Object> createEnv(String baseURL, boolean isWebWidget, String idpId, boolean genTestStaticJsonPage) throws IOException {
+	public Map<String, Object> createEnv(String baseURL, String idpId, boolean genTestStaticJsonPage) throws IOException {
 		Map<String, Object> env = new TreeMap<>();
 
     	env.put("baseURL", baseURL);
-    	env.put("isWebWidget", isWebWidget);
     	env.put("jsonpDisabled", jsonpDisabled);
     	env.put("useTestStaticJson", genTestStaticJsonPage);
     	if (idpId != null) env.put("idpId", idpId);

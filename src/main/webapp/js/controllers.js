@@ -5,7 +5,7 @@ var app = angular.module('myApp');
 
 app.controller('MainCtrl', function($scope, h, $route, $parse, routes, restWsHelpers) {
 
-    $scope.allowLogout = false;//!globals.isWebWidget;
+    $scope.allowLogout = false;
 
     $scope.$watch('loggedUser', function () {
 	$scope.mainVisibleTabs = $.grep(routes.routes, function(e) { 

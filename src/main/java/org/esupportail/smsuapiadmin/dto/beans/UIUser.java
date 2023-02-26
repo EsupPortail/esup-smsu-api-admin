@@ -16,7 +16,6 @@ public class UIUser {
 
     public String login;
 	public EnumeratedRole role;
-	public String sessionId;
 	public String idpId;
 
     public UIUser() {        

@@ -48,8 +48,8 @@ var app = angular.module('myApp');
 app.provider('routes', function () {
     this.routes = [];
     this.computeRoutes = computeRoutes;
-    this.$get = function (basicHelpers) {
-	return { routes: this.routes, findCurrentTab: findCurrentTab, h: basicHelpers };
+    this.$get = function () {
+	return { routes: this.routes, findCurrentTab: findCurrentTab };
     };
 });
 

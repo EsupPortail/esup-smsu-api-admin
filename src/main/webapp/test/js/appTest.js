@@ -34,7 +34,7 @@ myAppTest.run(function($http, $httpBackend, h) {
 	return function(method, url, data) {
 	    var id = url.match(/(\d+)$/)[0];
 	    var o = list.find(function (o) { return o.id == id; });
-	    angular.extend(o, JSON.parse(data));
+	    Object.assign(o, JSON.parse(data));
 	    return [200];
 	};
     }

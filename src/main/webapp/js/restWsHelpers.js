@@ -162,8 +162,8 @@ function headers() {
 
 function simple($function, params, flags) {
     var url = globals.baseURL + '/rest/' + $function;
-    params = angular.extend({}, params);
-    flags = angular.extend({}, flags);
+    params = { ...params };
+    flags = { ...flags };
     var args = { method: 'get', url: url, params: params, headers: headers() };
     return xhrRequest(args, flags).then(function(resp) {
 	return resp.data;

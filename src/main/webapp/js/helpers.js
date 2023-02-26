@@ -7,7 +7,7 @@ app.service('h', function (basicHelpers, restWsHelpers) {
 
 var h = this;
 
-angular.extend(this, basicHelpers);
+Object.assign(this, basicHelpers);
 
 // rename restWsHelpers methods for compat
 this.callRest = restWsHelpers.simple;

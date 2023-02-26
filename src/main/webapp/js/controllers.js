@@ -307,7 +307,7 @@ app.controller('DetailedSummaryCtrl', function($scope, h, $location, $route, h_s
     var computeGroupedBy = function() {
 	if ($scope.inProgress) return;
 	$scope.inProgress = true;
-	var fullFilter = angular.extend({ maxResults: $scope.nbResults }, $scope.accountFilter);
+	var fullFilter = { maxResults: $scope.nbResults, ...$scope.accountFilter };
 	h.callRest('summary/detailed', fullFilter)
 	    .then(function (flatList) {
 		$scope.noMoreResults = flatList.length < fullFilter.maxResults;

@@ -119,7 +119,7 @@ myAppTest.run(function($http, $httpBackend, h) {
 	var r = summary_detailed_base.map(function (e) {
 	    return h.objectSlice(e, ["institution", "appName", "accountName"]);
 	});
-	r = h.uniqWith(r, angular.toJson);
+	r = h.uniqWith(r, JSON.stringify);
 	return [200,r];
     }
     function summary_detailed(method, url, data) {

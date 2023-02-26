@@ -7,9 +7,6 @@ app.service('basicHelpers', function () {
 
 var h = this;
 
-this.objectValues = function (o) {
-    return $.map(o, function (l, k) { return l; });
-};
 this.objectSlice = function (o, fields) {
     var r = {};
     angular.forEach(fields, function (field) {
@@ -46,7 +43,7 @@ this.uniqWith = function (array, f) {
 	var k = f(e);
 	if (!(k in o)) o[k] = e;
     });
-    return h.objectValues(o);
+    return Object.values(o);
 };
 this.uniq = function (array) {
     return h.set2array(h.array2set(array));

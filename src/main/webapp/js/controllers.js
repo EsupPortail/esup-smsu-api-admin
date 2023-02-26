@@ -99,7 +99,7 @@ app.controller('ApplicationsDetailCtrl', function($scope, h, $routeParams, $loca
     };
 
     var modify = function (method, then) {
-	var app = angular.copy($scope.app);
+	var app = h.cloneDeep($scope.app);
 	delete app.isNew;
 	h.callRestModify(method, 'applications', app).then(function () {
 	    $location.url(then || '/applications');
@@ -154,7 +154,7 @@ app.controller('AccountsDetailCtrl', function($scope, h, $routeParams, $location
     };
 
     var modify = function (method) {
-	var account = angular.copy($scope.account);
+	var account = h.cloneDeep($scope.account);
 	h.callRestModify(method, 'accounts', account).then(function () {
 	    $location.path('/accounts');
 	});

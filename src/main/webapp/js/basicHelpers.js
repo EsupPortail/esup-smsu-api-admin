@@ -7,6 +7,9 @@ app.service('basicHelpers', function () {
 
 var h = this;
 
+this.cloneDeep = function (o) {
+    return JSON.parse(JSON.stringify(o))
+};
 this.simpleEach = function (o, f) {
     for (const k in o) {
         f(o[k], k)

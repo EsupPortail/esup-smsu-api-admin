@@ -42,7 +42,7 @@ myAppTest.run(function($http, $httpBackend, h) {
 	return function(method, url, data) {
 	    var id = url.match(/(\d+)$/)[0];
 	    var list_ = list.filter(function (o) { return o.id != id; });
-	    angular.copy(list_, list);
+	    list.splice(0, 999, ...list_);
 	    return [200];
 	};
     }
@@ -85,7 +85,7 @@ myAppTest.run(function($http, $httpBackend, h) {
 	var r = [];
 	for (const e of summary_consolidated_compact) {
 	    for (const stat of e.stats) {
-		var e_ = angular.copy(e);
+		var e_ = h.cloneDeep(e);
 		delete e_.stats;
 		e_.month = stat[0];
 		e_.nbSendedSMS = stat[1];
@@ -134,7 +134,7 @@ myAppTest.run(function($http, $httpBackend, h) {
 	var nbResults = nbBase < 5 ? nbBase : Math.min(search.maxResults, 80);
 	var r = [];
 	for (var i = 0; i < nbResults; i++) {
-	    r.push(angular.copy(filteredBase[i % nbBase]));
+	    r.push(h.cloneDeep(filteredBase[i % nbBase]));
 	}
 	return [200,r];
     }

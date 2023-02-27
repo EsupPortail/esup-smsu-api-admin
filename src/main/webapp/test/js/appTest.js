@@ -1,17 +1,3 @@
-// taken verbatim from angular.js (except for forEach -> angular.forEach)
-function isDefined(value){return typeof value != 'undefined';}
-function parseKeyValue(/**string*/keyValue) {
-  var obj = {}, key_value, key;
-  for (const keyValue_ of (keyValue || "").split('&')) {
-    if (keyValue_) {
-      key_value = keyValue_.split('=');
-      key = decodeURIComponent(key_value[0]);
-      obj[key] = isDefined(key_value[1]) ? decodeURIComponent(key_value[1]) : true;
-    }
-  }
-  return obj;
-}
-
 var myAppTest = angular.module('myAppTest', ['myApp', 'ngMockE2E']);
 
 myAppTest.run(function($httpBackend, h, login) {
@@ -120,15 +106,15 @@ myAppTest.run(function($httpBackend, h, login) {
 	return [200,r];
     }
     function summary_detailed(method, url, data) {
-	var search = parseKeyValue(url.match(/\?(.*)/)[1].replace('+', ' '));
+	var search = new URLSearchParams(new URL(url, document.location).search)
 
 	var filteredBase = summary_detailed_base.filter(function (e) {
-	    return !('account' in search && search.account !== e.accountName) &&
-		   !('app' in search && search.app !== e.appName) &&
-		   !('institution' in search && search.institution !== e.institution);
+	    return !(search.has('account') && search.get('account') !== e.accountName) &&
+		   !(search.has('app') && search.get('app') !== e.appName) &&
+		   !(search.has('institution') && search.get('institution') !== e.institution);
 	});
 	var nbBase = filteredBase.length;
-	var nbResults = nbBase < 5 ? nbBase : Math.min(search.maxResults, 80);
+	var nbResults = nbBase < 5 ? nbBase : Math.min(search.get('maxResults'), 80);
 	var r = [];
 	for (var i = 0; i < nbResults; i++) {
 	    r.push(h.cloneDeep(filteredBase[i % nbBase]));

@@ -14,13 +14,10 @@ function parseKeyValue(/**string*/keyValue) {
 
 var myAppTest = angular.module('myAppTest', ['myApp', 'ngMockE2E']);
 
-myAppTest.run(function($http, $httpBackend, h) {
-
-    // no way to fake iframeLogin, force jsonpLogin
-    h.iframeLogin = h.jsonpLogin;
+myAppTest.run(function($httpBackend, h, login) {
 
     var loggedUser = {"login":"admin","role":"ROLE_SUPER_ADMIN"};
-    $httpBackend.whenJSONP(/rest.login/).respond(loggedUser);
+    login.jsonp = function () { return Promise.resolve(loggedUser) }
 
     function create(list) {
 	return function(method, url, data) {

@@ -1,11 +1,31 @@
-(function () {
-"use strict";
+import * as basicHelpers from './basicHelpers.js'
 
 var app = angular.module('myApp');
 
-app.service('login', function ($http, $rootScope) {
+app.service('login', function ($rootScope) {
 
 var login = this;
+
+function loadScript(url, onerror) {
+    var elt = document.createElement("script");
+    elt.setAttribute("type", "text/javascript");
+    elt.setAttribute("src", url);
+    elt.onerror = onerror
+    document.head.appendChild(elt);
+}
+
+var jsonpDeferreds = []
+window.jsonp_success = function(resp) {
+    console.log('jsonp_success', resp)
+    for (const p of jsonpDeferreds) { p.resolve(resp) }
+    jsonpDeferreds = []
+}
+function jsonp_error(resp) {
+    console.log('jsonp_error', resp)
+    for (const p of jsonpDeferreds) { p.reject(resp) }
+    jsonpDeferreds = []
+}
+
 
 this.jsonp = function () {
     if (globals.jsonpDisabled) {
@@ -13,10 +33,12 @@ this.jsonp = function () {
     }
 
     console.log("jsonpLogin start");
-    return $http.jsonp(globals.baseURL + '/rest/login?callback=JSON_CALLBACK').then(function (resp) {
-	console.log("jsonpLogin ok");
-	return resp.data;
-    });
+    var defer = basicHelpers.promise_defer()
+    jsonpDeferreds.push(defer)
+    if (jsonpDeferreds.length === 1) {
+        loadScript(globals.baseURL + '/rest/login?callback=jsonp_success', jsonp_error)
+    }
+    return defer.promise
 };
 
 function mayAddIdpId(url) {
@@ -100,5 +122,3 @@ this.mayRedirect = function () {
 
 
 });
-
-})();

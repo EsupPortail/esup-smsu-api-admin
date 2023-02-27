@@ -130,19 +130,3 @@ myAppTest.run(function($httpBackend, h, login) {
 
 
 
-//myAppTest.factory('fakeRequest', function () {
-//    return {
-//	request: function (config) {
-//	    var r = config.url.match(new RegExp("^(.*)/rest/(summary/detailed.*)$"));
-//	    if (r) {
-//		var func = r[2];
-//		func = func.replace(/[?&]/, '_');
-//		config.url = r[1] + '/test/' + func + '.json';
-//	    }
-//	    return config;
-//	}
-//    };
-//});
-//myAppTest.config(function ($httpProvider) {
-//    $httpProvider.interceptors.push('fakeRequest');
-//});

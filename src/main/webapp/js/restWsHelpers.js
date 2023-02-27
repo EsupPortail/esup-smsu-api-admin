@@ -82,14 +82,6 @@ function tryRelog() {
     });
 }
 
-function setHttpHeader(methods, name, val) {
-    var headers = $http.defaults.headers;
-    for (const method of methods) {
-	if (!headers[method]) headers[method] = {};
-	headers[method][name] = val;
-    }
-}
-
 var alerted = {};
 function alertOnce(msg, timeout) {
     if (alerted[msg]) return;
@@ -110,22 +102,9 @@ function xhrRequest(args, flags) {
 	    return xhrRequest(args, { justSuccessfullyLogged: true });
 	});
     };
-    var onErrorCsrf = function (resp, err) {
-	if (flags.xhrRequestInvalidCsrfState) {
-	    alert("Invalid CRSF prevention token failed twice");
-	    return Promise.reject(resp);
-	}
-	setHttpHeader(['post','put','delete'], "X-CSRF-TOKEN", err.token);
-	console.log("retrying with new CSRF token");
-	return xhrRequest(args, { xhrRequestInvalidCsrfState: true });
-    };
     var onErrorFromJson = function(resp, err) {
-	if (err.error === "Invalid CRSF prevention token")
-	    return onErrorCsrf(resp, err);
-	else {
 	    alert(err.error);
 	    return Promise.reject(err);
-	}
     };
     var onError = function(resp) {
 	var status = resp.status;

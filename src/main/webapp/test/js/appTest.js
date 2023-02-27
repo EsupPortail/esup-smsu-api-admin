@@ -6,27 +6,24 @@ myAppTest.run(function($httpBackend, h, login) {
     login.jsonp = function () { return Promise.resolve(loggedUser) }
 
     function create(list) {
-	return function(method, url, data) {
+	return function(_url, data) {
 	    var o = JSON.parse(data);
 	    o.id = 1 + Math.max.apply(null, list.map(function(o) { return o.id; }));
 	    list.push(o);
-	    return [200];
 	};
     }
     function modify(list) {
-	return function(method, url, data) {
+	return function(url, data) {
 	    var id = url.match(/(\d+)$/)[0];
 	    var o = list.find(function (o) { return o.id == id; });
 	    Object.assign(o, JSON.parse(data));
-	    return [200];
 	};
     }
     function delete_(list) {
-	return function(method, url, data) {
+	return function(url, _data) {
 	    var id = url.match(/(\d+)$/)[0];
 	    var list_ = list.filter(function (o) { return o.id != id; });
 	    list.splice(0, 999, ...list_);
-	    return [200];
 	};
     }
 
@@ -45,13 +42,14 @@ myAppTest.run(function($httpBackend, h, login) {
 		   {"id":4,"name":"acc3","quota":19550,"consumedSms":18548}]
     };
 
+    let httpFake = []
     for(const kind of [ 'roles', 'users', 'applications', 'accounts' ]) {
-	var list = data[kind];
-	var regexp = new RegExp("/rest/" + kind);
-	$httpBackend.whenGET(regexp).respond(list);
-	$httpBackend.whenPUT(regexp).respond(modify(list));
-	$httpBackend.whenPOST(regexp).respond(create(list));
-	$httpBackend.whenDELETE(regexp).respond(delete_(list));
+	let list = data[kind];
+	var path = "/rest/" + kind;
+	httpFake.push({ method: 'GET', path, respond: () => list })
+	httpFake.push({ method: 'PUT', path, respond: modify(list) })
+	httpFake.push({ method: 'POST', path, respond: create(list) })
+	httpFake.push({ method: 'DELETE', path, respond: delete_(list) })
     }
 
 
@@ -76,9 +74,9 @@ myAppTest.run(function($httpBackend, h, login) {
 		r.push(e_);
 	    }
 	}
-	return [200,r];
+	return r;
     }
-    $httpBackend.whenGET(/rest.summary.consolidated/).respond(summary_consolidated);
+    httpFake.push({ method: 'GET', path: '/rest/summary/consolidated', respond: summary_consolidated });
 
 
     var summary_detailed_base = [
@@ -98,14 +96,14 @@ myAppTest.run(function($httpBackend, h, login) {
 	{"institution":"Université Rouge","appName":"ent.univ-rouge.fr","accountName":"ent.univ-rouge.fr","date":1380101835000,"nbDelivered":21,"nbInProgress":1,"errors":"0","nbSms":22},
 	{"institution":"Université Rouge","appName":"ent.univ-rouge.fr","accountName":"ent.univ-rouge.fr","date":1380099148000,"nbDelivered":2,"nbInProgress":1,"errors":"0","nbSms":3},
     ];
-    function summary_detailed_criteria() {
+    function summary_detailed_criteria(_url, _data) {
 	var r = summary_detailed_base.map(function (e) {
 	    return h.objectSlice(e, ["institution", "appName", "accountName"]);
 	});
 	r = h.uniqWith(r, JSON.stringify);
-	return [200,r];
+	return r;
     }
-    function summary_detailed(method, url, data) {
+    function summary_detailed(url, _data) {
 	var search = new URLSearchParams(new URL(url, document.location).search)
 
 	var filteredBase = summary_detailed_base.filter(function (e) {
@@ -119,11 +117,26 @@ myAppTest.run(function($httpBackend, h, login) {
 	for (var i = 0; i < nbResults; i++) {
 	    r.push(h.cloneDeep(filteredBase[i % nbBase]));
 	}
-	return [200,r];
+	return r;
     }
-    $httpBackend.whenGET(/rest.summary.detailed.criteria/).respond(summary_detailed_criteria);
-    $httpBackend.whenGET(/rest.summary.detailed/).respond(summary_detailed);
+    httpFake.push({ method: 'GET', path: '/rest/summary/detailed/criteria', respond: summary_detailed_criteria });
+    httpFake.push({ method: 'GET', path: '/rest/summary/detailed', respond: summary_detailed });
 
+    let real_fetch = window.fetch
+    window.fetch = function (url, args) {
+        const { pathname } = new URL(url, document.location)
+        const fake = httpFake.find(fake => (
+            args.method.toUpperCase() === fake.method && pathname.startsWith(fake.path)
+        ))
+        if (!fake) return real_fetch(url, args)
+        let response = fake.respond(url, args.body)
+        return Promise.resolve({ 
+            status: 200,
+            headers: {
+                get: _ => "application/json",
+            },
+            json: () => Promise.resolve(response) })
+    }
 
     $httpBackend.whenGET(/.*/).passThrough();
 });

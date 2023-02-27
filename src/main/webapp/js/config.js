@@ -11,8 +11,4 @@ app.config(function($routeProvider, routesProvider) {
     $routeProvider.otherwise({redirectTo: '/welcome'});
 });
 
-app.config(function($httpProvider) {
-    $httpProvider.defaults.withCredentials = true;
-});
-
 })();

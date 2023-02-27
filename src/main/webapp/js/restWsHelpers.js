@@ -3,7 +3,7 @@ import * as basicHelpers from './basicHelpers.js'
 
 var app = angular.module('myApp');
 
-app.service('restWsHelpers', function ($http, $rootScope, $timeout, login, loginSuccess, $location) {
+app.service('restWsHelpers', function ($rootScope, $timeout, login, loginSuccess, $location) {
 
 // loginSuccess need restWsHelpers but it would create a circular deps, resolve it by hand:
 loginSuccess.restWsHelpers = this;
@@ -92,6 +92,12 @@ function alertOnce(msg, timeout) {
     }
 }
 
+function add_query_params(url, params) {
+    const qs = "" + new URLSearchParams(params)
+    return url + (qs ? "?" + qs : '')
+}
+
+// { method: 'get'|'post'|'delete', url: string, data: object, params: Dictionary<string>, headers }
 function xhrRequest(args, flags) {
     var onError401 = function (resp) {
 	if (flags.justSuccessfullyLogged) {
@@ -126,9 +132,14 @@ function xhrRequest(args, flags) {
 	return Promise.reject(resp);
     };
     if (flags.noErrorHandling) onError = null;
-    return $http(args).then(function (resp) {
-	return resp;
-    }, onError);
+    const { url, params, method, data, headers } = args
+    return fetch(add_query_params(url, params), { method, body: JSON.stringify(data), headers }).then(function (resp) {
+        if (resp.status !== 200) return onError(resp)
+        const contentType = resp.headers.get("content-type");
+        if (contentType && contentType.startsWith("application/json")) {
+            return resp.json()
+        }
+    }, onError).finally(_ => setTimeout(_ => $rootScope.$apply(), 1))
 }
 
 function headers() {
@@ -144,9 +155,7 @@ function simple($function, params, flags) {
     params = { ...params };
     flags = { ...flags };
     var args = { method: 'get', url: url, params: params, headers: headers() };
-    return xhrRequest(args, flags).then(function(resp) {
-	return resp.data;
-    });
+    return xhrRequest(args, flags);
 };
 
 function action(method, restPath, o) {
@@ -159,6 +168,7 @@ function action(method, restPath, o) {
     }
     if (method !== 'delete') {
 	args.data = o;
+	args.headers['Content-Type'] = 'application/json;charset=utf-8' 
     }
     return xhrRequest(args, {});
 };

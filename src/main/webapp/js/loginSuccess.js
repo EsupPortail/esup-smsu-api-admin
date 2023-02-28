@@ -1,12 +1,6 @@
 import * as basicHelpers from './basicHelpers.js'
 
-var app = angular.module('myApp');
-
-app.service('loginSuccess', function ($rootScope) {
-
-var loginSuccess = this;
-
-this.set = function (loggedUser) {
+export const set = function (restWsHelpers, $rootScope, loggedUser) {
     console.log('user logged in: ' + loggedUser.login + " " + loggedUser.role);
 
     function setIt() {
@@ -15,7 +9,7 @@ this.set = function (loggedUser) {
     if ($rootScope.roles) {
 	setIt();
     } else {
-	getRolesInScope($rootScope).then(setIt);
+	getRolesInScope(restWsHelpers, $rootScope).then(setIt);
     }
 };
 
@@ -37,12 +31,9 @@ function userWithCapabilities(user, roles) {
     return user;
 }
 
-function getRolesInScope($scope) {
-    // NB: hack for restWsHelpers: to break circular dependencies,
-    // loginSuccess.restWsHelpers is set by hand in restWsHelpers.java
-    return loginSuccess.restWsHelpers.simple('roles').then(function(roles) {
+function getRolesInScope(restWsHelpers, $scope) {
+    return restWsHelpers.simple('roles').then(function(roles) {
 	$scope.roles = basicHelpers.array2hash(roles, 'role');
     });
 }
 
-});

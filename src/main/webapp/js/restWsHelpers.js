@@ -1,12 +1,14 @@
 import * as basicHelpers from './basicHelpers.js'
+import * as loginSuccess from './loginSuccess.js'
 
 
 var app = angular.module('myApp');
 
-app.service('restWsHelpers', function ($rootScope, $timeout, login, loginSuccess, $location) {
+app.service('restWsHelpers', function ($rootScope, $timeout, login, $location) {
 
-// loginSuccess need restWsHelpers but it would create a circular deps, resolve it by hand:
-loginSuccess.restWsHelpers = this;
+const loginSuccess_set = (loggedUser) => {
+    loginSuccess.set(this, $rootScope, loggedUser)
+}
 
 getUrlStartupParams();
 
@@ -32,14 +34,14 @@ function initialLogin() {
 
     if (globals.jsonpDisabled) {
 	// try a simple XHR login, especially needed in case we arrive here after a redirect
-	simple('login', {}, { noErrorHandling: true }).then(null, login.mayRedirect).then(loginSuccess.set);
+	simple('login', {}, { noErrorHandling: true }).then(null, login.mayRedirect).then(loginSuccess_set);
     } else {
-	login.jsonp().then(null, login.mayRedirect).then(loginSuccess.set);
+	login.jsonp().then(null, login.mayRedirect).then(loginSuccess_set);
     }
 }
 
 function simpleLogin() {
-    simple('login').then(loginSuccess.set);
+    simple('login').then(loginSuccess_set);
 }
 
 function tryRelog() {
@@ -52,7 +54,7 @@ function tryRelog() {
 	    // update loggedUser by using XHR
 	    simpleLogin();
 	} else {
-	    loginSuccess.set(loggedUser);
+	    loginSuccess_set(loggedUser);
 	}
 	return null;
     }

@@ -1,3 +1,4 @@
+export const template = `
 <div class="normalContent" ng-show="account">
 
  <div ng-show="isNew" class="alert alert-success">Le nouveau compte « {{account.name}} » vient d'être créé, vous pouvez maintenant le modifier.</div>
@@ -37,3 +38,46 @@
  </form>
 
 </div>
+`
+export default { template, controller: function($scope, h, $routeParams, $location, h_accounts) {
+    var id = $routeParams.id;
+    $scope.isNew = $routeParams.isNew;
+
+    var updateCurrentTabTitle = function () {
+	$scope.currentTab.text = $scope.account && $scope.account.name || ($scope.isNew ? 'Création' : 'Modification');
+    };
+    updateCurrentTabTitle();
+    $scope.$watch('account.name', updateCurrentTabTitle);
+
+    $scope.checkUniqueName = function (name) {
+	var account = $scope.name2account[name];
+	return !account || account === $scope.account;
+    };
+
+    var modify = function (method) {
+	var account = h.cloneDeep($scope.account);
+	h.callRestModify(method, 'accounts', account).then(function () {
+	    $location.path('/accounts');
+	});
+    };    
+    $scope.submit = function () {
+	if (!$scope.myForm.$valid) return;
+	modify('put');
+    };
+    $scope.disable = function () {
+	$scope.account.quota = 0;
+	modify('put');	
+    };
+
+    $scope.name2account = h.array2hash(h_accounts, 'name');
+    var id2account = h.array2hash(h_accounts, 'id');
+
+	if (id in id2account) {
+	    $scope.accounts = h_accounts;
+	    $scope.account = id2account[id];
+	    $scope.appDisabled = $scope.account.quota == 0;
+	} else {
+	    alert("invalid account " + id);
+	}
+  }
+}

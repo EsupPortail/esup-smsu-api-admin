@@ -1,3 +1,4 @@
+export const template = `
 <div class="normalContent" ng-show="app">
 
  <a class="btn btn-default" ng-hide="app.isNew || !app.deletable" ng-click="delete()"><span class="glyphicon glyphicon-remove"></span> Supprimer l'application</a>
@@ -62,3 +63,61 @@
  </form>
 
 </div>
+`
+
+export default { template, controller: function($rootScope, $scope, h, $routeParams, $location, h_accounts, h_applications) {
+    var id = $routeParams.id;
+
+    $scope.accounts = h_accounts;
+
+    var updateCurrentTabTitle = function () {
+	$scope.currentTab.text = $scope.app && $scope.app.name || (id === 'new' ? 'Création' : 'Modification');
+    };
+    updateCurrentTabTitle();
+    $scope.$watch('app.name', updateCurrentTabTitle);
+
+    $scope.checkUniqueName = function (name) {
+	var app = $scope.name2app[name];
+	return !app || app === $scope.app;
+    };
+
+    var modify = function (method, then) {
+	var app = h.cloneDeep($scope.app);
+	delete app.isNew;
+	h.callRestModify(method, 'applications', app).then(function () {
+	    $location.url(then || '/applications');
+	});
+    };    
+    $scope.submit = function () {
+	if (!$scope.myForm.$valid) return;
+	var method = $scope.app.isNew ? 'post' : 'put';
+	if ($scope.app.accountName == null) {
+	    // must first create the account
+	    var accountNameSuggestion = $scope.app.name;
+	    h.createEmptyAccount(accountNameSuggestion, $scope.accounts).then(function (account) {
+		$scope.app.accountName = account.name;
+  		modify(method, '/accounts/' + account.id + '?isNew');
+	    });
+	} else {
+	    modify(method);
+	}
+    };
+    $scope["delete"] = function () {
+	modify('delete');
+    };
+
+    $scope.name2app = h.array2hash(h_applications, 'name');
+
+	if (id === "new") {
+	    $scope.app = { isNew: true, accountName: null, quota: 0 };
+	} else {
+	    var id2app = h.array2hash(h_applications, 'id');
+
+	    if (id in id2app) {
+		$scope.app = id2app[id];
+	    } else {
+		alert("invalid application " + id);
+	    }
+	}
+  }
+}

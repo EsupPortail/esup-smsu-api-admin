@@ -1,3 +1,4 @@
+export const template = `
 <div class="normalContent">
    <a class="btn btn-default" href="#/users/new"><span class="glyphicon glyphicon-plus"></span> Ajouter un utilisateur</a>
 </div>
@@ -13,3 +14,9 @@
     </tr>
   </table>
 </div>
+`
+
+export default { template, controller: function($scope, h_users) {
+    $scope.users = h_users;
+  }
+}

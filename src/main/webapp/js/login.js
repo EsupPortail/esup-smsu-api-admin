@@ -1,4 +1,4 @@
-import * as basicHelpers from './basicHelpers.js'
+import * as h from './basicHelpers.js'
 
 
 function loadScript(url, onerror) {
@@ -30,7 +30,7 @@ export const jsonp = function () {
     }
 
     console.log("jsonpLogin start");
-    var defer = basicHelpers.promise_defer()
+    var defer = h.promise_defer()
     jsonpDeferreds.push(defer)
     if (jsonpDeferreds.length === 1) {
         loadScript(globals.baseURL + '/rest/login?callback=jsonp_success', jsonp_error)

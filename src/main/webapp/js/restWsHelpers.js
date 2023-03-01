@@ -1,4 +1,4 @@
-import * as basicHelpers from './basicHelpers.js'
+import * as h from './basicHelpers.js'
 import * as login from './login.js'
 import * as loginSuccess from './loginSuccess.js'
 
@@ -130,7 +130,7 @@ function xhrRequest(args, flags) {
 	} else if (status === 401) {
 	    return onError401(resp);
 	} else if (resp.data) {
-	    var err = basicHelpers.fromJsonOrNull(resp.data);
+	    var err = h.fromJsonOrNull(resp.data);
 	    if (err && err.error)
 		return onErrorFromJson(resp, err);
 

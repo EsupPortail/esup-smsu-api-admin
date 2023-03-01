@@ -1,4 +1,4 @@
-import * as basicHelpers from './basicHelpers.js'
+import * as h from './basicHelpers.js'
 
 export const set = function (restWsHelpers, $rootScope, loggedUser) {
     console.log('user logged in: ' + loggedUser.login + " " + loggedUser.role);
@@ -33,7 +33,7 @@ function userWithCapabilities(user, roles) {
 
 function getRolesInScope(restWsHelpers, $scope) {
     return restWsHelpers.simple('roles').then(function(roles) {
-	$scope.roles = basicHelpers.array2hash(roles, 'role');
+	$scope.roles = h.array2hash(roles, 'role');
     });
 }
 

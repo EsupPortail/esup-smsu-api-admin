@@ -1,10 +1,11 @@
 import * as basicHelpers from './basicHelpers.js'
+import * as login from './login.js'
 import * as loginSuccess from './loginSuccess.js'
 
 
 var app = angular.module('myApp');
 
-app.service('restWsHelpers', function ($rootScope, $timeout, login, $location) {
+app.service('restWsHelpers', function ($rootScope, $timeout, $location) {
 
 const loginSuccess_set = (loggedUser) => {
     loginSuccess.set(this, $rootScope, loggedUser)
@@ -34,9 +35,13 @@ function initialLogin() {
 
     if (globals.jsonpDisabled) {
 	// try a simple XHR login, especially needed in case we arrive here after a redirect
-	simple('login', {}, { noErrorHandling: true }).then(null, login.mayRedirect).then(loginSuccess_set);
+	simple('login', {}, { noErrorHandling: true })
+        .then(null, _ => login.mayRedirect($rootScope))
+        .then(loginSuccess_set);
     } else {
-	login.jsonp().then(null, login.mayRedirect).then(loginSuccess_set);
+	login.jsonp()
+        .then(null, _ => login.mayRedirect($rootScope))
+        .then(loginSuccess_set);
     }
 }
 
@@ -54,7 +59,7 @@ function tryRelog() {
 	    // update loggedUser by using XHR
 	    simpleLogin();
 	} else {
-	    loginSuccess_set(loggedUser);
+	    loginSuccess.set(restWsHelpers, $rootScope, loggedUser);
 	}
 	return null;
     }
@@ -75,7 +80,7 @@ function tryRelog() {
 	console.log("jsonpLogin failed, going to windowOpenLogin");
 
 	$rootScope.loggedUser = undefined; // hide app
-	return login.windowOpen('relog').then(relogSuccess, function (resp) {
+	return login.windowOpen($rootScope, 'relog').then(relogSuccess, function (resp) {
 	    console.log('relog failed');
 	    console.log(resp);
 	    alert("relog failed");

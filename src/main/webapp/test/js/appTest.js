@@ -1,9 +1,11 @@
+import * as login from '../../js/login.js'
+
 var myAppTest = angular.module('myAppTest', ['myApp', 'ngMockE2E']);
 
-myAppTest.run(function($httpBackend, h, login) {
+myAppTest.run(function($httpBackend, h) {
 
     var loggedUser = {"login":"admin","role":"ROLE_SUPER_ADMIN"};
-    login.jsonp = function () { return Promise.resolve(loggedUser) }
+    login.fake.jsonp = function () { return Promise.resolve(loggedUser) }
 
     function create(list) {
 	return function(_url, data) {

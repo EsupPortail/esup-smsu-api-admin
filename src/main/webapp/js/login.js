@@ -1,10 +1,5 @@
 import * as basicHelpers from './basicHelpers.js'
 
-var app = angular.module('myApp');
-
-app.service('login', function ($rootScope) {
-
-var login = this;
 
 function loadScript(url, onerror) {
     var elt = document.createElement("script");
@@ -26,8 +21,10 @@ function jsonp_error(resp) {
     jsonpDeferreds = []
 }
 
-
-this.jsonp = function () {
+export let fake = { jsonp: undefined }
+export const jsonp = function () {
+    if (fake.jsonp) return fake.jsonp()
+    
     if (globals.jsonpDisabled) {
 	return Promise.reject("jsonp login disabled");
     }
@@ -41,12 +38,12 @@ this.jsonp = function () {
     return defer.promise
 };
 
-function mayAddIdpId(url) {
+function mayAddIdpId($rootScope, url) {
     if ($rootScope.idpId) url += "&idpId=" + encodeURIComponent($rootScope.idpId);
     return url;
 }
 
-function windowOpenDivCreate(isRelog) {
+function windowOpenDivCreate($rootScope, isRelog) {
     var elt = angular.element('<div>', {'class': 'windowOpenLoginDiv alert alert-warning'});
     var msg = globals.jsonpDisabled && !isRelog ? 
 	($rootScope.idpId ? 
@@ -62,7 +59,7 @@ function hiddenIframeCreate(url) {
     angular.element('.myAppDiv').prepend(elt);
     return elt;
 }
-function windowOpenOnMessage(state) {
+function windowOpenOnMessage($rootScope, state) {
     var onmessage = function(e) {
 	if (typeof e.data !== "string") return;
 	var m = e.data.match(/^loggedUser=(.*)$/);
@@ -77,7 +74,7 @@ function windowOpenOnMessage(state) {
     window.addEventListener("message", onmessage);  
     return onmessage;
 }
-this.windowOpenState = {};
+export let windowOpenState = {};
 function windowOpenCleanup(state) {
     try {
 	if (state.div) state.div.remove();
@@ -85,20 +82,20 @@ function windowOpenCleanup(state) {
 	if (state.listener) window.removeEventListener("message", state.listener);  
 	if (state.window) state.window.close(); 
     } catch (e) {}
-    login.windowOpenState = {};
+    windowOpenState = {};
 }
-this.windowOpen = function (isRelog) {
-    windowOpenCleanup(login.windowOpenState);
+export const windowOpen = function ($rootScope, isRelog) {
+    windowOpenCleanup(windowOpenState);
 
-    var postMessageURL = mayAddIdpId(globals.baseURL + '/rest/login?postMessage');
+    var postMessageURL = mayAddIdpId($rootScope, globals.baseURL + '/rest/login?postMessage');
 
     var state = {};
-    login.windowOpenState = state;
+    windowOpenState = state;
 
     state.deferredLogin = h.promise_defer();
     state.deferredQueue = [];
-    state.div = windowOpenDivCreate(isRelog);
-    state.listener = windowOpenOnMessage(state); 
+    state.div = windowOpenDivCreate($rootScope, isRelog);
+    state.listener = windowOpenOnMessage($rootScope, state); 
     state.div.bind("click", function () {
 	state.window = window.open(postMessageURL);
     });
@@ -111,14 +108,12 @@ this.windowOpen = function (isRelog) {
     return state.deferredLogin.promise;
 };
 
-this.mayRedirect = function () {
+export const mayRedirect = function ($rootScope) {
 	console.log("jsonpLogin failed, trying redirect");
 	var then = window.location.hash && window.location.hash.replace(/^#/, '');
 	var dest = globals.baseURL + '/rest/login?then=' + encodeURIComponent(then);
-	window.location.href = mayAddIdpId(dest);
+	window.location.href = mayAddIdpId($rootScope, dest);
 	// the redirect may take time, in the meantime, do not think login was succesful
 	return Promise.reject("jsonpLogin failed, trying redirect");
 };
 
-
-});

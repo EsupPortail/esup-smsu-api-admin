@@ -68,7 +68,7 @@ export const template = `
 </div>
 `
 
-export default { template, controller: function($rootScope, $scope, restWsHelpers, $routeParams, $location, h_accounts, h_applications) {
+export default { template, controller: function($scope, restWsHelpers, $routeParams, $location, h_accounts, h_applications) {
     var id = $routeParams.id;
 
     $scope.accounts = h_accounts;

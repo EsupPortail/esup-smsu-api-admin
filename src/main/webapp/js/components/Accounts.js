@@ -13,7 +13,7 @@ export const template = `
 
 <div class="gridStyle" ng-grid="gridOptions" ng-class="{loading: !accounts}"></div>
 `
-export default { template, controller: function($scope, h, h_accounts) {
+export default { template, controller: function($scope, h_accounts) {
     $scope.accounts = h_accounts;
     $scope.warnConsumedRatio = 0.9;
     $scope.consumedRatio = function (account) {

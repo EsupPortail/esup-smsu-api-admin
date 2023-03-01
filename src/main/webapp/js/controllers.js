@@ -1,7 +1,7 @@
 
 var app = angular.module('myApp');
 
-app.controller('MainCtrl', function($scope, h, $route, $parse, routes, restWsHelpers) {
+app.controller('MainCtrl', function($scope, $route, $parse, routes, restWsHelpers) {
 
     $scope.allowLogout = false;
 

@@ -36,13 +36,6 @@ if (!window.jQuery) alert('FATAL ERROR, fix "server.url" or "contextPath" in con
 
 <div class="myAppDiv bootstrap-smsuapiadmin">
   <div ng-app="myApp" ng-show="loggedUser" ng-controller="MainCtrl">
-
-    <!-- most used templates -->
-    <script server-side-cache-buster server-side-prefix="baseURL" 
-	    server-side-angular-templates="partials/main.html partials/breadcrumb-inc.html 
-	                                   partials/welcome-inc.html"
-	    src="libs/myApp-templates.js"></script>
-
     <div my-include="main.html"></div>
   </div>
 </div>

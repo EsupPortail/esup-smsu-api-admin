@@ -11,8 +11,9 @@ import Welcome from './components/Welcome.js'
 
 function resolve(...l) {
     var r = {};
-    for(const name of l) {
-	r["h_" + name] = function (h) { return h[name](); };
+    for(const $function of l) {
+        const name = "h_" + $function.replaceAll('/', '_')
+	r[name] = function (restWsHelpers) { return restWsHelpers.simple($function); };
     }
     return r;
 }
@@ -21,8 +22,8 @@ let routes =
     [{ route: '/welcome', mainText: "Accueil", ...Welcome }, 
      { route: '/applications', mainText: "Applications clientes", show: 'loggedUser.can.FCTN_API_CONFIG_APPLIS', ...Applications, resolve: resolve('applications') },
      { route: '/accounts', mainText: "Comptes d'imputation", show: 'loggedUser.can.FCTN_GESTION_CPT_IMPUT', ...Accounts, resolve: resolve('accounts') },
-     { route: '/consolidatedSummary', mainText: "Relevé consolidé", show: 'loggedUser.can.FCTN_API_EDITION_RAPPORT', ...ConsolidatedSummary, resolve: resolve('summary_consolidated') },
-     { route: '/detailedSummary', mainText: "Relevé détaillé", show: 'loggedUser.can.FCTN_API_EDITION_RAPPORT', ...DetailedSummary, resolve: resolve('summary_detailed_criteria') },
+     { route: '/consolidatedSummary', mainText: "Relevé consolidé", show: 'loggedUser.can.FCTN_API_EDITION_RAPPORT', ...ConsolidatedSummary, resolve: resolve('summary/consolidated') },
+     { route: '/detailedSummary', mainText: "Relevé détaillé", show: 'loggedUser.can.FCTN_API_EDITION_RAPPORT', ...DetailedSummary, resolve: resolve('summary/detailed/criteria') },
      { route: '/users', mainText: "Gestion des utilisateurs", show: 'loggedUser.can.FCTN_MANAGE_USERS', ...Users, resolve: resolve('users') },
      { route: '/logout', mainText: "Déconnexion", show: 'allowLogout', ...About },
      { route: '/about', mainText: "A propos de", title: "A propos de SMSU-U", ...About },

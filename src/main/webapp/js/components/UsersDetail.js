@@ -39,7 +39,7 @@ export const template = `
 </div>
 `
 
-export default { template, controller: function($scope, h, $routeParams, $location, h_users) {
+export default { template, controller: function($scope, h, restWsHelpers, $routeParams, $location, h_users) {
     var id = $routeParams.id;
 
     var updateCurrentTabTitle = function () {
@@ -56,7 +56,7 @@ export default { template, controller: function($scope, h, $routeParams, $locati
     var modify = function (method) {
 	var user = $scope.user;
 	user = { id: user.id, login: user.login, role: user.role }; // keep only modifiable fields
-	h.callRestModify(method, 'users', user).then(function () {
+	restWsHelpers.action(method, 'users', user).then(function () {
 	    $location.path('/users');
 	});
     };

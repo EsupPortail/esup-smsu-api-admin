@@ -39,7 +39,7 @@ export const template = `
 
 </div>
 `
-export default { template, controller: function($scope, h, $routeParams, $location, h_accounts) {
+export default { template, controller: function($scope, h, restWsHelpers, $routeParams, $location, h_accounts) {
     var id = $routeParams.id;
     $scope.isNew = $routeParams.isNew;
 
@@ -56,7 +56,7 @@ export default { template, controller: function($scope, h, $routeParams, $locati
 
     var modify = function (method) {
 	var account = h.cloneDeep($scope.account);
-	h.callRestModify(method, 'accounts', account).then(function () {
+	restWsHelpers.action(method, 'accounts', account).then(function () {
 	    $location.path('/accounts');
 	});
     };    

@@ -60,7 +60,7 @@ Filtre : <a href="" ng-click="showAccountFilters = !showAccountFilters">{{accoun
 </div>
 `
 
-export default { template, controller: function($scope, h, $location, $route, h_summary_detailed_criteria) {
+export default { template, controller: function($scope, h, restWsHelpers, $location, $route, h_summary_detailed_criteria) {
     $scope.initialNbResults = 50;
     $scope.nbResults = $scope.initialNbResults;
     $scope.accountFilter = $location.search();
@@ -107,7 +107,7 @@ export default { template, controller: function($scope, h, $location, $route, h_
 	if ($scope.inProgress) return;
 	$scope.inProgress = true;
 	var fullFilter = { maxResults: $scope.nbResults, ...$scope.accountFilter };
-	h.callRest('summary/detailed', fullFilter)
+	restWsHelpers.simple('summary/detailed', fullFilter)
 	    .then(function (flatList) {
 		$scope.noMoreResults = flatList.length < fullFilter.maxResults;
 		$scope.groupedBy = computeGroupedByRaw(flatList);

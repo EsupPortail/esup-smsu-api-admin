@@ -65,7 +65,7 @@ export const template = `
 </div>
 `
 
-export default { template, controller: function($rootScope, $scope, h, $routeParams, $location, h_accounts, h_applications) {
+export default { template, controller: function($rootScope, $scope, h, restWsHelpers, $routeParams, $location, h_accounts, h_applications) {
     var id = $routeParams.id;
 
     $scope.accounts = h_accounts;
@@ -84,7 +84,7 @@ export default { template, controller: function($rootScope, $scope, h, $routePar
     var modify = function (method, then) {
 	var app = h.cloneDeep($scope.app);
 	delete app.isNew;
-	h.callRestModify(method, 'applications', app).then(function () {
+	restWsHelpers.action(method, 'applications', app).then(function () {
 	    $location.url(then || '/applications');
 	});
     };    

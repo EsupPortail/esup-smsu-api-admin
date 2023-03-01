@@ -8,13 +8,9 @@ var h = this;
 
 Object.assign(this, basicHelpers);
 
-// rename restWsHelpers methods for compat
-this.callRest = restWsHelpers.simple;
-this.callRestModify = restWsHelpers.action;
-
 function willCallRest($function) {
     return function () {
-	return h.callRest($function);
+	return restWsHelpers.simple($function);
     };
 }
 
@@ -41,7 +37,7 @@ this.createEmptyAccount = function (accountNameSuggestion, accounts) {
     var name = findName(accountNameSuggestion, h.array2hash(accounts, 'name'));
     console.log("found free account name " + name);
 
-    return h.callRestModify('post', 'accounts', { name: name, quota: 0 }).then(function () {
+    return restWsHelpers.action('post', 'accounts', { name: name, quota: 0 }).then(function () {
 	return h.accounts();
     }).then(function (accounts) {
 	return h.array2hash(accounts, 'name')[name];

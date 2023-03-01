@@ -51,3 +51,21 @@ export const fromJsonOrNull = function(json) {
 	return null;
     }
 };
+
+function toCSV(rows, attrs) {
+    return rows.map(function (row) {
+	return row.map(function (v) { 
+	    return v.replace(/,/g, '');
+	}).join(',');
+    }).join("\n");
+}
+
+export function exportCSV(domElt, rows, fileName) {
+    var csv = toCSV(rows);
+    var uri = "data:text/csv;charset=utf-8," + csv;
+    var link = document.createElement("a");
+    link.setAttribute("href", encodeURI(uri));
+    if (fileName) link.setAttribute("download", fileName);
+    domElt.appendChild(link); // needed on Firefox, but not Chromium.
+    link.click();
+};

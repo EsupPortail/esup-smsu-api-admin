@@ -1,5 +1,4 @@
-(function () {
-"use strict";
+import * as h from "./basicHelpers.js"
 
 var app = angular.module('myApp');
 
@@ -47,7 +46,7 @@ app.directive('displayRequiredIfNeeded', function ($parse) {
 	   }; 
 });
 
-app.directive('myValidator', function (h) {
+app.directive('myValidator', function () {
   return {
     restrict: 'A',
     require: 'ngModel', // controller to be passed into directive linking function
@@ -74,4 +73,3 @@ app.directive('myInclude', function () {
   };
 });
 
-})();

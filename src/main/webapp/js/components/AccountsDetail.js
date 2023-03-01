@@ -1,3 +1,5 @@
+import * as h from "../basicHelpers.js"
+
 export const template = `
 <div class="normalContent" ng-show="account">
 
@@ -39,7 +41,7 @@ export const template = `
 
 </div>
 `
-export default { template, controller: function($scope, h, restWsHelpers, $routeParams, $location, h_accounts) {
+export default { template, controller: function($scope, restWsHelpers, $routeParams, $location, h_accounts) {
     var id = $routeParams.id;
     $scope.isNew = $routeParams.isNew;
 

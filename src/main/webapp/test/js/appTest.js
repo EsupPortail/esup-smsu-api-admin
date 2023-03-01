@@ -1,8 +1,9 @@
+import * as h from '../../js/basicHelpers.js'
 import * as login from '../../js/login.js'
 
 var myAppTest = angular.module('myAppTest', ['myApp', 'ngMockE2E']);
 
-myAppTest.run(function($httpBackend, h) {
+myAppTest.run(function($httpBackend) {
 
     var loggedUser = {"login":"admin","role":"ROLE_SUPER_ADMIN"};
     login.fake.jsonp = function () { return Promise.resolve(loggedUser) }

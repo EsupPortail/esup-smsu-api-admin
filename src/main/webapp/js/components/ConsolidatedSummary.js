@@ -1,3 +1,6 @@
+import * as h from "../basicHelpers.js"
+import { getInstAppAccount } from "../helpers.js"
+
 export const template = `
 <div ng-show="appAccount">
 
@@ -51,7 +54,7 @@ export const template = `
 </a>
 `
 
-export default { template, controller: function($scope, h, h_summary_consolidated) {
+export default { template, controller: function($scope, h_summary_consolidated) {
     var computeTree = function () {
 	var tree = {};
 	for (const e of h_summary_consolidated) {
@@ -70,7 +73,7 @@ export default { template, controller: function($scope, h, h_summary_consolidate
     };
 
     for (const e of h_summary_consolidated) {
-	    $.extend(e, h.getInstAppAccount(e));
+	    $.extend(e, getInstAppAccount(e));
 	    e.nbReceived = e.nbSendedSMS - e.nbSMSInError;
 	    e.failureRate = Math.round(e.nbSMSInError / e.nbSendedSMS * 100) + "%";
     }

@@ -1,3 +1,6 @@
+import * as h from "../basicHelpers.js"
+import { createEmptyAccount } from "../helpers.js"
+
 export const template = `
 <div class="normalContent" ng-show="app">
 
@@ -65,7 +68,7 @@ export const template = `
 </div>
 `
 
-export default { template, controller: function($rootScope, $scope, h, restWsHelpers, $routeParams, $location, h_accounts, h_applications) {
+export default { template, controller: function($rootScope, $scope, restWsHelpers, $routeParams, $location, h_accounts, h_applications) {
     var id = $routeParams.id;
 
     $scope.accounts = h_accounts;
@@ -94,7 +97,7 @@ export default { template, controller: function($rootScope, $scope, h, restWsHel
 	if ($scope.app.accountName == null) {
 	    // must first create the account
 	    var accountNameSuggestion = $scope.app.name;
-	    h.createEmptyAccount(accountNameSuggestion, $scope.accounts).then(function (account) {
+	    createEmptyAccount(restWsHelpers, accountNameSuggestion, $scope.accounts).then(function (account) {
 		$scope.app.accountName = account.name;
   		modify(method, '/accounts/' + account.id + '?isNew');
 	    });

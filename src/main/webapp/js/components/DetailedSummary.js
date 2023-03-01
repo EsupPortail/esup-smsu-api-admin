@@ -1,3 +1,6 @@
+import * as h from "../basicHelpers.js"
+import { getInstAppAccount } from "../helpers.js"
+
 export const template = `
 Filtre : <a href="" ng-click="showAccountFilters = !showAccountFilters">{{accountFilter.account || 'aucun'}}</a>
 
@@ -60,7 +63,7 @@ Filtre : <a href="" ng-click="showAccountFilters = !showAccountFilters">{{accoun
 </div>
 `
 
-export default { template, controller: function($scope, h, restWsHelpers, $location, $route, h_summary_detailed_criteria) {
+export default { template, controller: function($scope, restWsHelpers, $location, $route, h_summary_detailed_criteria) {
     $scope.initialNbResults = 50;
     $scope.nbResults = $scope.initialNbResults;
     $scope.accountFilter = $location.search();
@@ -72,7 +75,7 @@ export default { template, controller: function($scope, h, restWsHelpers, $locat
     };
 
 	var flatList = h_summary_detailed_criteria.map(function (e) {
-	    return h.getInstAppAccount(e);
+	    return getInstAppAccount(e);
 	});
 	$scope.appAccountsTree = h.array2hashMulti(flatList, 'institution');
 
@@ -95,7 +98,7 @@ export default { template, controller: function($scope, h, restWsHelpers, $locat
 	    var key = e.appName + "+" + e.accountName;
 	    if (currentKey !== key) {
 		currentKey = key;
-		current = $.extend({ list: [] }, h.getInstAppAccount(e));
+		current = $.extend({ list: [] }, getInstAppAccount(e));
 		groupedBy.push(current);
 	    }
 	    current.list.push({ date: new Date(e.date), nbSmsAndDetails: nbSmsAndDetails(e) });

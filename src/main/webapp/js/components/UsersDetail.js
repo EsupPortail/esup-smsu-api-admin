@@ -1,3 +1,5 @@
+import * as h from "../basicHelpers.js"
+
 export const template = `
 <div class="normalContent" ng-show="user">
 
@@ -39,7 +41,7 @@ export const template = `
 </div>
 `
 
-export default { template, controller: function($scope, h, restWsHelpers, $routeParams, $location, h_users) {
+export default { template, controller: function($scope, restWsHelpers, $routeParams, $location, h_users) {
     var id = $routeParams.id;
 
     var updateCurrentTabTitle = function () {

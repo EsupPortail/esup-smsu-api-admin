@@ -1,14 +1,7 @@
-import * as basicHelpers from './basicHelpers.js'
+import * as h from "./basicHelpers.js"
 
-var app = angular.module('myApp');
 
-app.service('h', function (restWsHelpers) {
-
-var h = this;
-
-Object.assign(this, basicHelpers);
-
-this.getInstAppAccount = function (e) {
+export const getInstAppAccount = function (e) {
     return { institution: e.institution, app: e.appName, account: e.accountName };
 };
 
@@ -21,7 +14,7 @@ function findName(base, existingHash) {
     return name;
 }
 
-this.createEmptyAccount = function (accountNameSuggestion, accounts) {
+export const createEmptyAccount = function (restWsHelpers, accountNameSuggestion, accounts) {
     var name = findName(accountNameSuggestion, h.array2hash(accounts, 'name'));
     console.log("found free account name " + name);
 
@@ -31,6 +24,4 @@ this.createEmptyAccount = function (accountNameSuggestion, accounts) {
 	return h.array2hash(accounts, 'name')[name];
     });
 };
-
-});
 

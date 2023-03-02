@@ -5,13 +5,13 @@ SMS-U est un service numérique mutualisé d'envoi de messages SMS développé
 dans le cadre de l'Université numérique Paris Ile-de-France (UNPIdF) avec le
 concours financier de la Mairie de Paris et le soutien du consortium
 ESUP-Portail.
-<p>
+<p></p>
 SMS-U est un projet porté par l'Université Paris 1
 Panthéon-Sorbonne. Les composants esup-smsu-api, esup-smsu,
 esup-smsu-api-admin, esup-smsu-api-mail ont été développés par OBS IT&amp;L@bs
 (versions 1.0, 1.01, 1.02, 1.03).
 
-<p>
+<p></p>
 	
 Direction et coordination du projet initial :
 <ul>
@@ -29,7 +29,7 @@ Direction et coordination du projet actuel :
 SMS-U - Copyright (c) 2009-2014 Université Paris 1 Panthéon-Sorbonne
 
 <h4>Licence</h4>
-<p><a href="http://www.esup-portail.org/display/ESUP/La+licence+ESUP-Portail" target="_blank">Licence Apache version 2.0</a>
+<a href="http://www.esup-portail.org/display/ESUP/La+licence+ESUP-Portail" target="_blank">Licence Apache version 2.0</a>
 
 <h4>Plus d'information sur SMS-U ...</h4>
 <ul>

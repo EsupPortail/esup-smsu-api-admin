@@ -100,7 +100,7 @@ export default { template, name: 'DetailedSummary', props: ['summary_detailed_cr
 	    var key = e.appName + "+" + e.accountName;
 	    if (currentKey !== key) {
 		currentKey = key;
-		current = $.extend({ list: [] }, getInstAppAccount(e));
+		current = { list: [], ...getInstAppAccount(e) };
 		groupedBy.push(current);
 	    }
 	    current.list.push({ date: new Date(e.date), nbSmsAndDetails: nbSmsAndDetails(e) });

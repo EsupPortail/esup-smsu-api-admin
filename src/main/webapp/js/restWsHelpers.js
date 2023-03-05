@@ -2,51 +2,48 @@ import * as h from './basicHelpers.js'
 import * as login from './login.js'
 import * as loginSuccess from './loginSuccess.js'
 
-
-var app = angular.module('myApp');
-
-app.service('restWsHelpers', function ($rootScope, $timeout, $location) {
-
-const loginSuccess_set = (loggedUser) => {
-    loginSuccess.set(this, $rootScope, loggedUser)
-}
+const parse_querystring = qs => (
+    qs ? Object.fromEntries(new URLSearchParams(qs)) : {}
+)
 
 getUrlStartupParams();
 
 function getUrlStartupParams() {
     // used for first URL, you can have either:
-    // -  /?idpId=xxx : when you want the either to bookmark the idp choice
+    // -  /?idpId=xxx : when you want the user to bookmark the idp choice
     // - /#/?idpId=xxx : when you want the idpId to be hidden from URL
     // also used "redirect login" if no cookies
-    getUrlStartupParam('idpId');
+    const params = parse_querystring(location.search || location.hash.match(/[?].*/)?.[0])
+	if (getUrlStartupParam(params, 'idpId') && !location.search) {
+        // clean up URL
+        location.hash = location.hash.replace(/[?].*/, '');
+    }
 }
-function getUrlStartupParam(name) {
-    var val = $location.search()[name];
+function getUrlStartupParam(params, name) {
+    var val = params[name];
     if (val) {
-	// clean up URL
-	$location.search(name, null);
 	$rootScope[name] = val;
 	if (name === 'idpId') console.log("got idpId from startup url");
     }
+    return val
 }
 
-function initialLogin() {
-    if (globals.idpId) $rootScope.idpId = globals.idpId;
+export function initialLogin() {
 
     if (globals.jsonpDisabled) {
 	// try a simple XHR login, especially needed in case we arrive here after a redirect
 	simple('login', {}, { noErrorHandling: true })
         .then(null, _ => login.mayRedirect($rootScope))
-        .then(loginSuccess_set);
+        .then(loginSuccess.set);
     } else {
 	login.jsonp()
         .then(null, _ => login.mayRedirect($rootScope))
-        .then(loginSuccess_set);
+        .then(loginSuccess.set);
     }
 }
 
 function simpleLogin() {
-    simple('login').then(loginSuccess_set);
+    simple('login').then(loginSuccess.set);
 }
 
 function tryRelog() {
@@ -59,7 +56,7 @@ function tryRelog() {
 	    // update loggedUser by using XHR
 	    simpleLogin();
 	} else {
-	    loginSuccess.set(restWsHelpers, $rootScope, loggedUser);
+	    loginSuccess.set(loggedUser);
 	}
 	return null;
     }
@@ -95,7 +92,7 @@ function alertOnce(msg, timeout) {
     alert(msg);
     alerted[msg] = 1;
     if (timeout > 0) {
-       $timeout(function () { delete alerted[msg]; }, timeout);
+       setTimeout(function () { delete alerted[msg]; }, timeout);
     }
 }
 
@@ -146,7 +143,7 @@ function xhrRequest(args, flags) {
         if (contentType && contentType.startsWith("application/json")) {
             return resp.json()
         }
-    }, onError).finally(_ => setTimeout(_ => $rootScope.$apply(), 1))
+    }, onError)
 }
 
 function headers() {
@@ -157,7 +154,7 @@ function headers() {
     return r;
 }
 
-function simple($function, params, flags) {
+export function simple($function, params, flags) {
     var url = globals.baseURL + '/rest/' + $function;
     params = { ...params };
     flags = { ...flags };
@@ -165,7 +162,7 @@ function simple($function, params, flags) {
     return xhrRequest(args, flags);
 };
 
-function action(method, restPath, o) {
+export function action(method, restPath, o) {
     var args = { method: method, url: globals.baseURL + '/rest/' + restPath, headers: headers() };
     if (method !== 'post') {
 	var id = o.id;
@@ -180,8 +177,3 @@ function action(method, restPath, o) {
     return xhrRequest(args, {});
 };
 
-this.simple = simple;
-this.action = action;
-this.initialLogin = initialLogin;
-
-});

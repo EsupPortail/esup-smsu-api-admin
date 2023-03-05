@@ -1,6 +1,7 @@
 import * as h from './basicHelpers.js'
+import * as restWsHelpers from './restWsHelpers.js'
 
-export const set = function (restWsHelpers, $rootScope, loggedUser) {
+export const set = function (loggedUser) {
     console.log('user logged in: ' + loggedUser.login + " " + loggedUser.role);
 
     function setIt() {

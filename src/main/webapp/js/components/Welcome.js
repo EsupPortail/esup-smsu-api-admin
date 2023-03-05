@@ -1,10 +1,13 @@
-export const template = `
+import WelcomeInc from './WelcomeInc.js'
+
+export const template = /*html*/`
 <div class="normalContent">
 
-<div class="ifSideNavbar" my-include="welcome-inc.html">
+<div class="ifSideNavbar">
+  <WelcomeInc/>
 </div>
 
 </div>
 `
 
-export default { template, controller: function() {} }
+export default { template, components: { WelcomeInc } }

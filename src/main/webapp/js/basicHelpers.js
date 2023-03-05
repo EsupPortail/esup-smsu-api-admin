@@ -12,6 +12,13 @@ export const simpleEach = function (o, f) {
         f(o[k], k)
     }
 };
+export const simpleMap = function (o, f) {
+    let r = {}
+    for (const k in o) {
+        r[k] = f(o[k], k)
+    }
+    return r
+};
 export const objectSlice = function (o, fields) {
     var r = {};
     for (const field of fields) {
@@ -69,3 +76,30 @@ export function exportCSV(domElt, rows, fileName) {
     domElt.appendChild(link); // needed on Firefox, but not Chromium.
     link.click();
 };
+
+export function padStart(value, length, char) {
+    value = value + '';
+    var len = length - value.length;
+
+    if (len <= 0) {
+            return value;
+    } else {
+            return Array(len + 1).join(char) + value;
+    }
+}
+
+export function formatDate(date, format) {
+    const date_ = typeof date === "string" ? new Date(date) : date;
+    if (!date) return null;
+    return format.split(/(yyyy|MM|dd|HH|mm|ss)/).map(function (item) {
+        switch (item) {
+            case 'yyyy': return date_.getFullYear();
+            case 'MM': return padStart(date_.getMonth() + 1, 2, '0');
+            case 'dd': return padStart(date_.getDate(), 2, '0');
+            case 'HH': return padStart(date_.getHours(), 2, '0');
+            case 'mm': return padStart(date_.getMinutes(), 2, '0');
+            case 'ss': return padStart(date_.getSeconds(), 2, '0');
+            default: return item;
+        }
+    }).join('');   
+}

@@ -1,39 +1,37 @@
 import * as h from "../basicHelpers.js"
+import * as restWsHelpers from '../restWsHelpers.js'
+import router, { currentRoutePath } from '../routes.js'
 
-export const template = `
-<div class="normalContent" ng-show="account">
+export const template = /*html*/`
+<div class="normalContent" v-if="account">
+ <div v-if="isNew" class="alert alert-success">Le nouveau compte « {{account.name}} » vient d'être créé, vous pouvez maintenant le modifier.</div>
 
- <div ng-show="isNew" class="alert alert-success">Le nouveau compte « {{account.name}} » vient d'être créé, vous pouvez maintenant le modifier.</div>
-
- <a class="btn btn-default" ng-hide="appDisabled" ng-click="disable()"><span class="glyphicon glyphicon-remove"></span> Désactiver le compte</a>
+ <a class="btn btn-default" v-if="!appDisabled" @click="disable()"><span class="glyphicon glyphicon-remove"></span> Désactiver le compte</a>
 
  <h4 style="margin-top: 2em">Modifier</h4>
 
- <form novalidate  name="myForm" ng-submit="submitted = 1; submit()" class="form-horizontal">
+ <form @submit.prevent="submitted = 1; submit()" class="form-horizontal">
 
-  <div class="form-group" ng-class="{'has-error': submitted && myForm.name.$invalid}">
+  <div class="form-group" :class="{'has-error': submitted && !name_unique}">
     <label class="col-md-3 control-label" for="name">Nom</label>
     <div class="col-md-6">
-      <input type="text" name="name" ng-model="account.name" my-validator="{ unique: checkUniqueName }" required maxlength="30" class="form-control">
-      <span ng-show="submitted && myForm.name.$error.required" class="help-block">Required</span>
-      <span ng-show="submitted && myForm.name.$error.unique" class="help-block">Already in use</span>
+      <input type="text" name="name" v-model="account.name" required maxlength="30" class="form-control">
+      <span v-if="submitted && !name_unique" class="help-block">Already in use</span>
     </div>
   </div>
 
-  <div class="form-group"
-       ng-class="{'has-error': submitted && myForm.quota.$invalid}">
+  <div class="form-group">
     <label class="col-md-3 control-label" for="quota">Quota</label>
     <div class="col-md-6">
-      <input type="number" name="quota" ng-model="account.quota" min="0" integer class="form-control">
-      <span ng-show="submitted && myForm.quota.$invalid" class="help-block">Nombre positif</span>
+      <input type="number" name="quota" v-model="account.quota" min="0" integer class="form-control">
     </div>
   </div>
 
   <div class="form-group">
     <div class="col-md-offset-3 col-md-6">
       <button class="btn btn-primary" type="submit">
-	<span class="glyphicon" ng-class="{'glyphicon-pencil': !account.isNew}"></span>
-	{{account.isNew && "Créer" || "Enregistrer"}}</button>
+	<span class="glyphicon" :class="{'glyphicon-pencil': !isNew}"></span>
+	{{isNew && "Créer" || "Enregistrer"}}</button>
     </div>
   </div>
 
@@ -41,29 +39,34 @@ export const template = `
 
 </div>
 `
-export default { template, controller: function($scope, restWsHelpers, $routeParams, $location, h_accounts) {
-    var id = $routeParams.id;
-    $scope.isNew = $routeParams.isNew;
+export default { template, name: 'AccountsDetail', props: ['accounts', 'id'], setup: function(props) {
+    let $scope = Vue.reactive({
+        account: undefined,
+        submitted: false,
+    })
+    $scope.isNew = Vue.computed(() => 'isNew' in router.currentRoute.value.query)
 
-    var updateCurrentTabTitle = function () {
-	$scope.currentTab.text = $scope.account && $scope.account.name || ($scope.isNew ? 'Création' : 'Modification');
-    };
-    updateCurrentTabTitle();
-    $scope.$watch('account.name', updateCurrentTabTitle);
+    const our_path = currentRoutePath() // we want it to be static
+    Vue.watchEffect(() => {
+        $rootScope.currentTab_text[our_path] = $scope.account?.name || ($scope.isNew ? 'Création' : 'Modification');
+    });
 
-    $scope.checkUniqueName = function (name) {
-	var account = $scope.name2account[name];
-	return !account || account === $scope.account;
+    let orig_account = Vue.computed(() => props.accounts.find(account => account.id == props.id))
+    let name2account = Vue.computed(() => h.array2hash(props.accounts, 'name'))
+    const checkUnique = function (name) {
+	var account = name2account.value[name];
+	return !account || name === orig_account.value?.name;
     };
+    $scope.name_unique = Vue.computed(() => checkUnique($scope.account?.name))
 
     var modify = function (method) {
 	var account = h.cloneDeep($scope.account);
 	restWsHelpers.action(method, 'accounts', account).then(function () {
-	    $location.path('/accounts');
+	    router.push({ path: '/accounts' });
 	});
     };    
     $scope.submit = function () {
-	if (!$scope.myForm.$valid) return;
+        if (!$scope.name_unique) return;
 	modify('put');
     };
     $scope.disable = function () {
@@ -71,15 +74,14 @@ export default { template, controller: function($scope, restWsHelpers, $routePar
 	modify('put');	
     };
 
-    $scope.name2account = h.array2hash(h_accounts, 'name');
-    var id2account = h.array2hash(h_accounts, 'id');
-
-	if (id in id2account) {
-	    $scope.accounts = h_accounts;
-	    $scope.account = id2account[id];
-	    $scope.appDisabled = $scope.account.quota == 0;
+    Vue.watchEffect(() => {
+        if (orig_account.value) {
+            $scope.account = { ...orig_account.value }
 	} else {
-	    alert("invalid account " + id);
+            alert("invalid account " + props.id);
 	}
+    })
+    $scope.appDisabled = Vue.computed(() => $scope.account?.quota == 0)
+    return $scope
   }
 }

@@ -1,4 +1,6 @@
-export const template = `
+import MyTable from "./MyTable.js"
+
+/*
 <style>
 .ngHeaderText {
   white-space: normal;
@@ -6,37 +8,27 @@ export const template = `
 .gridStyle.loading {
   opacity: 0.5;
 }
-.highConsumedRatio {
-  color: #f00;
-}
 </style>
-
+*/
+export const template = /*html*/`
 <div class="normalContent">
-   <a class="btn btn-default" href="#/applications/new"><span class="glyphicon glyphicon-plus"></span> Ajouter une application</a>
+   <router-link class="btn btn-default" to="/applications/new"><span class="glyphicon glyphicon-plus"></span> Ajouter une application</router-link>
 </div>
 
-<p>
+<p></p>
 
-<div class="gridStyle" ng-grid="gridOptions" ng-class="{loading: !applications}"></div>
+<MyTable :data="applications" :columnDefs="columnDefs"/>
 `
 
-export default { template, controller: function($scope, h_applications) {
-    $scope.applications = h_applications;
-    $scope.warnConsumedRatio = 0.9;
-    $scope.consumedRatio = function (account) {
-	return account.consumedSms / account.quota;
-    };
-    $scope.gridOptions = { data: 'applications',
-			   sortInfo: {fields: ['name'], directions: ['asc', 'desc']},
-			   headerRowHeight: '50',
-			   multiSelect: false,
-			   columnDefs: [{field: 'name', displayName:"Application", width: '***', 
-					   cellTemplate: '<div class="ngCellText"><a href="#/applications/{{row.entity.id}}">{{row.getProperty(col.field)}}</a></div>'},
-					{field: 'quota', displayName: 'Quota', width: '*'},
-					{field: 'consumedSms', displayName: 'Nombre de \nSMS consommés', width: '*',
-					 cellTemplate: '<div ng-class="{highConsumedRatio: consumedRatio(row.entity) > warnConsumedRatio}"><div class="ngCellText">{{row.entity.consumedSms}}</div></div>'
-					} ]
-			 };
-
+export default { template, name: 'Applications', props: ['applications'], components: { MyTable }, setup: function(props) {
+    const warnConsumedRatio = 0.9;
+	return {
+        columnDefs: {name: { displayName:"Application", 
+					   cellTemplate: /*html*/`<router-link :to="'/applications/' + row.id">{{cell}}</router-link>`},
+					quota: {displayName: 'Quota'},
+					consumedSms: {displayName: 'Nombre de \nSMS consommés',
+					 cellTemplate: /*html*/`<div :style="row.consumedSms / row.quota > ${warnConsumedRatio} ? {color: '#f00'} : {}">{{cell}}</div>`
+					}},
+    }
   }
 }

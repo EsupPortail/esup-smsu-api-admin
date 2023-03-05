@@ -1,11 +1,13 @@
 import * as h from "../basicHelpers.js"
+import * as restWsHelpers from '../restWsHelpers.js'
+import router, { hash_params } from '../routes.js'
 import { getInstAppAccount } from "../helpers.js"
 
-export const template = `
-Filtre : <a href="" ng-click="showAccountFilters = !showAccountFilters">{{accountFilter.account || 'aucun'}}</a>
+export const template = /*html*/`
+Filtre : <a href="" @click.prevent="showAccountFilters = !showAccountFilters">{{accountFilter.account || 'aucun'}}</a>
 
-<div ng-if="showAccountFilters">
-  <a class="btn btn-default" style="margin-top: 1em" ng-show="accountFilter.account" ng-click="setAppAccount({})"><span class="glyphicon glyphicon-remove"></span> Supprimer le filtre</a>
+<div v-if="showAccountFilters">
+  <a class="btn btn-default" style="margin-top: 1em" v-if="accountFilter.account" @click.prevent="setAppAccount({})"><span class="glyphicon glyphicon-remove"></span> Supprimer le filtre</a>
 
   <h4 style="margin-top: 2em">Choisissez un compte dans le tableau ci-dessous</h4>
   <table class="table table-bordered">
@@ -16,35 +18,34 @@ Filtre : <a href="" ng-click="showAccountFilters = !showAccountFilters">{{accoun
       <th>Compte</th>
     </tr>
     </thead>
-    <tbody ng-repeat="(institution, list) in appAccountsTree">
-      <tr ng-repeat="e in list.slice(0,1)">
+    <tbody v-for="(list, institution) in appAccountsTree">
+      <tr v-for="e in list.slice(0,1)">
         <td rowspan="{{list.length}}">{{institution}}</td>
         <td>{{e.app}}</td>
-        <td><a href="" ng-click="setAppAccount(e)">{{e.account}}</a></td>
+        <td><a href="" @click.prevent="setAppAccount(e)">{{e.account}}</a></td>
       </tr>
-      <tr ng-repeat="e in list.slice(1)">
+      <tr v-for="e in list.slice(1)">
         <td>{{e.app}}</td>
-        <td><a href="" ng-click="setAppAccount(e)">{{e.account}}</a></td>
+        <td><a href="" @click.prevent="setAppAccount(e)">{{e.account}}</a></td>
       </tr>
     </tbody>
   </table>
 </div>
+<div style="margin-top: 1em" v-if="!showAccountFilters">
 
-<div style="margin-top: 1em" ng-show="groupedBy && !showAccountFilters">
-
-<table class="table table-striped">
+<table class="table table-striped" v-if="groupedBy">
   <thead>
   <tr>
     <th>Date</th>
     <th>Nombre de SMS</th>
   </tr>
   </thead>
-  <tbody ng-repeat="group in groupedBy">
+  <tbody v-for="group in groupedBy">
     <tr>
       <td colspan="5"><b>{{group.institution}}</b> {{group.app}} {{group.account}}</td>
     </tr>
-    <tr ng-repeat="e in group.list">
-      <td>{{e.date | date:'short'}}</td>
+    <tr v-for="e in group.list">
+      <td>{{formatDate(e.date, 'dd/MM/yyyy')}}</td>
       <td>{{e.nbSmsAndDetails}}</td>
     </tr>
   </tbody>
@@ -52,31 +53,32 @@ Filtre : <a href="" ng-click="showAccountFilters = !showAccountFilters">{{accoun
 
 <!-- margin-bottom is needed: -->
 <!-- * to make things more understable when the new results get displayed -->
-<!-- * on mobile phones, the onscroll event can be buggy, this blank fixes it -->
-<div style="margin-bottom: 8em" class="normalContent" when-scrolled="showMoreResults()" >
-  <a href="" ng-hide="inProgress || noMoreResults" name="{{nbResults}}" ng-click="showMoreResults()">Voir plus</a>
-  <div ng-show="inProgress">En cours...</div>
+<div style="margin-bottom: 8em" class="normalContent">
+  <a href="" v-show="!(inProgress || noMoreResults)" name="{{nbResults}}" @click.prevent="showMoreResults()">Voir plus</a>
+  <div v-if="inProgress">En cours...</div>
 </div>
-
-</div>
-
 </div>
 `
 
-export default { template, controller: function($scope, restWsHelpers, $location, $route, h_summary_detailed_criteria) {
-    $scope.initialNbResults = 50;
-    $scope.nbResults = $scope.initialNbResults;
-    $scope.accountFilter = $location.search();
+export default { template, name: 'DetailedSummary', props: ['summary_detailed_criteria'], setup: function(props) {
+    let $scope = Vue.reactive({ 
+        showAccountFilters: false,
+        groupedBy: undefined, 
+        noMoreResults: undefined,
+        formatDate: h.formatDate,
+    })
+    const initialNbResults = 50;
+    $scope.nbResults = initialNbResults;
+    $scope.accountFilter = Vue.computed(hash_params);
 
     $scope.setAppAccount = function (e) {
 	e = h.objectSlice(e, ['institution', 'app', 'account']); // all but hashKey
-	$location.search(e);
-	$route.reload();
+    $scope.showAccountFilters = false
+    $scope.groupedBy = undefined
+	router.push({ hash: "#" + new URLSearchParams(e) });
     };
 
-	var flatList = h_summary_detailed_criteria.map(function (e) {
-	    return getInstAppAccount(e);
-	});
+	var flatList = props.summary_detailed_criteria.map(getInstAppAccount);
 	$scope.appAccountsTree = h.array2hashMulti(flatList, 'institution');
 
     $scope.inProgress = false;
@@ -106,10 +108,11 @@ export default { template, controller: function($scope, restWsHelpers, $location
 	return groupedBy;
     };
 
-    var computeGroupedBy = function() {
+    Vue.watch(
+      () => ({ maxResults: $scope.nbResults, ...$scope.accountFilter }),
+      function(fullFilter) {
 	if ($scope.inProgress) return;
 	$scope.inProgress = true;
-	var fullFilter = { maxResults: $scope.nbResults, ...$scope.accountFilter };
 	restWsHelpers.simple('summary/detailed', fullFilter)
 	    .then(function (flatList) {
 		$scope.noMoreResults = flatList.length < fullFilter.maxResults;
@@ -122,14 +125,13 @@ export default { template, controller: function($scope, restWsHelpers, $location
 		    $scope.setAppAccount({});
 		}
 	    });
-    };
+    }, { immediate: true });
 
     $scope.showMoreResults = function () {
 	if ($scope.noMoreResults) return;
-	$scope.nbResults = $scope.nbResults + $scope.initialNbResults;
-	computeGroupedBy();
+	$scope.nbResults = $scope.nbResults + initialNbResults;
     };
 
-    computeGroupedBy();
+    return $scope
   }
 }

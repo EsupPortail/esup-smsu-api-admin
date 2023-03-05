@@ -1,22 +1,21 @@
-export const template = `
+export const template = /*html*/`
 <div class="normalContent">
    <a class="btn btn-default" href="#/users/new"><span class="glyphicon glyphicon-plus"></span> Ajouter un utilisateur</a>
 </div>
 
-<p>
+<p></p>
 
 <div>
   <table class="table table-striped">
     <thead><tr><th>Nom</th><th>Role</th></tr></thead>
-    <tr ng-repeat="user in users">
-      <td><a href="#/users/{{user.id}}">{{user.login}}</a></td>
+    <tbody>
+    <tr v-for="user in users">
+      <td><router-link :to="'/users/' + user.id">{{user.login}}</router-link></td>
       <td>{{user.role}}</td>
     </tr>
+    </tbody>
   </table>
 </div>
 `
 
-export default { template, controller: function($scope, h_users) {
-    $scope.users = h_users;
-  }
-}
+export default { template, name: 'Users', props: ['users'] }

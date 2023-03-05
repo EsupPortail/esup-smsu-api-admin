@@ -1,64 +1,61 @@
 import * as h from "../basicHelpers.js"
+import * as restWsHelpers from '../restWsHelpers.js'
+import router, { currentRoutePath } from '../routes.js'
 import { createEmptyAccount } from "../helpers.js"
 
-export const template = `
-<div class="normalContent" ng-show="app">
+export const template = /*html*/`
+<div class="normalContent" v-if="app">
 
- <a class="btn btn-default" ng-hide="app.isNew || !app.deletable" ng-click="delete()"><span class="glyphicon glyphicon-remove"></span> Supprimer l'application</a>
+ <a class="btn btn-default" v-if="!app.isNew && app.deletable" @click="deleteApp()"><span class="glyphicon glyphicon-remove"></span> Supprimer l'application</a>
 
- <h4 style="margin-top: 2em" ng-hide="app.isNew">Modifier</h4>
+ <h4 style="margin-top: 2em" v-if="!app.isNew">Modifier</h4>
 
 
- <form novalidate  name="myForm" ng-submit="submitted = 1; submit()" class="form-horizontal">
+ <form @submit.prevent="submitted = 1; submit()" class="form-horizontal">
 
-  <div class="form-group" ng-class="{'has-error': submitted && myForm.name.$invalid}">
+  <div class="form-group" :class="{'has-error': submitted && !name_unique}">
     <label class="col-md-3 control-label" for="name">Nom</label>
     <div class="col-md-6">
-      <input type="text" name="name" ng-model="app.name" my-validator="{ unique: checkUniqueName }" required maxlength="30" class="form-control">
-      <span ng-show="submitted && myForm.name.$error.required" class="help-block">Required</span>
-      <span ng-show="submitted && myForm.name.$error.unique" class="help-block">Already in use</span>
+      <input type="text" name="name" v-model="app.name" required maxlength="30" class="form-control">
+      <span v-if="submitted && !name_unique" class="help-block">Already in use</span>
     </div>
   </div>
 
-  <div class="form-group"
-       ng-class="{'has-error': submitted && myForm.password.$invalid}">
+  <div class="form-group">
     <label class="col-md-3 control-label" for="password">Mot de passe</label>
     <div class="col-md-6">
-      <input type="text" name="password" ng-model="app.password" required maxlength="1024" class="form-control">
-      <span ng-show="submitted && myForm.password.$error.required" class="help-block">Required</span>
+      <input type="text" v-model="app.password" required maxlength="1024" class="form-control">
     </div>
   </div>
 
- <div class="form-group" ng-class="{'has-error': submitted && myForm.institution.$invalid}">
+ <div class="form-group">
     <label class="col-md-3 control-label" for="institution">Etablissement</label>
     <div class="col-md-6">
-      <input type="text" name="institution" ng-model="app.institution" maxlength="30" class="form-control" required>
-      <span ng-show="submitted && myForm.institution.$error.required" class="help-block">Required</span>
+      <input type="text" name="institution" v-model="app.institution" maxlength="30" class="form-control" required>
     </div>
   </div>
 
   <div class="form-group">
     <label class="col-md-3 control-label" for="account">Compte d'imputation</label>
     <div class="col-md-6">
-      <select name="account" ng-model="app.accountName" ng-options="acc.name as acc.name for acc in accounts" class="form-control">
-	<option value="" ng-selected="selected">Nouveau compte</option>
+      <select name="account" v-model="app.accountName" class="form-control">
+	<option value="">Nouveau compte</option>
+    <option v-for="acc in accounts" :value="acc.name">{{acc.name}}</option>
       </select>
     </div>  
   </div>
 
-  <div class="form-group"
-       ng-class="{'has-error': submitted && myForm.quota.$invalid}">
+  <div class="form-group">
     <label class="col-md-3 control-label" for="quota">Quota</label>
     <div class="col-md-6">
-      <input type="number" name="quota" ng-model="app.quota" min="0" integer class="form-control">
-      <span ng-show="submitted && myForm.quota.$invalid" class="help-block">Nombre positif</span>
+      <input type="number" name="quota" v-model="app.quota" min="0" integer class="form-control">
     </div>
   </div>
 
   <div class="form-group">
     <div class="col-md-offset-3 col-md-6">
       <button class="btn btn-primary" type="submit">
-	<span class="glyphicon" ng-class="{'glyphicon-plus': app.isNew, 'glyphicon-pencil': !app.isNew}"></span>
+	<span class="glyphicon" :class="{'glyphicon-plus': app.isNew, 'glyphicon-pencil': !app.isNew}"></span>
 	{{app.isNew && "Créer" || "Enregistrer"}}</button>
     </div>
   </div>
@@ -68,59 +65,59 @@ export const template = `
 </div>
 `
 
-export default { template, controller: function($scope, restWsHelpers, $routeParams, $location, h_accounts, h_applications) {
-    var id = $routeParams.id;
+export default { template, name: 'ApplicationsDetail', props: ['applications', 'accounts', 'id'], setup: function(props) {
+    let $scope = Vue.reactive({
+        app: undefined,
+        submitted: false,
+    })
 
-    $scope.accounts = h_accounts;
+    const our_path = currentRoutePath() // we want it to be static
+    Vue.watchEffect(() => {
+	$rootScope.currentTab_text[our_path] = $scope.app?.name || (props.id === 'new' ? 'Création' : 'Modification');
+    });
 
-    var updateCurrentTabTitle = function () {
-	$scope.currentTab.text = $scope.app && $scope.app.name || (id === 'new' ? 'Création' : 'Modification');
+    let orig_app = Vue.computed(() => props.applications.find(app => app.id == props.id))
+    let name2app = Vue.computed(() => h.array2hash(props.applications, 'name'))
+    const checkUnique = function (name) {
+	var app = name2app.value[name];
+	return !app || name === orig_app.value?.name;
     };
-    updateCurrentTabTitle();
-    $scope.$watch('app.name', updateCurrentTabTitle);
-
-    $scope.checkUniqueName = function (name) {
-	var app = $scope.name2app[name];
-	return !app || app === $scope.app;
-    };
+    $scope.name_unique = Vue.computed(() => checkUnique($scope.app?.name))
 
     var modify = function (method, then) {
 	var app = h.cloneDeep($scope.app);
 	delete app.isNew;
 	restWsHelpers.action(method, 'applications', app).then(function () {
-	    $location.url(then || '/applications');
+	    router.push(then || { path: '/applications' });
 	});
     };    
     $scope.submit = function () {
-	if (!$scope.myForm.$valid) return;
+        if (!$scope.name_unique) return;
 	var method = $scope.app.isNew ? 'post' : 'put';
-	if ($scope.app.accountName == null) {
+	if ($scope.app.accountName === '') {
 	    // must first create the account
 	    var accountNameSuggestion = $scope.app.name;
-	    createEmptyAccount(restWsHelpers, accountNameSuggestion, $scope.accounts).then(function (account) {
+	    createEmptyAccount(restWsHelpers, accountNameSuggestion, props.accounts).then(function (account) {
 		$scope.app.accountName = account.name;
-  		modify(method, '/accounts/' + account.id + '?isNew');
+  		modify(method, { path: '/accounts/' + account.id, query: { isNew: null } });
 	    });
 	} else {
 	    modify(method);
 	}
     };
-    $scope["delete"] = function () {
+    $scope.deleteApp = function () {
 	modify('delete');
     };
 
-    $scope.name2app = h.array2hash(h_applications, 'name');
-
-	if (id === "new") {
-	    $scope.app = { isNew: true, accountName: null, quota: 0 };
+    Vue.watchEffect(() => {
+	if (props.id === "new") {
+	    $scope.app = { isNew: true, accountName: '', quota: 0 };
+	} else if (orig_app.value) {
+		$scope.app = { ...orig_app.value };
 	} else {
-	    var id2app = h.array2hash(h_applications, 'id');
-
-	    if (id in id2app) {
-		$scope.app = id2app[id];
-	    } else {
-		alert("invalid application " + id);
-	    }
+		alert("invalid application " + props.id);
 	}
+	})
+    return $scope
   }
 }

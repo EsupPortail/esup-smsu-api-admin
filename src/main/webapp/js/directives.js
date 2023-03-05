@@ -41,7 +41,7 @@ app.directive('base64content', function ($compile) {
 
 app.directive('displayRequiredIfNeeded', function ($parse) {
     return { restrict: 'A', 
-	     template: '<span ng-show="$parent.submitted && inputName.$error.required" class="help-block">Required</span>',
+	     template: '<span v-if="$parent.submitted && inputName.$error.required" class="help-block">Required</span>',
 	     scope: { inputName: '=' }
 	   }; 
 });

@@ -1,8 +1,8 @@
 import * as h from "../basicHelpers.js"
 import { getInstAppAccount } from "../helpers.js"
 
-export const template = `
-<div ng-show="appAccount">
+export const template = /*html*/`
+<div v-if="appAccount">
 
   <dl style="margin-top: 2em" class="dl-horizontal">
     <dt>Etablissement</dt><dd>{{appAccount.institution}}</dd>
@@ -17,7 +17,7 @@ export const template = `
     <th>Nombre de SMS reçus</th>
     <th>Taux d'échec</th>
   </tr>
-  <tr ng-repeat="e in appAccount.data">
+  <tr v-for="e in appAccount.data">
     <td>{{e.month}}</td>
     <td>{{e.nbSendedSMS}}</td>
     <td>{{e.nbReceived}}</td>
@@ -36,28 +36,29 @@ export const template = `
     <th>Compte</th>
   </tr>
   </thead>
-  <tbody ng-repeat="(institution, list) in appAccountsTree">
-    <tr ng-repeat="e in list.slice(0,1)">
+  <tbody v-for="(list, institution) in appAccountsTree">
+    <tr v-for="e in list.slice(0,1)">
       <td rowspan="{{list.length}}">{{institution}}</td>
       <td>{{e.app}}</td>
-      <td><a href="" ng-click="setAppAccount(e)">{{e.account}}</a></td>
+      <td><a href="" @click.prevent="appAccount = e">{{e.account}}</a></td>
     </tr>
-    <tr ng-repeat="e in list.slice(1)">
+    <tr v-for="e in list.slice(1)">
       <td>{{e.app}}</td>
-      <td><a href="" ng-click="setAppAccount(e)">{{e.account}}</a></td>
+      <td><a href="" @click.prevent="appAccount = e">{{e.account}}</a></td>
     </tr>
   </tbody>
 </table>
 
-<a href="" ng-click="exportCSV($event)">
+<a href="" @click="exportCSV($event)">
   Export vers tableur
 </a>
 `
 
-export default { template, controller: function($scope, h_summary_consolidated) {
+export default { template, name: 'ConsolidatedSummary', props: ['summary_consolidated'], setup: function(props) {
+    let $scope = Vue.reactive({ appAccount: undefined })
     var computeTree = function () {
 	var tree = {};
-	for (const e of h_summary_consolidated) {
+	for (const e of props.summary_consolidated) {
 	    var key1 = e.institution;
 	    var key2 = e.app + "+" + e.account;
 	    if (!tree[key1]) 
@@ -72,17 +73,13 @@ export default { template, controller: function($scope, h_summary_consolidated) 
 	return tree;
     };
 
-    for (const e of h_summary_consolidated) {
+    for (const e of props.summary_consolidated) {
 	    $.extend(e, getInstAppAccount(e));
 	    e.nbReceived = e.nbSendedSMS - e.nbSMSInError;
 	    e.failureRate = Math.round(e.nbSMSInError / e.nbSendedSMS * 100) + "%";
     }
-    $scope.flatList = h_summary_consolidated;
+    $scope.flatList = props.summary_consolidated;
     $scope.appAccountsTree = computeTree();
-
-    $scope.setAppAccount = function(e) {
-	$scope.appAccount = e;
-    };
 
     function toStringListList(list, attrs) {
 	return list.map(function (o) {
@@ -93,5 +90,6 @@ export default { template, controller: function($scope, h_summary_consolidated) 
 	var rows = toStringListList($scope.flatList, ['institution', 'app', 'account', 'month', 'nbSendedSMS', 'nbReceived']);
 	h.exportCSV(event.target.parentElement, rows, "smsuapi-consolidated.csv");
     };
+    return $scope
   }
 }

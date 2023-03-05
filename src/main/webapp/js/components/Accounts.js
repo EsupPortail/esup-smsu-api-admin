@@ -1,35 +1,17 @@
-export const template = `
-<style>
-.ngHeaderText {
-  white-space: normal;
-}
-.gridStyle.loading {
-  opacity: 0.5;
-}
-.highConsumedRatio {
-  color: #f00;
-}
-</style>
+import MyTable from "./MyTable.js"
 
-<div class="gridStyle" ng-grid="gridOptions" ng-class="{loading: !accounts}"></div>
+export const template = /*html*/`
+<MyTable :data="accounts" :columnDefs="columnDefs"/>
 `
-export default { template, controller: function($scope, h_accounts) {
-    $scope.accounts = h_accounts;
-    $scope.warnConsumedRatio = 0.9;
-    $scope.consumedRatio = function (account) {
-	return account.consumedSms / account.quota;
-    };
-    $scope.gridOptions = { data: 'accounts',
-			   sortInfo: {fields: ['name'], directions: ['asc', 'desc']},
-			   headerRowHeight: '50',
-			   multiSelect: false,
-			   columnDefs: [{field: 'name', displayName:"Compte d'imputation", width: '****', 
-					   cellTemplate: '<div class="ngCellText"><a href="#/accounts/{{row.entity.id}}">{{row.getProperty(col.field)}}</a></div>'},
-					{field: 'quota', displayName: 'Quota', width: '**'},
-					{field: 'consumedSms', displayName: 'Nombre de SMS consommés', width: '**',
-					 cellTemplate: '<div ng-class="{highConsumedRatio: consumedRatio(row.entity) > warnConsumedRatio}"><div class="ngCellText">{{row.entity.consumedSms}}</div></div>'
-					}]
-			 };
-
+export default { template, name: 'Accounts', props: ['accounts'], components: { MyTable }, setup: function(props) {
+    const warnConsumedRatio = 0.9;
+    return {
+	    columnDefs: {name: { displayName:"Compte d'imputation", 
+					   cellTemplate: /*html*/`<router-link :to="'/accounts/' + row.id">{{cell}}</router-link>`},
+					quota: { displayName: 'Quota'},
+					consumedSms: { displayName: 'Nombre de SMS consommés',
+					 cellTemplate: /*html*/`<div :style="row.consumedSms / row.quota > ${warnConsumedRatio} ? {color: '#f00'} : {}">{{cell}}</div>`
+					}},
+    }
   }
 }

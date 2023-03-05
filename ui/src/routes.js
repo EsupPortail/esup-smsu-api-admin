@@ -1,3 +1,4 @@
+import * as VueRouter from 'vue-router'
 import * as restWsHelpers from './restWsHelpers.js'
 import About from './components/About.js'
 import AccountsDetail from './components/AccountsDetail.js'

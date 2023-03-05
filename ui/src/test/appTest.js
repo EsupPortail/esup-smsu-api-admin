@@ -1,6 +1,7 @@
-import * as h from '../../js/basicHelpers.js'
-import * as login from '../../js/login.js'
+import * as h from '../basicHelpers.js'
+import * as login from '../login.js'
 
+console.log("appTest!")
     var loggedUser = {"login":"admin","role":"ROLE_SUPER_ADMIN"};
     login.fake.jsonp = function () { return Promise.resolve(loggedUser) }
 

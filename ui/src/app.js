@@ -1,6 +1,8 @@
+import * as Vue from 'vue'
 import router from './routes.js'
 import Main from './components/Main.js'
 
+window.Vue = Vue
 window.$rootScope = Vue.reactive({
     allowLogout: false,
     loggedUser: undefined,
@@ -12,4 +14,5 @@ window.$rootScope = Vue.reactive({
 const app = Vue.createApp(Main)
 app.use(router)
 
-app.mount('#app')
+const p = globals.test ? import('./test/appTest.js') : Promise.resolve()
+p.then(_ => app.mount('#app'))

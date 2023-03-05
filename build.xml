@@ -32,36 +32,11 @@
 		    </and>
 		  </not>
 		</condition>
-
-		<condition property="need-download-webjars">
-		  <not>
-		    <available file="src/main/webapp/libs" type="dir" /> 
-		  </not>
-		</condition>
 	</target>
 
-	<target name="download" depends="download-jars,download-webjars" />
+	<target name="download" depends="download-jars" />
 		
 	<property name="jetty-version" value="8.1.9.v20130131" />
-
-	<target name="download-webjars" depends="prepare" if="need-download-webjars">
-	      <artifact:remoteRepository id="https_central" url="https://repo.maven.apache.org/maven2" />
-	      <artifact:pom id="mypom" file="pom.xml" />
-	      <artifact:dependencies filesetId="jar.fileset" scopes="provided" pomRefId="mypom"><remoteRepository refid="https_central" /></artifact:dependencies>    
-	      <restrict id="webjars.list">
-		<fileset refid="jar.fileset" />
-		<rsel:name name="**/webjars/**" />
-	      </restrict>
-
-	      <delete dir="src/main/webapp/libs" />
-	      <unzip dest="src/main/webapp/libs">
-		<restrict refid="webjars.list" />
-		<patternset>
-		  <include name="META-INF/resources/webjars/" />
-		</patternset>
-		<mapper type="glob" from="META-INF/resources/webjars/*" to="*"/>
-	      </unzip>
-	</target>
 
 	<target name="download-jars" depends="prepare" if="need-download-jars">
 	      <artifact:remoteRepository id="https_central" url="https://repo.maven.apache.org/maven2" />

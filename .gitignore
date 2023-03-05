@@ -1,4 +1,7 @@
-src/main/webapp/libs
+src/main/webapp/index.html
+src/main/webapp/assets/
+src/main/webapp/css/
+ui/node_modules/
 build
 target
 TAGS

@@ -104,7 +104,7 @@ console.log("appTest!")
 	return r;
     }
     function summary_detailed(url, _data) {
-	var search = new URLSearchParams(new URL(url, document.location).search)
+	var search = new URLSearchParams(new URL(url, document.location.href).search)
 
 	var filteredBase = summary_detailed_base.filter(function (e) {
 	    return !(search.has('account') && search.get('account') !== e.accountName) &&
@@ -112,7 +112,7 @@ console.log("appTest!")
 		   !(search.has('institution') && search.get('institution') !== e.institution);
 	});
 	var nbBase = filteredBase.length;
-	var nbResults = nbBase < 5 ? nbBase : Math.min(search.get('maxResults'), 80);
+	var nbResults = nbBase < 5 ? nbBase : Math.min(parseInt(search.get('maxResults')), 80);
 	var r = [];
 	for (var i = 0; i < nbResults; i++) {
 	    r.push(h.cloneDeep(filteredBase[i % nbBase]));
@@ -124,6 +124,7 @@ console.log("appTest!")
 
     let real_fetch = window.fetch
     window.fetch = function (url, args) {
+        // @ts-ignore
         const { pathname } = new URL(url, document.location)
         const fake = httpFake.find(fake => (
             args.method.toUpperCase() === fake.method && pathname.startsWith(fake.path)
@@ -132,6 +133,7 @@ console.log("appTest!")
         let response = fake.respond(url, args.body)
         return Promise.resolve({ 
             status: 200,
+            // @ts-ignore
             headers: {
                 get: _ => "application/json",
             },

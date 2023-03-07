@@ -32,7 +32,7 @@ export default {
                 ({ props: ['row', 'cell'], template: colDef.cellTemplate || '{{cell}}' })
             )
         ))
-        const sort = Vue.reactive({})
+        const sort = Vue.reactive({ field: undefined, direction: 1 })
         const set_sort_field = (field) => {
             if (sort.field === field) {
                 sort.direction *= -1

@@ -50,6 +50,7 @@ export default {
         currentMainTab: Vue.computed(findParentTab),
         mainVisibleTabs: Vue.computed(() => (
             router.getRoutes().filter(e => (
+                // @ts-ignore
                 e.meta.mainText && (!e.meta.show || e.meta.show())
             )) 
         )),

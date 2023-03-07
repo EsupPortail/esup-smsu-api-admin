@@ -60,7 +60,7 @@ export default { template, name: 'UsersDetail', props: ['users', 'id'], setup: f
 	var user = login2user.value[login];
 	return !user || login === orig_user.value?.login;
     };
-    $scope.login_unique = Vue.computed(() => checkUnique($scope.user?.login))
+    const login_unique = Vue.computed(() => checkUnique($scope.user?.login))
 
     var modify = function (method) {
 	var user = h.objectSlice($scope.user, ['id', 'login', 'role']) // keep only modifiable fields
@@ -69,11 +69,11 @@ export default { template, name: 'UsersDetail', props: ['users', 'id'], setup: f
 	});
     };
     
-    $scope.submit = function () {
-	if (!$scope.login_unique) return;
+    const submit = function () {
+	if (!login_unique.value) return;
 	modify($scope.user.isNew ? 'post' : 'put');
     };
-    $scope.deleteUser = function () {
+    const deleteUser = function () {
 	modify('delete');
     };
 
@@ -87,6 +87,6 @@ export default { template, name: 'UsersDetail', props: ['users', 'id'], setup: f
 	    router.push({ path: '/users' });
     }
     }) 
-    return $scope
+    return { ...Vue.toRefs($scope), login_unique, submit, deleteUser }
   }
 }

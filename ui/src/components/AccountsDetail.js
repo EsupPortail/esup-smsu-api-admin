@@ -44,11 +44,11 @@ export default { template, name: 'AccountsDetail', props: ['accounts', 'id'], se
         account: undefined,
         submitted: false,
     })
-    $scope.isNew = Vue.computed(() => 'isNew' in router.currentRoute.value.query)
+    const isNew = Vue.computed(() => 'isNew' in router.currentRoute.value.query)
 
     const our_path = currentRoutePath() // we want it to be static
     Vue.watchEffect(() => {
-        $rootScope.currentTab_text[our_path] = $scope.account?.name || ($scope.isNew ? 'Création' : 'Modification');
+        $rootScope.currentTab_text[our_path] = $scope.account?.name || (isNew.value ? 'Création' : 'Modification');
     });
 
     let orig_account = Vue.computed(() => props.accounts.find(account => account.id == props.id))
@@ -57,7 +57,7 @@ export default { template, name: 'AccountsDetail', props: ['accounts', 'id'], se
 	var account = name2account.value[name];
 	return !account || name === orig_account.value?.name;
     };
-    $scope.name_unique = Vue.computed(() => checkUnique($scope.account?.name))
+    const name_unique = Vue.computed(() => checkUnique($scope.account?.name))
 
     var modify = function (method) {
 	var account = h.cloneDeep($scope.account);
@@ -65,11 +65,11 @@ export default { template, name: 'AccountsDetail', props: ['accounts', 'id'], se
 	    router.push({ path: '/accounts' });
 	});
     };    
-    $scope.submit = function () {
-        if (!$scope.name_unique) return;
+    const submit = function () {
+        if (!name_unique.value) return;
 	modify('put');
     };
-    $scope.disable = function () {
+    const disable = function () {
 	$scope.account.quota = 0;
 	modify('put');	
     };
@@ -81,7 +81,7 @@ export default { template, name: 'AccountsDetail', props: ['accounts', 'id'], se
             alert("invalid account " + props.id);
 	}
     })
-    $scope.appDisabled = Vue.computed(() => $scope.account?.quota == 0)
-    return $scope
+    const appDisabled = Vue.computed(() => $scope.account?.quota == 0)
+    return { ...Vue.toRefs($scope), isNew, name_unique, submit, disable, appDisabled }
   }
 }

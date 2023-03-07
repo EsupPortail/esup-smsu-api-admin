@@ -61,27 +61,27 @@ Filtre : <a href="" @click.prevent="showAccountFilters = !showAccountFilters">{{
 `
 
 export default { template, name: 'DetailedSummary', props: ['summary_detailed_criteria'], setup: function(props) {
+    const initialNbResults = 50;
+    const flatList = props.summary_detailed_criteria.map(getInstAppAccount);
     let $scope = Vue.reactive({ 
         showAccountFilters: false,
         groupedBy: undefined, 
         noMoreResults: undefined,
         formatDate: h.formatDate,
+        nbResults: initialNbResults,
+        accountFilter: Vue.computed(hash_params),
+        appAccountsTree: h.array2hashMulti(flatList, 'institution'),
+        inProgress: false,
     })
-    const initialNbResults = 50;
-    $scope.nbResults = initialNbResults;
-    $scope.accountFilter = Vue.computed(hash_params);
 
-    $scope.setAppAccount = function (e) {
+    const setAppAccount = function (e) {
 	e = h.objectSlice(e, ['institution', 'app', 'account']); // all but hashKey
     $scope.showAccountFilters = false
     $scope.groupedBy = undefined
 	router.push({ hash: "#" + new URLSearchParams(e) });
     };
 
-	var flatList = props.summary_detailed_criteria.map(getInstAppAccount);
-	$scope.appAccountsTree = h.array2hashMulti(flatList, 'institution');
 
-    $scope.inProgress = false;
 
     var nbSmsAndDetails = function (e) {
 	var details = [];
@@ -122,16 +122,16 @@ export default { template, name: 'DetailedSummary', props: ['summary_detailed_cr
 		// an error occured.
 		if (resp && resp.status == 404 && $scope.accountFilter.account) {
 		    // try removing accountFilter
-		    $scope.setAppAccount({});
+		    setAppAccount({});
 		}
 	    });
     }, { immediate: true });
 
-    $scope.showMoreResults = function () {
+    const showMoreResults = function () {
 	if ($scope.noMoreResults) return;
 	$scope.nbResults = $scope.nbResults + initialNbResults;
     };
 
-    return $scope
+    return { ...Vue.toRefs($scope), setAppAccount, showMoreResults }
   }
 }

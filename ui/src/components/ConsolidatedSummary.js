@@ -78,18 +78,17 @@ export default { template, name: 'ConsolidatedSummary', props: ['summary_consoli
 	    e.nbReceived = e.nbSendedSMS - e.nbSMSInError;
 	    e.failureRate = Math.round(e.nbSMSInError / e.nbSendedSMS * 100) + "%";
     }
-    $scope.flatList = props.summary_consolidated;
-    $scope.appAccountsTree = computeTree();
+    const appAccountsTree = computeTree();
 
     function toStringListList(list, attrs) {
 	return list.map(function (o) {
 	    return attrs.map(function (attr) { return ""+o[attr]; });
 	});
     }
-    $scope.exportCSV = function (event) {
-	var rows = toStringListList($scope.flatList, ['institution', 'app', 'account', 'month', 'nbSendedSMS', 'nbReceived']);
+    const exportCSV = function (event) {
+	var rows = toStringListList(props.summary_consolidated, ['institution', 'app', 'account', 'month', 'nbSendedSMS', 'nbReceived']);
 	h.exportCSV(event.target.parentElement, rows, "smsuapi-consolidated.csv");
     };
-    return $scope
+    return { ...Vue.toRefs($scope), appAccountsTree, exportCSV }
   }
 }

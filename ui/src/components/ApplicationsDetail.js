@@ -82,7 +82,7 @@ export default { template, name: 'ApplicationsDetail', props: ['applications', '
 	var app = name2app.value[name];
 	return !app || name === orig_app.value?.name;
     };
-    $scope.name_unique = Vue.computed(() => checkUnique($scope.app?.name))
+    const name_unique = Vue.computed(() => checkUnique($scope.app?.name))
 
     var modify = function (method, then) {
 	var app = h.cloneDeep($scope.app);
@@ -91,8 +91,8 @@ export default { template, name: 'ApplicationsDetail', props: ['applications', '
 	    router.push(then || { path: '/applications' });
 	});
     };    
-    $scope.submit = function () {
-        if (!$scope.name_unique) return;
+    const submit = function () {
+        if (!name_unique.value) return;
 	var method = $scope.app.isNew ? 'post' : 'put';
 	if ($scope.app.accountName === '') {
 	    // must first create the account
@@ -105,7 +105,7 @@ export default { template, name: 'ApplicationsDetail', props: ['applications', '
 	    modify(method);
 	}
     };
-    $scope.deleteApp = function () {
+    const deleteApp = function () {
 	modify('delete');
     };
 
@@ -118,6 +118,6 @@ export default { template, name: 'ApplicationsDetail', props: ['applications', '
 		alert("invalid application " + props.id);
 	}
 	})
-    return $scope
+    return { ...Vue.toRefs($scope), name_unique, submit, deleteApp }
   }
 }

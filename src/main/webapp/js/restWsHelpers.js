@@ -162,7 +162,7 @@ export function simple($function, params, flags) {
     return xhrRequest(args, flags);
 };
 
-export function action(method, restPath, o) {
+export async function action(method, restPath, o) {
     var args = { method: method, url: globals.baseURL + '/rest/' + restPath, headers: headers() };
     if (method !== 'post') {
 	var id = o.id;
@@ -174,6 +174,6 @@ export function action(method, restPath, o) {
 	args.data = o;
 	args.headers['Content-Type'] = 'application/json;charset=utf-8' 
     }
-    return xhrRequest(args, {});
+    return await xhrRequest(args, {});
 };
 

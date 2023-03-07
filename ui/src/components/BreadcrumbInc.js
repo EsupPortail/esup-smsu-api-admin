@@ -1,3 +1,5 @@
+import * as Vue from 'vue'
+import { $rootScope } from '../globals.js'
 import { currentRoutePath } from "../routes.js"
 
 const template = /*html*/`

@@ -1,3 +1,4 @@
+import * as Vue from 'vue'
 import * as h from "../basicHelpers.js"
 import * as restWsHelpers from '../restWsHelpers.js'
 import router, { hash_params } from '../routes.js'

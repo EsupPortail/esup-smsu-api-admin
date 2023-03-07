@@ -10,6 +10,7 @@ import DetailedSummary from './components/DetailedSummary.js'
 import UsersDetail from './components/UsersDetail.js'
 import Users from './components/Users.js'
 import Welcome from './components/Welcome.js'
+import { $rootScope } from './globals.js'
 
 const loggedUser_can = (fctn) => (
     () => $rootScope.loggedUser?.can?.[fctn]

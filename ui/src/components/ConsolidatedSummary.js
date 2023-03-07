@@ -1,3 +1,4 @@
+import * as Vue from 'vue'
 import * as h from "../basicHelpers.js"
 import { getInstAppAccount } from "../helpers.js"
 

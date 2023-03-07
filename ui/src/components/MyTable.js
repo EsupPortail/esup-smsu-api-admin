@@ -1,3 +1,4 @@
+import * as Vue from 'vue'
 import * as h from '../basicHelpers.js'
 
 const template = /*html*/`

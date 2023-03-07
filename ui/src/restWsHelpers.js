@@ -1,4 +1,5 @@
 import * as h from './basicHelpers.js'
+import { $rootScope } from './globals.js'
 import * as login from './login.js'
 import * as loginSuccess from './loginSuccess.js'
 

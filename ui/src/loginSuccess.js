@@ -1,4 +1,5 @@
 import * as h from './basicHelpers.js'
+import { $rootScope } from './globals.js'
 import * as restWsHelpers from './restWsHelpers.js'
 
 export const set = function (loggedUser) {

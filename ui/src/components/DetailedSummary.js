@@ -56,7 +56,7 @@ Filtre : <a href="" @click.prevent="showAccountFilters = !showAccountFilters">{{
 <!-- margin-bottom is needed: -->
 <!-- * to make things more understable when the new results get displayed -->
 <div style="margin-bottom: 8em" class="normalContent">
-  <a href="" v-show="!(inProgress || noMoreResults)" name="{{nbResults}}" v-whenVisible="showMoreResults" @click.prevent="showMoreResults()">Voir plus</a>
+  <a href="" v-show="groupedBy && !(inProgress || noMoreResults)" name="{{nbResults}}" v-whenVisible="showMoreResults" @click.prevent="showMoreResults()">Voir plus</a>
   <div v-if="inProgress">En cours...</div>
 </div>
 </div>

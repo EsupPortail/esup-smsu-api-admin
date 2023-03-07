@@ -1,4 +1,4 @@
-export const template = /*html*/`
+<template>
 <div v-if="appAccount">
 
   <dl style="margin-top: 2em" class="dl-horizontal">
@@ -49,13 +49,14 @@ export const template = /*html*/`
 <a href="" @click="exportCSV($event)">
   Export vers tableur
 </a>
-`
+</template>
 
+<script>
 import * as Vue from 'vue'
 import * as h from "../basicHelpers.js"
 import { getInstAppAccount } from "../helpers.js"
 
-export default { template, name: 'ConsolidatedSummary', props: ['summary_consolidated'], setup: function(props) {
+export default { props: ['summary_consolidated'], setup: function(props) {
     let $scope = Vue.reactive({ appAccount: undefined })
     var computeTree = function () {
 	var tree = {};
@@ -93,3 +94,4 @@ export default { template, name: 'ConsolidatedSummary', props: ['summary_consoli
     return { ...Vue.toRefs($scope), appAccountsTree, exportCSV }
   }
 }
+</script>

@@ -1,10 +1,11 @@
-export const template = /*html*/`
+<template>
 <MyTable :data="accounts" :columnDefs="columnDefs"/>
-`
+</template>
 
-import MyTable from "./MyTable.js"
+<script>
+import MyTable from "./MyTable.vue"
 
-export default { template, name: 'Accounts', props: ['accounts'], components: { MyTable }, setup: function(props) {
+export default { props: ['accounts'], components: { MyTable }, setup: function(props) {
     const warnConsumedRatio = 0.9;
     return {
 	    columnDefs: {name: { displayName:"Compte d'imputation", 
@@ -16,3 +17,4 @@ export default { template, name: 'Accounts', props: ['accounts'], components: { 
     }
   }
 }
+</script>

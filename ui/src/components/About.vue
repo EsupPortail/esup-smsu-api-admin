@@ -1,4 +1,4 @@
-export const template = /*html*/`
+<template>
 <div class="normalContent">
 
 SMS-U est un service numérique mutualisé d'envoi de messages SMS développé
@@ -38,6 +38,4 @@ SMS-U - Copyright (c) 2009-2014 Université Paris 1 Panthéon-Sorbonne
 </ul>
 	
 </div>
-`
-
-export default { template }
+</template>

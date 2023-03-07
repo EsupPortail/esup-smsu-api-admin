@@ -8,7 +8,7 @@
 }
 </style>
 */
-export const template = /*html*/`
+<template>
 <div class="normalContent">
    <router-link class="btn btn-default" to="/applications/new"><span class="glyphicon glyphicon-plus"></span> Ajouter une application</router-link>
 </div>
@@ -16,11 +16,12 @@ export const template = /*html*/`
 <p></p>
 
 <MyTable :data="applications" :columnDefs="columnDefs"/>
-`
+</template>
 
-import MyTable from "./MyTable.js"
+<script>
+import MyTable from "./MyTable.vue"
 
-export default { template, name: 'Applications', props: ['applications'], components: { MyTable }, setup: function(props) {
+export default { props: ['applications'], components: { MyTable }, setup: function(props) {
     const warnConsumedRatio = 0.9;
 	return {
         columnDefs: {name: { displayName:"Application", 
@@ -32,3 +33,4 @@ export default { template, name: 'Applications', props: ['applications'], compon
     }
   }
 }
+</script>

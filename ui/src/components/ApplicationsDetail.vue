@@ -1,4 +1,4 @@
-export const template = /*html*/`
+<template>
 <div class="normalContent" v-if="app">
 
  <a class="btn btn-default" v-if="!app.isNew && app.deletable" @click="deleteApp()"><span class="glyphicon glyphicon-remove"></span> Supprimer l'application</a>
@@ -58,8 +58,9 @@ export const template = /*html*/`
  </form>
 
 </div>
-`
+</template>
 
+<script>
 import * as Vue from 'vue'
 import * as h from "../basicHelpers.js"
 import * as restWsHelpers from '../restWsHelpers.js'
@@ -67,7 +68,7 @@ import router, { currentRoutePath } from '../routes.js'
 import { createEmptyAccount } from "../helpers.js"
 import { $rootScope } from '../globals.js'
 
-export default { template, name: 'ApplicationsDetail', props: ['applications', 'accounts', 'id'], setup: function(props) {
+export default { props: ['applications', 'accounts', 'id'], setup: function(props) {
     let $scope = Vue.reactive({
         app: undefined,
         submitted: false,
@@ -123,3 +124,4 @@ export default { template, name: 'ApplicationsDetail', props: ['applications', '
     return { ...Vue.toRefs($scope), name_unique, submit, deleteApp }
   }
 }
+</script>

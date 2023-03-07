@@ -1,4 +1,4 @@
-export const template = /*html*/`
+<template>
 <div class="normalContent" v-if="account">
  <div v-if="isNew" class="alert alert-success">Le nouveau compte « {{account.name}} » vient d'être créé, vous pouvez maintenant le modifier.</div>
 
@@ -34,15 +34,16 @@ export const template = /*html*/`
  </form>
 
 </div>
-`
+</template>
 
+<script>
 import * as Vue from 'vue'
 import * as h from "../basicHelpers.js"
 import { $rootScope } from '../globals.js'
 import * as restWsHelpers from '../restWsHelpers.js'
 import router, { currentRoutePath } from '../routes.js'
 
-export default { template, name: 'AccountsDetail', props: ['accounts', 'id'], setup: function(props) {
+export default { props: ['accounts', 'id'], setup: function(props) {
     let $scope = Vue.reactive({
         account: undefined,
         submitted: false,
@@ -88,3 +89,4 @@ export default { template, name: 'AccountsDetail', props: ['accounts', 'id'], se
     return { ...Vue.toRefs($scope), isNew, name_unique, submit, disable, appDisabled }
   }
 }
+</script>

@@ -1,4 +1,4 @@
-const template = /*html*/`
+<template>
 <div class="container-fluid" v-if="loggedUser">
 <div class="row">
 
@@ -30,17 +30,17 @@ const template = /*html*/`
  </div>
 </div>
 </div>
-`
+</template>
 
+<script>
 import * as Vue from 'vue'
 import router, { findParentTab } from '../routes.js'
 import * as restWsHelpers from '../restWsHelpers.js'
-import BreadcrumbInc from './BreadcrumbInc.js'
-import WelcomeInc from './WelcomeInc.js'
+import BreadcrumbInc from './BreadcrumbInc.vue'
+import WelcomeInc from './WelcomeInc.vue'
 import { $rootScope } from '../globals.js'
 
 export default {
-  template,
   components: { BreadcrumbInc, WelcomeInc },
   props: [],
   setup(_props) {
@@ -60,3 +60,4 @@ export default {
     }
   }
 }
+</script>

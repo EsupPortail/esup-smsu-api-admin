@@ -1,4 +1,4 @@
-const template = /*html*/`
+<template>
    <ul class="breadcrumb" v-if="currentTab">
      <li v-if="currentTab.path != '/welcome'" class="ifBottomNavbar">
        <router-link to="/">Accueil</router-link>
@@ -8,14 +8,14 @@ const template = /*html*/`
      </li>
      <li class="active">{{currentTab_text || currentTab.meta.mainText}}</li>
    </ul>
-`
+</template>
 
+<script>
 import * as Vue from 'vue'
 import { $rootScope } from '../globals.js'
 import { currentRoutePath } from "../routes.js"
 
 export default {
-    template,
     props: ['currentTab', 'currentMainTab'],
     setup() {
         return { 
@@ -23,3 +23,4 @@ export default {
         }
     },
 }
+</script>

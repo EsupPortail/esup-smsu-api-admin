@@ -1,4 +1,4 @@
-export const template = /*html*/`
+<template>
 Filtre : <a href="" @click.prevent="showAccountFilters = !showAccountFilters">{{accountFilter.account || 'aucun'}}</a>
 
 <div v-if="showAccountFilters">
@@ -53,8 +53,9 @@ Filtre : <a href="" @click.prevent="showAccountFilters = !showAccountFilters">{{
   <div v-if="inProgress">En cours...</div>
 </div>
 </div>
-`
+</template>
 
+<script>
 import * as Vue from 'vue'
 import * as h from "../basicHelpers.js"
 import * as restWsHelpers from '../restWsHelpers.js'
@@ -62,7 +63,7 @@ import router, { hash_params } from '../routes.js'
 import { getInstAppAccount } from "../helpers.js"
 import { whenVisible } from "../directives.js"
 
-export default { template, name: 'DetailedSummary', directives: { whenVisible }, props: ['summary_detailed_criteria'], setup: function(props) {
+export default { directives: { whenVisible }, props: ['summary_detailed_criteria'], setup: function(props) {
     const initialNbResults = 50;
     const flatList = props.summary_detailed_criteria.map(getInstAppAccount);
     let $scope = Vue.reactive({ 
@@ -137,3 +138,4 @@ export default { template, name: 'DetailedSummary', directives: { whenVisible },
     return { ...Vue.toRefs($scope), setAppAccount, showMoreResults }
   }
 }
+</script>

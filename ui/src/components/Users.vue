@@ -1,4 +1,4 @@
-export const template = /*html*/`
+<template>
 <div class="normalContent">
    <a class="btn btn-default" href="#/users/new"><span class="glyphicon glyphicon-plus"></span> Ajouter un utilisateur</a>
 </div>
@@ -16,6 +16,8 @@ export const template = /*html*/`
     </tbody>
   </table>
 </div>
-`
+</template>
 
-export default { template, name: 'Users', props: ['users'] }
+<script>
+export default { props: ['users'] }
+</script>

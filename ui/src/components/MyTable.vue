@@ -1,4 +1,4 @@
-const template = /*html*/`
+<template>
 <table class="table table-striped">
   <tr>
     <template v-for="(colDef, field) in columnDefs">
@@ -18,14 +18,13 @@ const template = /*html*/`
   </tr>
   </tbody>
 </table>
-`
+</template>
 
+<script>
 import * as Vue from 'vue'
 import * as h from '../basicHelpers.js'
 
 export default {
-    template,
-    name: 'MyTable',
     props: ['data', 'columnDefs'],
     setup(props) {
         const columnComponents = Vue.computed(() => (
@@ -56,3 +55,4 @@ export default {
         }
     },
 }
+</script>

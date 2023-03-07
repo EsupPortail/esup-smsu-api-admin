@@ -1,4 +1,4 @@
-export const template = /*html*/`
+<template>
 <div class="normalContent" v-if="user">
 
  <a class="btn btn-default" v-if="!user.isNew" @click="deleteUser()"><span class="glyphicon glyphicon-remove"></span> Supprimer l'utilisateur</a>
@@ -36,15 +36,16 @@ export const template = /*html*/`
  </form>
 
 </div>
-`
+</template>
 
+<script>
 import * as Vue from 'vue'
 import * as h from "../basicHelpers.js"
 import { $rootScope } from '../globals.js'
 import * as restWsHelpers from '../restWsHelpers.js'
 import router, { currentRoutePath } from '../routes.js'
 
-export default { template, name: 'UsersDetail', props: ['users', 'id'], setup: function(props) {
+export default { props: ['users', 'id'], setup: function(props) {
     let $scope = Vue.reactive({
         roles: Vue.ref($rootScope.roles),
         user: undefined,
@@ -92,3 +93,4 @@ export default { template, name: 'UsersDetail', props: ['users', 'id'], setup: f
     return { ...Vue.toRefs($scope), login_unique, submit, deleteUser }
   }
 }
+</script>

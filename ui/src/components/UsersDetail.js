@@ -1,9 +1,3 @@
-import * as Vue from 'vue'
-import * as h from "../basicHelpers.js"
-import { $rootScope } from '../globals.js'
-import * as restWsHelpers from '../restWsHelpers.js'
-import router, { currentRoutePath } from '../routes.js'
-
 export const template = /*html*/`
 <div class="normalContent" v-if="user">
 
@@ -43,6 +37,12 @@ export const template = /*html*/`
 
 </div>
 `
+
+import * as Vue from 'vue'
+import * as h from "../basicHelpers.js"
+import { $rootScope } from '../globals.js'
+import * as restWsHelpers from '../restWsHelpers.js'
+import router, { currentRoutePath } from '../routes.js'
 
 export default { template, name: 'UsersDetail', props: ['users', 'id'], setup: function(props) {
     let $scope = Vue.reactive({

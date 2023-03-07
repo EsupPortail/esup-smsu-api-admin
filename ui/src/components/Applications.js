@@ -1,5 +1,3 @@
-import MyTable from "./MyTable.js"
-
 /*
 <style>
 .ngHeaderText {
@@ -19,6 +17,8 @@ export const template = /*html*/`
 
 <MyTable :data="applications" :columnDefs="columnDefs"/>
 `
+
+import MyTable from "./MyTable.js"
 
 export default { template, name: 'Applications', props: ['applications'], components: { MyTable }, setup: function(props) {
     const warnConsumedRatio = 0.9;

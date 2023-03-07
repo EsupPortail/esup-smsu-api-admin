@@ -1,5 +1,3 @@
-import WelcomeInc from './WelcomeInc.js'
-
 export const template = /*html*/`
 <div class="normalContent">
 
@@ -9,5 +7,7 @@ export const template = /*html*/`
 
 </div>
 `
+
+import WelcomeInc from './WelcomeInc.js'
 
 export default { template, components: { WelcomeInc } }

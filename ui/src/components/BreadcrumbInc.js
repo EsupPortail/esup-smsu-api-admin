@@ -1,7 +1,3 @@
-import * as Vue from 'vue'
-import { $rootScope } from '../globals.js'
-import { currentRoutePath } from "../routes.js"
-
 const template = /*html*/`
    <ul class="breadcrumb" v-if="currentTab">
      <li v-if="currentTab.path != '/welcome'" class="ifBottomNavbar">
@@ -13,6 +9,10 @@ const template = /*html*/`
      <li class="active">{{currentTab_text || currentTab.meta.mainText}}</li>
    </ul>
 `
+
+import * as Vue from 'vue'
+import { $rootScope } from '../globals.js'
+import { currentRoutePath } from "../routes.js"
 
 export default {
     template,

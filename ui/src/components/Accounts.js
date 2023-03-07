@@ -1,8 +1,9 @@
-import MyTable from "./MyTable.js"
-
 export const template = /*html*/`
 <MyTable :data="accounts" :columnDefs="columnDefs"/>
 `
+
+import MyTable from "./MyTable.js"
+
 export default { template, name: 'Accounts', props: ['accounts'], components: { MyTable }, setup: function(props) {
     const warnConsumedRatio = 0.9;
     return {

@@ -1,6 +1,3 @@
-import * as Vue from 'vue'
-import * as h from '../basicHelpers.js'
-
 const template = /*html*/`
 <table class="table table-striped">
   <tr>
@@ -22,6 +19,9 @@ const template = /*html*/`
   </tbody>
 </table>
 `
+
+import * as Vue from 'vue'
+import * as h from '../basicHelpers.js'
 
 export default {
     template,

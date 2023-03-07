@@ -1,9 +1,3 @@
-import * as Vue from 'vue'
-import * as h from "../basicHelpers.js"
-import { $rootScope } from '../globals.js'
-import * as restWsHelpers from '../restWsHelpers.js'
-import router, { currentRoutePath } from '../routes.js'
-
 export const template = /*html*/`
 <div class="normalContent" v-if="account">
  <div v-if="isNew" class="alert alert-success">Le nouveau compte « {{account.name}} » vient d'être créé, vous pouvez maintenant le modifier.</div>
@@ -41,6 +35,13 @@ export const template = /*html*/`
 
 </div>
 `
+
+import * as Vue from 'vue'
+import * as h from "../basicHelpers.js"
+import { $rootScope } from '../globals.js'
+import * as restWsHelpers from '../restWsHelpers.js'
+import router, { currentRoutePath } from '../routes.js'
+
 export default { template, name: 'AccountsDetail', props: ['accounts', 'id'], setup: function(props) {
     let $scope = Vue.reactive({
         account: undefined,

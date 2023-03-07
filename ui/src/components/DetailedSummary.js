@@ -1,10 +1,3 @@
-import * as Vue from 'vue'
-import * as h from "../basicHelpers.js"
-import * as restWsHelpers from '../restWsHelpers.js'
-import router, { hash_params } from '../routes.js'
-import { getInstAppAccount } from "../helpers.js"
-import { whenVisible } from "../directives.js"
-
 export const template = /*html*/`
 Filtre : <a href="" @click.prevent="showAccountFilters = !showAccountFilters">{{accountFilter.account || 'aucun'}}</a>
 
@@ -61,6 +54,13 @@ Filtre : <a href="" @click.prevent="showAccountFilters = !showAccountFilters">{{
 </div>
 </div>
 `
+
+import * as Vue from 'vue'
+import * as h from "../basicHelpers.js"
+import * as restWsHelpers from '../restWsHelpers.js'
+import router, { hash_params } from '../routes.js'
+import { getInstAppAccount } from "../helpers.js"
+import { whenVisible } from "../directives.js"
 
 export default { template, name: 'DetailedSummary', directives: { whenVisible }, props: ['summary_detailed_criteria'], setup: function(props) {
     const initialNbResults = 50;

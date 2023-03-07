@@ -1,10 +1,3 @@
-import * as Vue from 'vue'
-import * as h from "../basicHelpers.js"
-import * as restWsHelpers from '../restWsHelpers.js'
-import router, { currentRoutePath } from '../routes.js'
-import { createEmptyAccount } from "../helpers.js"
-import { $rootScope } from '../globals.js'
-
 export const template = /*html*/`
 <div class="normalContent" v-if="app">
 
@@ -66,6 +59,13 @@ export const template = /*html*/`
 
 </div>
 `
+
+import * as Vue from 'vue'
+import * as h from "../basicHelpers.js"
+import * as restWsHelpers from '../restWsHelpers.js'
+import router, { currentRoutePath } from '../routes.js'
+import { createEmptyAccount } from "../helpers.js"
+import { $rootScope } from '../globals.js'
 
 export default { template, name: 'ApplicationsDetail', props: ['applications', 'accounts', 'id'], setup: function(props) {
     let $scope = Vue.reactive({

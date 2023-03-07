@@ -1,7 +1,3 @@
-import * as Vue from 'vue'
-import * as h from "../basicHelpers.js"
-import { getInstAppAccount } from "../helpers.js"
-
 export const template = /*html*/`
 <div v-if="appAccount">
 
@@ -54,6 +50,10 @@ export const template = /*html*/`
   Export vers tableur
 </a>
 `
+
+import * as Vue from 'vue'
+import * as h from "../basicHelpers.js"
+import { getInstAppAccount } from "../helpers.js"
 
 export default { template, name: 'ConsolidatedSummary', props: ['summary_consolidated'], setup: function(props) {
     let $scope = Vue.reactive({ appAccount: undefined })

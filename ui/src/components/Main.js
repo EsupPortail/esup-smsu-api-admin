@@ -1,10 +1,3 @@
-import * as Vue from 'vue'
-import router, { findParentTab } from '../routes.js'
-import * as restWsHelpers from '../restWsHelpers.js'
-import BreadcrumbInc from './BreadcrumbInc.js'
-import WelcomeInc from './WelcomeInc.js'
-import { $rootScope } from '../globals.js'
-
 const template = /*html*/`
 <div class="container-fluid" v-if="loggedUser">
 <div class="row">
@@ -39,6 +32,12 @@ const template = /*html*/`
 </div>
 `
 
+import * as Vue from 'vue'
+import router, { findParentTab } from '../routes.js'
+import * as restWsHelpers from '../restWsHelpers.js'
+import BreadcrumbInc from './BreadcrumbInc.js'
+import WelcomeInc from './WelcomeInc.js'
+import { $rootScope } from '../globals.js'
 
 export default {
   template,

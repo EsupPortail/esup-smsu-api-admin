@@ -113,7 +113,7 @@ function xhrRequest(args, flags) {
 	    return xhrRequest(args, { justSuccessfullyLogged: true });
 	});
     };
-    var onErrorFromJson = function(resp, err) {
+    var onErrorFromJson = function(_resp, err) {
 	    alert(err.error);
 	    return Promise.reject(err);
     };

@@ -21,7 +21,7 @@
 <script>
 import MyTable from "./MyTable.vue"
 
-export default { props: ['applications'], components: { MyTable }, setup: function(props) {
+export default { props: ['applications'], components: { MyTable }, setup: function(_props) {
     const warnConsumedRatio = 0.9;
 	return {
         columnDefs: {name: { displayName:"Application", 

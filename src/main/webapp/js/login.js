@@ -44,32 +44,33 @@ function mayAddIdpId($rootScope, url) {
 }
 
 function windowOpenDivCreate($rootScope, isRelog) {
-    var elt = angular.element('<div>', {'class': 'windowOpenLoginDiv alert alert-warning'});
+    var elt = document.createElement('div')
+    elt.className = 'windowOpenLoginDiv alert alert-warning';
     var msg = globals.jsonpDisabled && !isRelog ? 
 	($rootScope.idpId ? 
 	 "Authentification en cours. Pour forcer l'authentification, veuillez cliquer ci-dessous" : 
 	 "Veuillez cliquer ici pour vous authentifier") :
 	'Votre session a expiré. Veuillez vous identifier à nouveau.';
-    elt.html(msg + ' <span class="glyphicon glyphicon-log-in"></span>');
-    angular.element('.myAppDiv').prepend(elt);
+    elt.innerHTML = msg + ' <span class="glyphicon glyphicon-log-in"></span>';
+    document.querySelector('.myAppDiv').prepend(elt);
     return elt;
 }
 function hiddenIframeCreate(url) {
-    var elt = angular.element('<iframe>', {'src': url, 'style': 'display: none'});
-    angular.element('.myAppDiv').prepend(elt);
+    var elt = document.createElement('iframe')
+    elt.src = url;
+    elt.style.display = 'none';
+    document.querySelector('.myAppDiv').prepend(elt);
     return elt;
 }
-function windowOpenOnMessage($rootScope, state) {
+function windowOpenOnMessage(state) {
     var onmessage = function(e) {
 	if (typeof e.data !== "string") return;
 	var m = e.data.match(/^loggedUser=(.*)$/);
 	if (!m) return;
 
 	windowOpenCleanup(state);
-	$rootScope.$apply(function () { 
-	    state.deferredLogin.resolve(JSON.parse(m[1]));
-	    for (const deferred of state.deferredQueue) { deferred.resolve(); }
-	});
+	state.deferredLogin.resolve(JSON.parse(m[1]));
+	for (const deferred of state.deferredQueue) { deferred.resolve(); }
     };
     window.addEventListener("message", onmessage);  
     return onmessage;
@@ -95,8 +96,8 @@ export const windowOpen = function ($rootScope, isRelog) {
     state.deferredLogin = h.promise_defer();
     state.deferredQueue = [];
     state.div = windowOpenDivCreate($rootScope, isRelog);
-    state.listener = windowOpenOnMessage($rootScope, state); 
-    state.div.bind("click", function () {
+    state.listener = windowOpenOnMessage(state); 
+    state.div.addEventListener("click", function () {
 	state.window = window.open(postMessageURL);
     });
 

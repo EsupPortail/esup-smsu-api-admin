@@ -1,0 +1,20 @@
+{
+    "extends": "@vue/tsconfig/tsconfig.web.json",
+    "include": ["src/**/*", "src/**/*.vue"],
+    "compilerOptions": {
+        "noEmit": true,
+        "checkJs": true,
+        "allowJs": true,
+        "skipLibCheck": true,
+
+        // disable what @vue/tsconfig is doing since "strict" is too much work for now
+        "strict": false,
+        // but enable a few strict stuff
+        "alwaysStrict": true,
+        "strictFunctionTypes": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+    }
+}

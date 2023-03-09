@@ -22,7 +22,7 @@
 </table>
 </template>
 
-<script>
+<script lang="ts">
 import * as Vue from 'vue'
 
 export default {

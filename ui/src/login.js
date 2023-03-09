@@ -10,6 +10,7 @@ function loadScript(url, onerror) {
 }
 
 var jsonpDeferreds = []
+// @ts-ignore
 window.jsonp_success = function(resp) {
     console.log('jsonp_success', resp)
     for (const p of jsonpDeferreds) { p.resolve(resp) }

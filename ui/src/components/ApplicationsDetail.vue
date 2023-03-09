@@ -60,7 +60,7 @@
 </div>
 </template>
 
-<script>
+<script lang="ts">
 import * as Vue from 'vue'
 import * as h from "../basicHelpers.js"
 import * as restWsHelpers from '../restWsHelpers.js'
@@ -87,7 +87,7 @@ export default { props: ['applications', 'accounts', 'id'], setup: function(prop
     };
     const name_unique = Vue.computed(() => checkUnique($scope.app?.name))
 
-    var modify = function (method, then) {
+    var modify = function (method, then = null) {
 	var app = h.cloneDeep($scope.app);
 	delete app.isNew;
 	restWsHelpers.action(method, 'applications', app).then(function () {

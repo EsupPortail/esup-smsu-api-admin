@@ -51,7 +51,7 @@
 </a>
 </template>
 
-<script>
+<script lang="ts">
 import * as Vue from 'vue'
 import * as h from "../basicHelpers.js"
 import { getInstAppAccount } from "../helpers.js"
@@ -72,7 +72,7 @@ export default { props: ['summary_consolidated'], setup: function(props) {
 	h.simpleEach(tree, function (subtree, key1) {
 	    tree[key1] = Object.keys(subtree).sort().map(k => subtree[k]);
 	});
-	return tree;
+	return tree as { [x : string]: any[] };
     };
 
     for (const e of props.summary_consolidated) {

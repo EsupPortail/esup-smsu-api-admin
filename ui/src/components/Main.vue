@@ -10,7 +10,9 @@
 
  <div class="col-md-3 sidenavDiv">
   <ul class="sidenav nav nav-stacked" :class="{ifSideNavbar: !forceSidenav}">
-	<li v-for="tab in mainVisibleTabs" :class="{active: tab == currentMainTab}">
+	<li v-for="tab in mainVisibleTabs" :class="
+        // @ts-ignore
+        {active: tab == currentMainTab}">
 	   <router-link :to="tab">
 	     <span class="glyphicon glyphicon-chevron-right"></span>
 	     {{tab.meta.mainText}}
@@ -32,7 +34,7 @@
 </div>
 </template>
 
-<script>
+<script lang="ts">
 import * as Vue from 'vue'
 import router, { findParentTab } from '../routes.js'
 import * as restWsHelpers from '../restWsHelpers.js'

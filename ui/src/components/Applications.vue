@@ -25,7 +25,7 @@
 </MyTable>
 </template>
 
-<script>
+<script lang="ts">
 import MyTable from "./MyTable.vue"
 
 export default { props: ['applications'], components: { MyTable }, setup: function(_props) {

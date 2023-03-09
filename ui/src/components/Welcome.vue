@@ -8,7 +8,7 @@
 </div>
 </template>
 
-<script>
+<script lang="ts">
 import WelcomeInc from './WelcomeInc.vue'
 
 export default { components: { WelcomeInc } }

@@ -55,7 +55,7 @@ Filtre : <a href="" @click.prevent="showAccountFilters = !showAccountFilters">{{
 </div>
 </template>
 
-<script>
+<script lang="ts">
 import * as Vue from 'vue'
 import * as h from "../basicHelpers.js"
 import * as restWsHelpers from '../restWsHelpers.js'

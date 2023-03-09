@@ -9,7 +9,7 @@
 </MyTable>
 </template>
 
-<script>
+<script lang="ts">
 import MyTable from "./MyTable.vue"
 
 export default { props: ['accounts'], components: { MyTable }, setup: function(_props) {

@@ -38,7 +38,7 @@
 </div>
 </template>
 
-<script>
+<script lang="ts">
 import * as Vue from 'vue'
 import * as h from "../basicHelpers.js"
 import { $rootScope } from '../globals.js'

@@ -34,6 +34,12 @@ export const array2hash = function (array, field) {
     }
     return h;
 };
+/**
+ * 
+ * @param {any[]} array 
+ * @param {string} field 
+ * @returns {Object.<string, any>}
+ */
 export const array2hashMulti = function (array, field) {
     var h = {};
     for (const e of array) {

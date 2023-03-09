@@ -10,7 +10,7 @@
    </ul>
 </template>
 
-<script>
+<script lang="ts">
 import * as Vue from 'vue'
 import { $rootScope } from '../globals.js'
 import { currentRoutePath } from "../routes.js"

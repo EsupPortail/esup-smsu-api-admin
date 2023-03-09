@@ -59,7 +59,7 @@ export const fromJsonOrNull = function(json) {
     }
 };
 
-function toCSV(rows, attrs) {
+function toCSV(rows) {
     return rows.map(function (row) {
 	return row.map(function (v) { 
 	    return v.replace(/,/g, '');

@@ -15,21 +15,26 @@
 
 <p></p>
 
-<MyTable :data="applications" :columnDefs="columnDefs"/>
+<MyTable :data="applications" :columnDefs="columnDefs">
+    <template #name="{row, cell}">
+        <router-link :to="'/applications/' + row.id">{{cell}}</router-link>
+    </template>
+    <template #consumedSms="{row, cell}">
+        <div :style="row.consumedSms / row.quota > warnConsumedRatio ? {color: '#f00'} : {}">{{cell}}</div>
+    </template>
+</MyTable>
 </template>
 
 <script>
 import MyTable from "./MyTable.vue"
 
 export default { props: ['applications'], components: { MyTable }, setup: function(_props) {
-    const warnConsumedRatio = 0.9;
-	return {
-        columnDefs: {name: { displayName:"Application", 
-					   cellTemplate: /*html*/`<router-link :to="'/applications/' + row.id">{{cell}}</router-link>`},
+    return {
+        warnConsumedRatio: 0.9,
+        columnDefs: {name: { displayName:"Application" },
 					quota: {displayName: 'Quota'},
-					consumedSms: {displayName: 'Nombre de \nSMS consommés',
-					 cellTemplate: /*html*/`<div :style="row.consumedSms / row.quota > ${warnConsumedRatio} ? {color: '#f00'} : {}">{{cell}}</div>`
-					}},
+					consumedSms: {displayName: 'Nombre de \nSMS consommés'},
+					},
     }
   }
 }

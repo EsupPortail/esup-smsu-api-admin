@@ -13,7 +13,9 @@
   <tbody>
   <tr v-for="row in sorted_data">
     <td v-for="(_, field) in columnDefs">
-        <component :is="columnComponents[field]" :row="row" :cell="row[field]"/>
+        <slot :name="field" :row="row" :cell="row[field]">
+            {{ row[field] }}
+        </slot>
     </td>
   </tr>
   </tbody>
@@ -22,16 +24,10 @@
 
 <script>
 import * as Vue from 'vue'
-import * as h from '../basicHelpers.js'
 
 export default {
     props: ['data', 'columnDefs'],
     setup(props) {
-        const columnComponents = Vue.computed(() => (
-            h.simpleMap(props.columnDefs, (colDef) =>
-                ({ props: ['row', 'cell'], template: colDef.cellTemplate || '{{cell}}' })
-            )
-        ))
         const sort = Vue.reactive({ field: undefined, direction: 1 })
         const set_sort_field = (field) => {
             if (sort.field === field) {
@@ -51,7 +47,6 @@ export default {
         return {
             sort, set_sort_field,
             sorted_data,
-            columnComponents,
         }
     },
 }

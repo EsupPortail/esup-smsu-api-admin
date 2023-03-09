@@ -8,9 +8,4 @@ export default defineConfig({
     outDir: '../src/main/webapp/'
   },
   plugins: [vue()],
-  resolve: {
-    alias: {
-        'vue': 'vue/dist/vue.esm-bundler.js'
-    },
-  }
 })

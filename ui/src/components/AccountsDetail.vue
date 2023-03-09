@@ -6,7 +6,7 @@
 
  <h4 style="margin-top: 2em">Modifier</h4>
 
- <form @submit.prevent="submitted = 1; submit()" class="form-horizontal">
+ <form @submit.prevent="submitted = true; submit()" class="form-horizontal">
 
   <div class="form-group" :class="{'has-error': submitted && !name_unique}">
     <label class="col-md-3 control-label" for="name">Nom</label>

@@ -56,7 +56,7 @@ Filtre : <a href="" @click.prevent="showAccountFilters = !showAccountFilters">{{
 </template>
 
 <script lang="ts">
-import * as Vue from 'vue'
+import { computed, reactive, toRefs, watch } from 'vue'
 import * as h from "../basicHelpers.js"
 import * as restWsHelpers from '../restWsHelpers.js'
 import router, { hash_params } from '../routes.js'
@@ -66,13 +66,13 @@ import { whenVisible } from "../directives.js"
 export default { directives: { whenVisible }, props: ['summary_detailed_criteria'], setup: function(props) {
     const initialNbResults = 50;
     const flatList = props.summary_detailed_criteria.map(getInstAppAccount);
-    let $scope = Vue.reactive({ 
+    let $scope = reactive({ 
         showAccountFilters: false,
         groupedBy: undefined, 
         noMoreResults: undefined,
         formatDate: h.formatDate,
         nbResults: initialNbResults,
-        accountFilter: Vue.computed(hash_params),
+        accountFilter: computed(hash_params),
         appAccountsTree: h.array2hashMulti(flatList, 'institution'),
         inProgress: false,
     })
@@ -111,7 +111,7 @@ export default { directives: { whenVisible }, props: ['summary_detailed_criteria
 	return groupedBy;
     };
 
-    Vue.watch(
+    watch(
       () => ({ maxResults: $scope.nbResults, ...$scope.accountFilter }),
       function(fullFilter) {
 	if ($scope.inProgress) return;
@@ -135,7 +135,7 @@ export default { directives: { whenVisible }, props: ['summary_detailed_criteria
 	$scope.nbResults = $scope.nbResults + initialNbResults;
     };
 
-    return { ...Vue.toRefs($scope), setAppAccount, showMoreResults }
+    return { ...toRefs($scope), setAppAccount, showMoreResults }
   }
 }
 </script>

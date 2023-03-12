@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import * as Vue from 'vue'
+import { computed } from "vue"
 import { $rootScope } from '../globals.js'
 import { currentRoutePath } from "../routes.js"
 
@@ -19,7 +19,7 @@ export default {
     props: ['currentTab', 'currentMainTab'],
     setup() {
         return { 
-            currentTab_text: Vue.computed(() => $rootScope.currentTab_text[currentRoutePath()])
+            currentTab_text: computed(() => $rootScope.currentTab_text[currentRoutePath()])
         }
     },
 }

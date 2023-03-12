@@ -52,12 +52,12 @@
 </template>
 
 <script lang="ts">
-import * as Vue from 'vue'
+import { reactive, toRefs } from 'vue'
 import * as h from "../basicHelpers.js"
 import { getInstAppAccount } from "../helpers.js"
 
 export default { props: ['summary_consolidated'], setup: function(props) {
-    let $scope = Vue.reactive({ appAccount: undefined })
+    let $scope = reactive({ appAccount: undefined })
     var computeTree = function () {
 	var tree = {};
 	for (const e of props.summary_consolidated) {
@@ -91,7 +91,7 @@ export default { props: ['summary_consolidated'], setup: function(props) {
 	var rows = toStringListList(props.summary_consolidated, ['institution', 'app', 'account', 'month', 'nbSendedSMS', 'nbReceived']);
 	h.exportCSV(event.target.parentElement, rows, "smsuapi-consolidated.csv");
     };
-    return { ...Vue.toRefs($scope), appAccountsTree, exportCSV }
+    return { ...toRefs($scope), appAccountsTree, exportCSV }
   }
 }
 </script>

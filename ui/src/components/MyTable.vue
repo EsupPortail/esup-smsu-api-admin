@@ -23,12 +23,12 @@
 </template>
 
 <script lang="ts">
-import * as Vue from 'vue'
+import { computed, reactive } from 'vue'
 
 export default {
     props: ['data', 'columnDefs'],
     setup(props) {
-        const sort = Vue.reactive({ field: undefined, direction: 1 })
+        const sort = reactive({ field: undefined, direction: 1 })
         const set_sort_field = (field) => {
             if (sort.field === field) {
                 sort.direction *= -1
@@ -37,7 +37,7 @@ export default {
                 sort.direction = 1
             }
         }
-        const sorted_data = Vue.computed(() => (
+        const sorted_data = computed(() => (
             sort.field ? props.data.sort((a,b) => {
                 const v_a = a[sort.field]
                 const v_b = b[sort.field]

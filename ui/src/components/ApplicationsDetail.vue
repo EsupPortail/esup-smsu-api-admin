@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts">
-import * as Vue from 'vue'
+import { computed, reactive, toRefs, watchEffect } from "vue"
 import * as h from "../basicHelpers.js"
 import * as restWsHelpers from '../restWsHelpers.js'
 import router, { currentRoutePath } from '../routes.js'
@@ -69,23 +69,23 @@ import { createEmptyAccount } from "../helpers.js"
 import { $rootScope } from '../globals.js'
 
 export default { props: ['applications', 'accounts', 'id'], setup: function(props) {
-    let $scope = Vue.reactive({
+    let $scope = reactive({
         app: undefined,
         submitted: false,
     })
 
     const our_path = currentRoutePath() // we want it to be static
-    Vue.watchEffect(() => {
+    watchEffect(() => {
 	$rootScope.currentTab_text[our_path] = $scope.app?.name || (props.id === 'new' ? 'Création' : 'Modification');
     });
 
-    let orig_app = Vue.computed(() => props.applications.find(app => app.id == props.id))
-    let name2app = Vue.computed(() => h.array2hash(props.applications, 'name'))
+    let orig_app = computed(() => props.applications.find(app => app.id == props.id))
+    let name2app = computed(() => h.array2hash(props.applications, 'name'))
     const checkUnique = function (name) {
 	var app = name2app.value[name];
 	return !app || name === orig_app.value?.name;
     };
-    const name_unique = Vue.computed(() => checkUnique($scope.app?.name))
+    const name_unique = computed(() => checkUnique($scope.app?.name))
 
     var modify = function (method, then = null) {
 	var app = h.cloneDeep($scope.app);
@@ -112,7 +112,7 @@ export default { props: ['applications', 'accounts', 'id'], setup: function(prop
 	modify('delete');
     };
 
-    Vue.watchEffect(() => {
+    watchEffect(() => {
 	if (props.id === "new") {
 	    $scope.app = { isNew: true, accountName: '', quota: 0 };
 	} else if (orig_app.value) {
@@ -121,7 +121,7 @@ export default { props: ['applications', 'accounts', 'id'], setup: function(prop
 		alert("invalid application " + props.id);
 	}
 	})
-    return { ...Vue.toRefs($scope), name_unique, submit, deleteApp }
+    return { ...toRefs($scope), name_unique, submit, deleteApp }
   }
 }
 </script>

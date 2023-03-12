@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import * as Vue from 'vue'
+import { computed, ref } from 'vue'
 import router, { findParentTab } from '../routes.js'
 import * as restWsHelpers from '../restWsHelpers.js'
 import BreadcrumbInc from './BreadcrumbInc.vue'
@@ -48,17 +48,17 @@ export default {
   setup(_props) {
     restWsHelpers.initialLogin();
     return {
-        loggedUser: Vue.computed(() => $rootScope.loggedUser),
+        loggedUser: computed(() => $rootScope.loggedUser),
         currentTab: router.currentRoute,
-        currentMainTab: Vue.computed(findParentTab),
-        mainVisibleTabs: Vue.computed(() => (
+        currentMainTab: computed(findParentTab),
+        mainVisibleTabs: computed(() => (
             router.getRoutes().filter(e => (
                 // @ts-ignore
                 e.meta.mainText && (!e.meta.show || e.meta.show())
             )) 
         )),
-        forceSidenav: Vue.computed(() => router.currentRoute.value?.path === "/welcome"),
-        loadInProgress: Vue.ref(false),
+        forceSidenav: computed(() => router.currentRoute.value?.path === "/welcome"),
+        loadInProgress: ref(false),
     }
   }
 }

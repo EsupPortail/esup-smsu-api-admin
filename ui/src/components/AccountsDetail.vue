@@ -37,31 +37,31 @@
 </template>
 
 <script lang="ts">
-import * as Vue from 'vue'
+import { computed, reactive, toRefs, watchEffect } from "vue"
 import * as h from "../basicHelpers.js"
 import { $rootScope } from '../globals.js'
 import * as restWsHelpers from '../restWsHelpers.js'
 import router, { currentRoutePath } from '../routes.js'
 
 export default { props: ['accounts', 'id'], setup: function(props) {
-    let $scope = Vue.reactive({
+    let $scope = reactive({
         account: undefined,
         submitted: false,
     })
-    const isNew = Vue.computed(() => 'isNew' in router.currentRoute.value.query)
+    const isNew = computed(() => 'isNew' in router.currentRoute.value.query)
 
     const our_path = currentRoutePath() // we want it to be static
-    Vue.watchEffect(() => {
+    watchEffect(() => {
         $rootScope.currentTab_text[our_path] = $scope.account?.name || (isNew.value ? 'Création' : 'Modification');
     });
 
-    let orig_account = Vue.computed(() => props.accounts.find(account => account.id == props.id))
-    let name2account = Vue.computed(() => h.array2hash(props.accounts, 'name'))
+    let orig_account = computed(() => props.accounts.find(account => account.id == props.id))
+    let name2account = computed(() => h.array2hash(props.accounts, 'name'))
     const checkUnique = function (name) {
 	var account = name2account.value[name];
 	return !account || name === orig_account.value?.name;
     };
-    const name_unique = Vue.computed(() => checkUnique($scope.account?.name))
+    const name_unique = computed(() => checkUnique($scope.account?.name))
 
     var modify = function (method) {
 	var account = h.cloneDeep($scope.account);
@@ -78,15 +78,15 @@ export default { props: ['accounts', 'id'], setup: function(props) {
 	modify('put');	
     };
 
-    Vue.watchEffect(() => {
+    watchEffect(() => {
         if (orig_account.value) {
             $scope.account = { ...orig_account.value }
 	} else {
             alert("invalid account " + props.id);
 	}
     })
-    const appDisabled = Vue.computed(() => $scope.account?.quota == 0)
-    return { ...Vue.toRefs($scope), isNew, name_unique, submit, disable, appDisabled }
+    const appDisabled = computed(() => $scope.account?.quota == 0)
+    return { ...toRefs($scope), isNew, name_unique, submit, disable, appDisabled }
   }
 }
 </script>

@@ -39,31 +39,31 @@
 </template>
 
 <script lang="ts">
-import * as Vue from 'vue'
+import { computed, reactive, ref, watchEffect, toRefs } from 'vue'
 import * as h from "../basicHelpers.js"
 import { $rootScope } from '../globals.js'
 import * as restWsHelpers from '../restWsHelpers.js'
 import router, { currentRoutePath } from '../routes.js'
 
 export default { props: ['users', 'id'], setup: function(props) {
-    let $scope = Vue.reactive({
-        roles: Vue.ref($rootScope.roles),
+    let $scope = reactive({
+        roles: ref($rootScope.roles),
         user: undefined,
         submitted: false,
     })
     const our_path = currentRoutePath() // we want it to be static
-    Vue.watchEffect(() => {
+    watchEffect(() => {
 	$rootScope.currentTab_text[our_path] = ($scope.user?.login || (props.id === 'new' ? 'Création' : 'Modification'));
     console.log('usersdetail', JSON.stringify($rootScope.currentTab_text))
     });
 
-    let orig_user = Vue.computed(() => props.users.find(user => user.id == props.id))
-    let login2user = Vue.computed(() => h.array2hash(props.users, 'login'))
+    let orig_user = computed(() => props.users.find(user => user.id == props.id))
+    let login2user = computed(() => h.array2hash(props.users, 'login'))
     const checkUnique = function (login) {
 	var user = login2user.value[login];
 	return !user || login === orig_user.value?.login;
     };
-    const login_unique = Vue.computed(() => checkUnique($scope.user?.login))
+    const login_unique = computed(() => checkUnique($scope.user?.login))
 
     var modify = function (method) {
 	var user = h.objectSlice($scope.user, ['id', 'login', 'role']) // keep only modifiable fields
@@ -80,7 +80,7 @@ export default { props: ['users', 'id'], setup: function(props) {
 	modify('delete');
     };
 
-    Vue.watchEffect(() => {
+    watchEffect(() => {
     if (props.id === "new") {
 	    $scope.user = { isNew: true, role: '' };
     } else if (orig_user.value) {
@@ -90,7 +90,7 @@ export default { props: ['users', 'id'], setup: function(props) {
 	    router.push({ path: '/users' });
     }
     }) 
-    return { ...Vue.toRefs($scope), login_unique, submit, deleteUser }
+    return { ...toRefs($scope), login_unique, submit, deleteUser }
   }
 }
 </script>

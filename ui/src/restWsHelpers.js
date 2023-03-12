@@ -3,7 +3,7 @@ import { $rootScope } from './globals.js'
 import * as login from './login.js'
 import * as loginSuccess from './loginSuccess.js'
 
-const parse_querystring = qs => (
+export const parse_querystring = qs => (
     qs ? Object.fromEntries(new URLSearchParams(qs)) : {}
 )
 

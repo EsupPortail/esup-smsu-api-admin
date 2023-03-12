@@ -66,8 +66,7 @@ export function findParentTab() {
 
 export const hash_params = () => {
     const { hash } = router.currentRoute.value
-    if (!hash) return {};
-    return Object.fromEntries(new URLSearchParams(hash.replace(/^#/, '')));
+    return restWsHelpers.parse_querystring(hash.replace(/^#/, ''));
 }
 
 export const currentRoutePath = () => (
